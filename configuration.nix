@@ -7,15 +7,16 @@
 let dogebox = import <dogebox> { inherit pkgs; }; in
 {
   imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ./setup
-    ];
-
-  # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
-  boot.loader.grub.enable = false;
-  # Enables the generation of /boot/extlinux/extlinux.conf
-  boot.loader.generic-extlinux-compatible.enable = true;
+    [ 
+      # ./setup
+    ] ++
+    if pkgs.system == "aarch64-linux" then
+      [ ./bootloader/extlinux.nix
+        ./aarch64/hardware-configuration.nix ]
+    else
+      [ ./bootloader/systemd-boot.nix
+        ./x86_64/hardware-configuration.nix ]
+    ;
 
   networking.hostName = "dogebox";
   # Pick only one of the below networking options.
@@ -34,7 +35,7 @@ let dogebox = import <dogebox> { inherit pkgs; }; in
     sandbox = true;
     sandbox-fallback = false;
     substituters = [ "https://cache.nixos.org/" ];
-    system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-armv8-a" ];
+    system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
     trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
     #trusted-substituters =
     trusted-users = [ "root" "nixos" ];
@@ -75,11 +76,11 @@ let dogebox = import <dogebox> { inherit pkgs; }; in
     vim
     wget
     dogebox.dogeboxd
-    dogebox.dogecoin-core
-    dogebox.dogemap
-    dogebox.dogenet
-    dogebox.jampuppy
-    dogebox.libdogecoin
+    #dogebox.dogecoin-core
+    #dogebox.dogemap
+    #dogebox.dogenet
+    #dogebox.jampuppy
+    #dogebox.libdogecoin
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

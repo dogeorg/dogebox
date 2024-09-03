@@ -12,7 +12,7 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/33a12f86-2b92-4cdd-89d9-9d3fb1f83a74";
+    { device = "/dev/disk/by-label/DOGEBOX";
       fsType = "ext4";
     };
 
