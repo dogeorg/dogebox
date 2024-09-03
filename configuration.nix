@@ -7,15 +7,10 @@
 let dogebox = import <dogebox> { inherit pkgs; }; in
 {
   imports =
-    [ 
-      # ./setup
-    ] ++
-    if pkgs.system == "aarch64-linux" then
-      [ ./bootloader/extlinux.nix
-        ./aarch64/hardware-configuration.nix ]
-    else
-      [ ./bootloader/systemd-boot.nix
-        ./x86_64/hardware-configuration.nix ]
+      [ ./bootloader
+        ./hardware-configuration.nix 
+      ]
+        #++ lib.optional(builtins.pathExists ... ) ......nix
     ;
 
   networking.hostName = "dogebox";
@@ -75,7 +70,7 @@ let dogebox = import <dogebox> { inherit pkgs; }; in
     git
     vim
     wget
-    dogebox.dogeboxd
+    #dogebox.dogeboxd
     #dogebox.dogecoin-core
     #dogebox.dogemap
     #dogebox.dogenet
