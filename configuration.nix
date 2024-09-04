@@ -70,7 +70,7 @@ let dogebox = import <dogebox> { inherit pkgs; }; in
     git
     vim
     wget
-    #dogebox.dogeboxd
+    dogebox.dogeboxd
     #dogebox.dogecoin-core
     #dogebox.dogemap
     #dogebox.dogenet
