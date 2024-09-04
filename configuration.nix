@@ -7,7 +7,7 @@
 let dogebox = import <dogebox> { inherit pkgs; }; in
 {
   imports =
-      [ ./bootloader
+      [ #./bootloader
         ./hardware-configuration.nix 
       ]
         #++ lib.optional(builtins.pathExists ... ) ......nix
