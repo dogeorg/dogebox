@@ -37,7 +37,7 @@ jobs:
 
       - name: nixos-rebuild based on configuration.nix
         run: |
-          NIXOS_CONFIG=./configuration.nix nixos-rebuild switch
+          nix-shell -p nixos-rebuild --cmd 'NIXOS_CONFIG=./configuration.nix nixos-rebuild switch'
           
       - name: Generate NixOS configuration
         run: |
