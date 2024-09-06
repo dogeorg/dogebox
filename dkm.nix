@@ -7,7 +7,7 @@ let dogebox = import <dogebox> { inherit pkgs; }; in
   ];
 
   users.users.dkm = {
-    isNormalUser = true;
+    isSystemUser = true;
     group =  "dogebox";
     extraGroups = [];
   };
@@ -17,8 +17,7 @@ let dogebox = import <dogebox> { inherit pkgs; }; in
     wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
-      # TODO: This needs a storage path
-      ExecStart = "$TODO{pkgs.dogebox.dkm}/bin/dkm";
+      ExecStart = "${dogebox.dkm}/bin/dkm";
       Restart = "always";
       User = "dkm";
       Group = "dogebox";
