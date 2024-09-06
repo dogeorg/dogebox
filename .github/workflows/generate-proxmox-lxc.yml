@@ -28,8 +28,13 @@ jobs:
         uses: cachix/install-nix-action@v24
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
-          nix_path: nixpkgs=https://nixos.org/channels/nixos-24.05:dogebox=https://github.com/dogeorg/dogebox-nur-packages/archive/main.tar.gz
-        
+          nix_path: nixpkgs=channenl:nixos-24.05
+
+      - name: Add dogebox channel
+        run: |
+          nix-channel --add https://github.com/dogeorg/dogebox-nur-packages/archive/main.tar.gz dogebox
+          nix-channel --update
+          
       - name: Generate NixOS configuration
         run: |
           nix run github:nix-community/nixos-generators -- -f proxmox-lxc -c configuration.nix | {
