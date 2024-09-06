@@ -37,7 +37,7 @@ jobs:
           
       - name: Generate NixOS configuration
         run: |
-          nix run 'let dogebox = import <dogebox> { inherit pkgs; }; in { github:nix-community/nixos-generators -- -f proxmox-lxc -c configuration.nix }' | {
+          nix run 'let dogebox = import <dogebox> { inherit pkgs; }; github:nix-community/nixos-generators -- -f proxmox-lxc -c configuration.nix' | {
             read path
             echo "BUILD_PATH=$path" >> $GITHUB_ENV
           }
