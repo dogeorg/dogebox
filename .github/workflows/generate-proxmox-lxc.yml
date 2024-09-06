@@ -28,7 +28,7 @@ jobs:
         uses: cachix/install-nix-action@v24
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
-          nix_path: nixpkgs=https\://nixos.org/channels/nixos-24.05:dogebox=https\://github.com/dogeorg/dogebox-nur-packages/archive/main.tar.gz
+          nix_path: nixpkgs=https://nixos.org/channels/nixos-24.05:dogebox=https://github.com/dogeorg/dogebox-nur-packages/archive/main.tar.gz
         
       - name: Generate NixOS configuration
         run: |
