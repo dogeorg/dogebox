@@ -28,7 +28,8 @@ jobs:
         uses: cachix/install-nix-action@v24
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
-
+          nix_path: nixpkgs=channel:nixos-24.05
+        
       - name: Generate NixOS configuration
         run: |
           nix run github:nix-community/nixos-generators -- -f proxmox-lxc -c configuration.nix | {
