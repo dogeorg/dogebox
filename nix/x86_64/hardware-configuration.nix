@@ -3,6 +3,9 @@
 # to /etc/nixos/configuration.nix instead.
 { config, lib, pkgs, modulesPath, ... }:
 
+let
+  configDir = ./.;
+in
 {
   imports = [ ];
 
@@ -16,9 +19,9 @@
       fsType = "ext4";
     };
 
-  fileSystems."/boot" =
+  fileSystems."/boot" = lib.mkForce
     { device = "/dev/disk/by-uuid/7FCD-A2D1";
-      fsType = "vfat";
+      fsType = "ext4";
     };
 
   swapDevices = [ ];
@@ -31,5 +34,12 @@
   # networking.interfaces.enp0s3.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  virtualisation.virtualbox.guest.enable = true;
+  #virtualisation.virtualbox.guest.enable = true;
+
+  # Copy self into build image.
+  environment.etc = {
+    "nixos/x86_64/hardware-configuration.nix" = {
+      source = "${configDir}/hardware-configuration.nix";
+    };
+  };
 }

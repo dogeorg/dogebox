@@ -1,5 +1,8 @@
 { config, libs, pkgs, ... }:
 
+let
+  configDir = ./.;
+in
 {
 
   boot = if pkgs.system == "aarch64-linux" then {
@@ -20,5 +23,12 @@
     # boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
     loader.systemd-boot.enable = true;
 
+  };
+
+  # Copy self into build image.
+  environment.etc = {
+    "nixos/bootloader/default.nix" = {
+      source = "${configDir}/default.nix";
+    };
   };
 }

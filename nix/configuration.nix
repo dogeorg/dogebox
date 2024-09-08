@@ -4,6 +4,8 @@
 
 { config, lib, pkgs, ... }:
 
+let configDir = ./.;
+in
 {
   imports =
       [ #./bootloader
@@ -33,22 +35,20 @@
   # Set your time zone.
   time.timeZone = "Australia/Brisbane";
 
-  # Install a few utility packages
   environment.systemPackages = with pkgs; [
+    # Install a few utility packages
     git
     vim
     wget
   ];
+ 
+  # Copy self into build image.
+  environment.etc = {
+    "nixos/configuration.nix" = {
+      source = "${configDir}/configuration.nix";
+    };
+  };
 
-  # /media does not exist by default, and devmon's default config
-  # will mount devices at '/media/<username>/<devname>' rather
-  # than '/media/<devname>' for some reason, so this should
-  # ensure it exists.
-  systemd.tmpfiles.rules = [
-    "d /media 0755 root root -"
-  ];
-
-  services.devmon.enable = true;
-
-  system.stateVersion = "23.11"; # Did you read the comment?
+  # DO NOT CHANGE THIS. EVER. EVEN WHEN UPDATING YOUR SYSTEM PAST 24.05.
+  system.stateVersion = "24.05";
 }

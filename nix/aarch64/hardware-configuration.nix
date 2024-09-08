@@ -3,6 +3,9 @@
 # to /etc/nixos/configuration.nix instead.
 { config, lib, pkgs, modulesPath, ... }:
 
+let
+  configDir = ./.;
+in
 {
   imports =
     [ (modulesPath + "/profiles/qemu-guest.nix")
@@ -28,4 +31,11 @@
   # networking.interfaces.enp0s1.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
+
+  # Copy self into build image.
+  environment.etc = {
+    "nixos/aarch64/hardware-configuration.nix" = {
+      source = "${configDir}/hardware-configuration.nix";
+    };
+  };
 }

@@ -1,6 +1,9 @@
 { config, lib, pkgs, ... }:
 
-let dogebox = import <dogebox> { inherit pkgs; }; in
+let
+  dogebox = import <dogebox> { inherit pkgs; };
+  configDir = ./.;
+in
 {
   environment.systemPackages = [
     dogebox.dogeboxd
@@ -30,6 +33,8 @@ let dogebox = import <dogebox> { inherit pkgs; }; in
     };
   };
 
+  networking.firewall.allowedTCPPorts = [ 3000 8080 ];
+
   security.wrappers.nixosrebuildswitch = {
     source = "${dogebox.dogeboxd}/dogeboxd/bin/nixosrebuildswitch";
     owner = "root";
@@ -42,5 +47,12 @@ let dogebox = import <dogebox> { inherit pkgs; }; in
     owner = "root";
     group = "root";
     setuid = true;
+  };
+
+  # Copy self into build image.
+  environment.etc = {
+    "nixos/dogeboxd.nix" = {
+      source = "${configDir}/dogeboxd.nix";
+    };
   };
 }

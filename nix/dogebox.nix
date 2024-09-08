@@ -1,6 +1,9 @@
 { config, lib, pkgs, ... }:
 
-let dogebox = import <dogebox> { inherit pkgs; }; in
+let
+  dogebox = import <dogebox> { inherit pkgs; };
+  configDir = ./.;  
+in
 {
   imports = [
     ./dkm.nix
@@ -25,7 +28,7 @@ let dogebox = import <dogebox> { inherit pkgs; }; in
 
   users.users.shibe = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "wheel" "dogebox" ];
 
     # Very temporary, until we have SSH key management in dpanel.
     password = "suchpass";
@@ -34,4 +37,13 @@ let dogebox = import <dogebox> { inherit pkgs; }; in
   # These will be overridden by the included dogebox.nix file above, but set defaults.
   networking.wireless.enable = lib.mkDefault false;
   networking.networkmanager.enable = lib.mkForce false;
+
+  networking.firewall.enable = true;
+
+  # Copy self into build image.
+  environment.etc = {
+    "nixos/dogebox.nix" = {
+      source = "${configDir}/dogebox.nix";
+    };
+  };
 }
