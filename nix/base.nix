@@ -8,8 +8,8 @@ let configDir = ./.;
 in
 {
   imports =
-      [ #./bootloader
-        ./hardware-configuration.nix 
+      [
+        # ./hardware-configuration.nix 
         ./dogebox.nix
       ]
     ;
@@ -41,14 +41,14 @@ in
     vim
     wget
   ];
- 
-  # Copy self into build image.
-  environment.etc = {
-    "nixos/configuration.nix" = {
-      source = "${configDir}/configuration.nix";
-    };
-  };
 
   # DO NOT CHANGE THIS. EVER. EVEN WHEN UPDATING YOUR SYSTEM PAST 24.05.
   system.stateVersion = "24.05";
+ 
+  # Copy self into build image.
+  environment.etc = {
+    "nixos/base.nix" = {
+      source = "${configDir}/base.nix";
+    };
+  };
 }
