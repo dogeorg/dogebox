@@ -33,18 +33,18 @@ jobs:
 
       - name: Add dogebox channel
         run: |
-          nix-channel --add https://nixos.org/channels/nixos-24.05 nixos
           nix-channel --add https://github.com/dogeorg/dogebox-nur-packages/archive/main.tar.gz dogebox
           nix-channel --update
           nix-channel --list
-          echo "Profiles dir:"
-          ls -a
-          sudo find /nix/store | grep dogebox
-          echo "Runner's home"
-          ls -la /home/runner/
-          echo "store profiles dir"
-          find /nix/var/nix/profiles/
-          export
+          #echo "Profiles dir:"
+          #ls -a
+          #sudo find /nix/store | grep dogebox
+          #echo "Runner's home"
+          #ls -la /home/runner/
+          #echo "store profiles dir"
+          #find /nix/var/nix/profiles/
+          #export
+          NIX_PATH=$NIX_PATH:`ls -d /nix/store/*dogebox/dogebox`
           
 #      - name: nixos-rebuild based on configuration-builder.nix
 #        run: |
