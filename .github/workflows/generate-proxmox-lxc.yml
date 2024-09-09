@@ -39,7 +39,7 @@ jobs:
           nix-channel --list
           echo "Profiles dir:"
           ls -a
-          sudo find ~/.nix-defxper
+          sudo find /nix/store | grep dogebox
           export
           
 #      - name: nixos-rebuild based on configuration-builder.nix
