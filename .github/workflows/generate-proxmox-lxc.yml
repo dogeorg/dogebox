@@ -35,7 +35,10 @@ jobs:
           nix-channel --add https://github.com/dogeorg/dogebox-nur-packages/archive/main.tar.gz dogebox
           nix-channel --update
           nix-channel --list
-
+          echo "Profiles dir:"
+          find /nix/var/nix/profiles/per-user/root/
+          export
+          
 #      - name: nixos-rebuild based on configuration-builder.nix
 #        run: |
 #          nix-env --install nixos-rebuild 
