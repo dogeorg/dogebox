@@ -1,4 +1,4 @@
-name: 'generate-proxmox-lxc'
+name: 'generate-virtualbox-ova'
 
 # Controls when the workflow will run
 on:
