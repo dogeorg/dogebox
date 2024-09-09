@@ -35,14 +35,14 @@ jobs:
           nix-channel --add https://github.com/dogeorg/dogebox-nur-packages/archive/main.tar.gz dogebox
           nix-channel --update
 
-      - name: nixos-rebuild based on configuration-builder.nix
-        run: |
-          nix-env --install nixos-rebuild 
-          sudo NIXOS_CONFIG=/home/runner/work/dogebox/dogebox/configuration-builder.nix nixos-rebuild switch
+#      - name: nixos-rebuild based on configuration-builder.nix
+#        run: |
+#          nix-env --install nixos-rebuild 
+#          sudo NIXOS_CONFIG=/home/runner/work/dogebox/dogebox/configuration-builder.nix nixos-rebuild switch
           
       - name: Generate NixOS configuration
         run: |
-          nix run github:nix-community/nixos-generators -- -f proxmox-lxc -c configuration.nix | {
+          nix run github:nix-community/nixos-generators -- -f proxmox-lxc -c nix/pve.nix | {
             read path
             echo "BUILD_PATH=$path" >> $GITHUB_ENV
           }
