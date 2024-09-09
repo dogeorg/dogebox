@@ -44,7 +44,7 @@ jobs:
           #echo "store profiles dir"
           #find /nix/var/nix/profiles/
           #export
-          NIX_PATH=$NIX_PATH:`ls -d /nix/store/*dogebox/dogebox`
+          NIX_PATH=$NIX_PATH:`ls -d /nix/store/*dogebox/`
           
 #      - name: nixos-rebuild based on configuration-builder.nix
 #        run: |
