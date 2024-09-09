@@ -34,18 +34,15 @@ jobs:
         run: |
           nix-channel --add https://github.com/dogeorg/dogebox-nur-packages/archive/main.tar.gz dogebox
           nix-channel --update
-          nix-channel --list
-          export NIX_PATH=$NIX_PATH:`ls -d /nix/store/*dogebox/`
                     
-      - name: Generate NixOS configuration
+      - name: Generate LXC image
         run: |
-          echo $NIX_PATH
           NIX_PATH=$NIX_PATH:$(ls -d /nix/store/*dogebox/) nix run github:nix-community/nixos-generators -- -f proxmox-lxc -c nix/pve.nix | {
             read path
             echo "BUILD_PATH=$path" >> $GITHUB_ENV
           }
 
-      - name: Move the build artifact to a working directory.
+      - name: Move the build artifact to a working directory
         run: |
           NEW_FILENAME="$(basename ${{ env.BUILD_PATH }})"
           RELEASE_PATH="${{ github.workspace }}/$NEW_FILENAME"
