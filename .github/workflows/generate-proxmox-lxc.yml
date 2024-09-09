@@ -29,28 +29,14 @@ jobs:
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
           nix_path: nixpkgs=channel:nixos-24.05
-          #find /nix/var/nix/profiles/per-user/root/channels
 
       - name: Add dogebox channel
         run: |
           nix-channel --add https://github.com/dogeorg/dogebox-nur-packages/archive/main.tar.gz dogebox
           nix-channel --update
           nix-channel --list
-          #echo "Profiles dir:"
-          #ls -a
-          #sudo find /nix/store | grep dogebox
-          #echo "Runner's home"
-          #ls -la /home/runner/
-          #echo "store profiles dir"
-          #find /nix/var/nix/profiles/
-          #export
-          NIX_PATH=$NIX_PATH:`ls -d /nix/store/*dogebox/`
-          
-#      - name: nixos-rebuild based on configuration-builder.nix
-#        run: |
-#          nix-env --install nixos-rebuild 
-#          sudo NIXOS_CONFIG=/home/runner/work/dogebox/dogebox/configuration-builder.nix nixos-rebuild switch
-          
+          export NIX_PATH=$NIX_PATH:`ls -d /nix/store/*dogebox/`
+                    
       - name: Generate NixOS configuration
         run: |
           echo $NIX_PATH
