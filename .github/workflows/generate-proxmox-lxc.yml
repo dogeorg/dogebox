@@ -41,7 +41,7 @@ jobs:
           ls -a
           sudo find /nix/store | grep dogebox
           echo "Runner's home"
-          find /home/runner/
+          ls -la /home/runner/
           echo "store profiles dir"
           find /nix/var/nix/profiles/
           export
