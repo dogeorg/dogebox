@@ -38,6 +38,8 @@ jobs:
           nix-channel --update
           nix-channel --list
           echo "Profiles dir:"
+          ls -a
+          sudo find ~/.nix-defxper
           export
           
 #      - name: nixos-rebuild based on configuration-builder.nix
