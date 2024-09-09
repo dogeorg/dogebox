@@ -28,7 +28,7 @@ jobs:
         uses: cachix/install-nix-action@v24
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
-          #nix_path: nixpkgs=channel:nixos-24.05
+          nix_path: nixpkgs=channel:nixos-24.05
           #find /nix/var/nix/profiles/per-user/root/channels
 
       - name: Add dogebox channel
