@@ -1,0 +1,61 @@
+name: 'generate-proxmox-lxc'
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  #push:
+  #  branches: [ "main" ]
+  #pull_request:
+  #  branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# The following permissions are required for softprops/action-gh-release@v1.
+permissions:
+  contents: write
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+      
+      - name: Install nix
+        uses: cachix/install-nix-action@v24
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+          nix_path: nixpkgs=channel:nixos-24.05
+
+      - name: Add dogebox channel
+        run: |
+          nix-channel --add https://github.com/dogeorg/dogebox-nur-packages/archive/main.tar.gz dogebox
+          nix-channel --update
+
+#      - name: nixos-rebuild based on configuration-builder.nix
+#        run: |
+#          nix-env --install nixos-rebuild 
+#          sudo NIXOS_CONFIG=/home/runner/work/dogebox/dogebox/configuration-builder.nix nixos-rebuild switch
+          
+      - name: Generate NixOS configuration
+        run: |
+          nix run github:nix-community/nixos-generators -- -f proxmox-lxc -c nix/pve.nix | {
+            read path
+            echo "BUILD_PATH=$path" >> $GITHUB_ENV
+          }
+
+      - name: Move the build artifact to a working directory.
+        run: |
+          NEW_FILENAME="$(basename ${{ env.BUILD_PATH }})"
+          RELEASE_PATH="${{ github.workspace }}/$NEW_FILENAME"
+          cp "${{ env.BUILD_PATH }}" "$RELEASE_PATH"
+          echo "RELEASE_PATH=$RELEASE_PATH" >> $GITHUB_ENV
+
+      # Create a GitHub release and attach the generated container template.
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ env.RELEASE_PATH }}
