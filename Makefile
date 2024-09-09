@@ -1,5 +1,9 @@
 VM_NAME = dogebox-$(shell date +%s)
 
+pve:
+	@echo "Generating Proxmox LXC..."
+	@nixos-generate -c nix/pve.nix -f proxmox-lxc
+
 virtualbox:
 	@echo "Generating VirtualBox OVA..."
 	@nixos-generate -c nix/vbox.nix -f virtualbox
@@ -13,4 +17,4 @@ virtualbox-launch: virtualbox
 	VBoxManage modifyvm "$(VM_NAME)" --nic1 bridged --bridgeadapter1 $$BRIDGE_ADAPTER && \
 	VBoxManage startvm "$(VM_NAME)"
 
-.PHONY: virtualbox virtualbox-launch
+.PHONY: pve virtualbox virtualbox-launch
