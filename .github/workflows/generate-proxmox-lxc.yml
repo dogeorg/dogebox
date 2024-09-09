@@ -53,7 +53,8 @@ jobs:
           
       - name: Generate NixOS configuration
         run: |
-          nix run github:nix-community/nixos-generators -- -f proxmox-lxc -c nix/pve.nix | {
+          echo $NIX_PATH
+          NIX_PATH=$NIX_PATH:$(ls -d /nix/store/*dogebox/dogebox) nix run github:nix-community/nixos-generators -- -f proxmox-lxc -c nix/pve.nix | {
             read path
             echo "BUILD_PATH=$path" >> $GITHUB_ENV
           }
