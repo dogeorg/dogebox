@@ -37,7 +37,7 @@ jobs:
                     
       - name: Generate LXC image
         run: |
-          NIX_PATH=$NIX_PATH:$(ls -d /nix/store/*dogebox/) nix run github:nix-community/nixos-generators -- -f proxmox-lxc -c nix/pve.nix | {
+          NIX_PATH=$NIX_PATH:$(ls -d /nix/store/*dogebox/) nix run github:nix-community/nixos-generators -- -f virtualbox -c nix/vbox.nix | {
             read path
             echo "BUILD_PATH=$path" >> $GITHUB_ENV
           }
