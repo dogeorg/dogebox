@@ -2,19 +2,19 @@ VM_NAME = dogebox-$(shell date +%s)
 
 pve:
 	@echo "Generating Proxmox LXC..."
-	@nixos-generate -c nix/pve.nix -f proxmox-lxc
+	@nixos-generate -c nix/default-builder.nix -f proxmox-lxc
 
 virtualbox:
 	@echo "Generating VirtualBox OVA..."
-	@nixos-generate -c nix/vbox-entry.nix -f virtualbox
+	@nixos-generate -c nix/vbox-builder.nix -f virtualbox
 
 virtualbox-launch: virtualbox
 	@echo "Importing and launching the VirtualBox VM..."
 	# Capture the generated OVA path from the nixos-generate output
-	OVA_FILE=$$(nixos-generate -c nix/vbox-entry.nix -f virtualbox | grep -o '.*\.ova$$'); \
+	OVA_FILE=$$(nixos-generate -c nix/vbox-builder.nix -f virtualbox | grep -o '.*\.ova$$'); \
 	BRIDGE_ADAPTER=$$(VBoxManage list bridgedifs | grep '^Name:' | head -n1 | awk '{print $$2}'); \
 	VBoxManage import $$OVA_FILE --vsys 0 --vmname "$(VM_NAME)" && \
 	VBoxManage modifyvm "$(VM_NAME)" --nic1 bridged --bridgeadapter1 $$BRIDGE_ADAPTER && \
 	VBoxManage startvm "$(VM_NAME)"
 
-.PHONY: pve virtualbox virtualbox-launch
+.PHONY: pve qcow virtualbox virtualbox-launch
