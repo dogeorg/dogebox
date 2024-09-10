@@ -89,7 +89,8 @@ TODO :)
 <details>
   <summary>Running in Virtualbox</summary>
 
-TODO :)
+1. Install Virtualbox :)
+2. Run `make virtualbox-launch`
 
 </details>
 

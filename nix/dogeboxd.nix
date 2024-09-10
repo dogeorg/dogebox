@@ -2,10 +2,11 @@
 
 let
   dogebox = import <dogebox> { inherit pkgs; };
-  configDir = ./.;
 in
 {
   environment.systemPackages = [
+    pkgs.systemd
+    pkgs.nixos-rebuild
     dogebox.dogeboxd
   ];
 
@@ -30,10 +31,18 @@ in
       Restart = "always";
       User = "dogeboxd";
       Group = "dogebox";
+      Environment = "PATH=/run/wrappers/bin:${pkgs.systemd}/bin:${pkgs.nixos-rebuild}/bin:${pkgs.coreutils}/bin:${pkgs.bash}/bin:$PATH";
     };
   };
 
   networking.firewall.allowedTCPPorts = [ 3000 8080 ];
+
+  security.wrappers.nixosrebuildboot = {
+    source = "${dogebox.dogeboxd}/dogeboxd/bin/nixosrebuildboot";
+    owner = "root";
+    group = "root";
+    setuid = true;
+  };
 
   security.wrappers.nixosrebuildswitch = {
     source = "${dogebox.dogeboxd}/dogeboxd/bin/nixosrebuildswitch";
@@ -49,10 +58,21 @@ in
     setuid = true;
   };
 
-  # Copy self into build image.
-  environment.etc = {
-    "nixos/dogeboxd.nix" = {
-      source = "${configDir}/dogeboxd.nix";
-    };
+  security.wrappers.reboot = {
+    source = "${pkgs.systemd}/bin/reboot";
+    owner = "root";
+    group = "root";
+    setuid = true;
   };
+
+  # TEMPORARY. Remove this when we can figure out how to point it to _just_ the wrappers?
+  security.sudo.extraRules = [
+    {
+      users = [ "dogeboxd" ];
+      commands = [ {
+        command = "ALL";
+        options = [ "NOPASSWD" ];
+      } ];
+    }
+  ];
 }

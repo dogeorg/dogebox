@@ -2,17 +2,10 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 
-let configDir = ./.;
-in
 {
-  imports =
-      [
-        # ./hardware-configuration.nix 
-        ./dogebox.nix
-      ]
-    ;
+  imports = [ ./dogebox.nix ];
 
   nix.settings = {
     #allowed-users = [ "*" ];
@@ -44,11 +37,4 @@ in
 
   # DO NOT CHANGE THIS. EVER. EVEN WHEN UPDATING YOUR SYSTEM PAST 24.05.
   system.stateVersion = "24.05";
- 
-  # Copy self into build image.
-  environment.etc = {
-    "nixos/base.nix" = {
-      source = "${configDir}/base.nix";
-    };
-  };
 }

@@ -3,9 +3,6 @@
 # to /etc/nixos/configuration.nix instead.
 { config, lib, pkgs, modulesPath, ... }:
 
-let
-  configDir = ./.;
-in
 {
   imports = [ ];
 
@@ -35,11 +32,4 @@ in
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   #virtualisation.virtualbox.guest.enable = true;
-
-  # Copy self into build image.
-  environment.etc = {
-    "nixos/x86_64/hardware-configuration.nix" = {
-      source = "${configDir}/hardware-configuration.nix";
-    };
-  };
 }

@@ -2,7 +2,6 @@
 
 let
   dogebox = import <dogebox> { inherit pkgs; };
-  configDir = ./.;
 in
 {
   environment.systemPackages = [
@@ -28,13 +27,6 @@ in
       Restart = "always";
       User = "dkm";
       Group = "dogebox";
-    };
-  };
-
-  # Copy self into build image.
-  environment.etc = {
-    "nixos/dkm.nix" = {
-      source = "${configDir}/dkm.nix";
     };
   };
 }
