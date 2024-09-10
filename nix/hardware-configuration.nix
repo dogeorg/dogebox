@@ -4,16 +4,15 @@
 
   fileSystems."/" = lib.mkDefault
     { 
-      device = "/dev/disk/by-label/DOGEBOX";
+      device = "/dev/disk/by-label/dogebox";
       fsType = "ext4";
     };
 
   fileSystems."/boot" = lib.mkDefault 
     {
-      device = "/dev/sda1";
+      device = "/dev/sda";
       fsType = "vfat";
     };
 
   networking.useDHCP = lib.mkDefault true;
-
 }
