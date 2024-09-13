@@ -2,6 +2,7 @@
 
 pkgs.mkShell {
   buildInputs = [
+    pkgs.gnumake
     pkgs.nixos-generators
   ];
 }

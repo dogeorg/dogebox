@@ -1,11 +1,9 @@
 { modulesPath, ... }:
 
 {
-  imports =
-      [ 
-        (modulesPath + "/virtualisation/proxmox-lxc.nix")
-        ./base.nix
-      ]
-    ;
+  imports = [ 
+    (modulesPath + "/virtualisation/proxmox-lxc.nix")
+    ./base.nix
+  ];
 
 }

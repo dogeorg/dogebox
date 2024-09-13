@@ -1,5 +1,10 @@
+{ modulesPath, ... }:
+
 {
-  imports = [ ./base.nix ];
+  imports = [
+    (modulesPath + "/profiles/qemu-guest.nix")
+    ./base.nix
+  ];
 
   fileSystems."/" = {
     device = "/dev/disk/by-label/nixos";
