@@ -49,29 +49,8 @@ in
 
   networking.firewall.allowedTCPPorts = [ 3000 8080 ];
 
-  security.wrappers.nixosrebuildboot = {
-    source = "${dogebox.dogeboxd}/dogeboxd/bin/nixosrebuildboot";
-    owner = "root";
-    group = "root";
-    setuid = true;
-  };
-
-  security.wrappers.nixosrebuildswitch = {
-    source = "${dogebox.dogeboxd}/dogeboxd/bin/nixosrebuildswitch";
-    owner = "root";
-    group = "root";
-    setuid = true;
-  };
-
-  security.wrappers.machinectlstop = {
-    source = "${dogebox.dogeboxd}/dogeboxd/bin/machinectlstop";
-    owner = "root";
-    group = "root";
-    setuid = true;
-  };
-
-  security.wrappers.reboot = {
-    source = "${pkgs.systemd}/bin/reboot";
+  security.wrappers._dbxroot = {
+    source = "${dogebox.dogeboxd}/dogeboxd/bin/_dbxroot";
     owner = "root";
     group = "root";
     setuid = true;
