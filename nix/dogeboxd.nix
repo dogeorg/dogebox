@@ -39,7 +39,7 @@ in
     wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
-      ExecStart = "${dogebox.dogeboxd}/dogeboxd/bin/dogeboxd --addr 0.0.0.0 --data /opt/dogebox --nix /opt/dogebox/nix --port 3000 --uiport 8080 --uidir ${dogebox.dogeboxd}/dpanel/src";
+      ExecStart = "/run/wrappers/bin/dogeboxd --addr 0.0.0.0 --data /opt/dogebox --nix /opt/dogebox/nix --port 3000 --uiport 8080 --uidir ${dogebox.dogeboxd}/dpanel/src";
       Restart = "always";
       User = "dogeboxd";
       Group = "dogebox";
@@ -54,6 +54,15 @@ in
     owner = "root";
     group = "root";
     setuid = true;
+  };
+
+  # This wrapper is to ensure dogeboxd can listen on port :80
+  # for it's internal router. This is never exposed outside the host.
+  security.wrappers.dogeboxd = {
+    source = "${dogebox.dogeboxd}/dogeboxd/bin/dogeboxd";
+    owner = "dogeboxd";
+    group = "dogebox";
+    capabilities = "cap_net_bind_service=+ep";
   };
 
   # TEMPORARY. Remove this when we can figure out how to point it to _just_ the wrappers?
