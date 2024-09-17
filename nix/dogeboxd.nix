@@ -56,6 +56,15 @@ in
     setuid = true;
   };
 
+  # This wrapper is to ensure dogeboxd can listen on port :80
+  # for it's internal router. This is never exposed outside the host.
+  security.wrappers.dogeboxd = {
+    source = "${dogebox.dogeboxd}/dogeboxd/bin/dogeboxd";
+    owner = "dogeboxd";
+    group = "dogebox";
+    capabilities = "cap_net_bind_service=+ep";
+  };
+
   # TEMPORARY. Remove this when we can figure out how to point it to _just_ the wrappers?
   security.sudo.extraRules = [
     {
