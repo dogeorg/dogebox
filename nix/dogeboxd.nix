@@ -39,7 +39,7 @@ in
     wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
-      ExecStart = "${dogebox.dogeboxd}/dogeboxd/bin/dogeboxd --addr 0.0.0.0 --data /opt/dogebox --nix /opt/dogebox/nix --port 3000 --uiport 8080 --uidir ${dogebox.dogeboxd}/dpanel/src";
+      ExecStart = "/run/wrappers/bin/dogeboxd --addr 0.0.0.0 --data /opt/dogebox --nix /opt/dogebox/nix --port 3000 --uiport 8080 --uidir ${dogebox.dogeboxd}/dpanel/src";
       Restart = "always";
       User = "dogeboxd";
       Group = "dogebox";
