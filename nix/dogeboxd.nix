@@ -65,6 +65,15 @@ in
     capabilities = "cap_net_bind_service=+ep";
   };
 
+  # This wrapper grants no special powers, but makes the binary
+  # available system-wide, so that it can be used by systemd init
+  # for checking if containers should start at boot (when not in recovery mode)
+  security.wrappers.dbx = {
+    source = "${dogebox.dogeboxd}/dogeboxd/bin/dbx";
+    owner = "dogeboxd";
+    group = "dogebox";
+  };
+
   # TEMPORARY. Remove this when we can figure out how to point it to _just_ the wrappers?
   security.sudo.extraRules = [
     {
