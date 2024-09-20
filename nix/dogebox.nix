@@ -40,7 +40,7 @@ in
         echo "Adding nixpkgs channel..."
         ${pkgs.nix}/bin/nix-channel --add https://nixos.org/channels/nixos-24.05 nixpkgs
         echo "Adding dogebox nix channel..."
-        ${pkgs.nix}/bin/nix-channel --add https://github.com/dogeorg/dogebox-nur-packages/archive/main.tar.gz dogebox
+        ${pkgs.nix}/bin/nix-channel --add https://github.com/dogeorg/dogebox-nur-packages/archive/fb400bbacde816437c5dcb30b4e7067ab26265ac.tar.gz dogebox
         echo "Updating nix channel..."
         ${pkgs.nix}/bin/nix-channel --update
         echo "Rebuilding system..."
