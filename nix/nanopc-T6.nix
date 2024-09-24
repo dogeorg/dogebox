@@ -5,6 +5,13 @@
     ./base.nix
   ];
 
+  nixpkgs.overlays = [
+    (final: super: {
+      makeModulesClosure = x:
+        super.makeModulesClosure (x // { allowMissing = true; });
+    })
+  ];
+
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
   boot.loader.grub.enable = false;
   # Enables the generation of /boot/extlinux/extlinux.conf
@@ -33,13 +40,6 @@
       configfile = ./nanopc-T6_linux_defconfig;
 
       allowImportFromDerivation = true;
-
-#  modulesClosure = pkgs.makeModulesClosure {
-#    rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules;
-#    kernel = modulesTree;
-#    firmware = firmware;
-#    allowMissing = false;
-#  };
 
     })
     .overrideAttrs (old: {
@@ -95,5 +95,17 @@
     '';
     wantedBy = [ "basic.target" ];
   };
+
+  system.activationScripts.rk3588-firmware = ''
+    for i in /etc/firmware /lib/firmware /system;
+    do
+      [ -L $i ] && echo "Removing old symlink $i" && rm $i
+      [ -e $i ] && echo "Moving $i out of the way" && mv $i $i.`date -I`
+    done
+    echo "Adding new firmware symlinks"
+    ln -sf ${dogebox.rk3588-firmware}/etc/firmware/ /etc/firmware
+    ln -sf ${dogebox.rk3588-firmware}/lib/firmware/ /lib/firmware
+    ln -sf ${dogebox.rk3588-firmware}/system/ /system
+  '';
 
 }
