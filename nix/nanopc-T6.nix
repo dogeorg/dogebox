@@ -1,5 +1,8 @@
 { pkgs, ... }:
 
+let
+  dogebox = import <dogebox> { inherit pkgs; };
+in
 {
   imports = [ 
     ./base.nix
@@ -25,35 +28,31 @@
                          ...
                       } :
     (linuxManualConfig rec {
-      modDirVersion = "6.1.43";
-      version = "${modDirVersion}-xunlong-rk3588";
-      extraMeta.branch = "6.1";
+      modDirVersion = "6.1.57";
+      version = modDirVersion;
 
-      # https://github.com/orangepi-xunlong/linux-orangepi/tree/orange-pi-6.1-rk35xx
       src = fetchFromGitHub {
-        owner = "orangepi-xunlong";
-        repo = "linux-orangepi";
-        rev = "752c0d0a12fdce201da45852287b48382caa8c0f";
-        hash = "sha256-tVu/3SF/+s+Z6ytKvuY+ZwqsXUlm40yOZ/O5kfNfUYc=";
+        owner = "friendlyarm";
+        repo = "kernel-rockchip";
+        rev = "85d0764ec61ebfab6b0d9f6c65f2290068a46fa1";
+        hash = "sha256-oGMx0EYfPQb8XxzObs8CXgXS/Q9pE1O5/fP7/ehRUDA=";
       };
 
       configfile = ./nanopc-T6_linux_defconfig;
-
+      
       allowImportFromDerivation = true;
 
     })
     .overrideAttrs (old: {
-      name = "k"; # dodge uboot length limits
       nativeBuildInputs = old.nativeBuildInputs ++ [ubootTools];
     });
       linux_rk3588 = pkgs.callPackage linux_rk3588_pkg{};
     in
       pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor linux_rk3588);
 
-  #boot.initrd.availableKernelModules = [ "nvme" "usbhid" ];
-  boot.initrd.availableKernelModules = [];
+  boot.initrd.availableKernelModules = [ "nvme" "usbhid" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ ];
+  boot.kernelModules = [ "rtw88_8822ce" "rtw88_pci" "rtw88_core" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
@@ -67,11 +66,6 @@
     wpa_supplicant
     screen
   ];
-
-  services.openssh = {
-    enable = true;
-    passwordAuthentication = true;
-  };
 
   systemd.services.resizerootfs = {
     description = "Expands root filesystem on first boot";
@@ -107,5 +101,4 @@
     ln -sf ${dogebox.rk3588-firmware}/lib/firmware/ /lib/firmware
     ln -sf ${dogebox.rk3588-firmware}/system/ /system
   '';
-
 }
