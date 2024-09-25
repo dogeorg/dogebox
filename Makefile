@@ -1,5 +1,9 @@
 VM_NAME = dogebox-$(shell date +%s)
 
+nanopc-T6:
+	@echo "Generating nanopc-T6 image..."
+	@nixos-generate -c nix/nanopc-T6-builder.nix -f raw
+
 pve:
 	@echo "Generating Proxmox LXC..."
 	@nixos-generate -c nix/pve-builder.nix -f proxmox-lxc
