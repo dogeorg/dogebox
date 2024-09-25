@@ -7240,6 +7240,7 @@ CONFIG_ROCKCHIP_DEBUG=y
 # Xilinx SoC drivers
 #
 # end of Xilinx SoC drivers
+CONFIG_VENDOR_FRIENDLYELEC=y
 # end of SOC (System On Chip) specific Drivers
 
 CONFIG_PM_DEVFREQ=y
