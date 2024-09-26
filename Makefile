@@ -2,7 +2,15 @@ VM_NAME = dogebox-$(shell date +%s)
 
 pve:
 	@echo "Generating Proxmox LXC..."
-	@nixos-generate -c nix/default-builder.nix -f proxmox-lxc
+	@nixos-generate -c nix/pve-builder.nix -f proxmox-lxc
+
+qemu:
+	@echo "Generating QEMU qcow2..."
+	@nixos-generate -c nix/qemu-builder.nix -f qcow
+
+raw:
+	@echo "Generating raw image..."
+	@nixos-generate -c nix/default-builder.nix -f raw
 
 virtualbox:
 	@echo "Generating VirtualBox OVA..."
@@ -17,4 +25,8 @@ virtualbox-launch: virtualbox
 	VBoxManage modifyvm "$(VM_NAME)" --nic1 bridged --bridgeadapter1 $$BRIDGE_ADAPTER && \
 	VBoxManage startvm "$(VM_NAME)"
 
-.PHONY: pve qcow virtualbox virtualbox-launch
+vmware:
+	@echo "Generating VMWare VMDK..."
+	@nixos-generate -c nix/vmware-builder.nix -f vmware
+
+.PHONY: pve qemu raw virtualbox virtualbox-launch vmware
