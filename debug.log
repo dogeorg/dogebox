@@ -1,0 +1,772 @@
+this derivation will be built:
+  /nix/store/mhs0frsaabfm894ljvxkn98s6lkqdfcf-dogecoin-core-1.14.7.drv
+building '/nix/store/mhs0frsaabfm894ljvxkn98s6lkqdfcf-dogecoin-core-1.14.7.drv'...
+Running phase: unpackPhase
+unpacking source archive /nix/store/jw4i9nf2ihbsfrwahzvqynaqazjc6hxf-v1.14.7.tar.gz
+source root is dogecoin-1.14.7
+setting SOURCE_DATE_EPOCH to timestamp 1709070193 of file dogecoin-1.14.7/src/zmq/zmqpublishnotifier.h
+Running phase: patchPhase
+Running phase: updateAutotoolsGnuConfigScriptsPhase
+Updating Autotools / GNU config script to a newer upstream version: ./depends/config.sub
+Updating Autotools / GNU config script to a newer upstream version: ./depends/config.guess
+Running phase: autoreconfPhase
+autoreconf: export WARNINGS=
+autoreconf: Entering directory '.'
+autoreconf: configure.ac: not using Gettext
+autoreconf: running: aclocal --force -I build-aux/m4
+autoreconf: configure.ac: tracing
+autoreconf: configure.ac: adding subdirectory src/univalue to autoreconf
+autoreconf: Entering directory 'src/univalue'
+autoreconf: configure.ac: not using Gettext
+autoreconf: running: aclocal --force -I build-aux/m4
+autoreconf: configure.ac: tracing
+autoreconf: running: libtoolize --copy --force
+libtoolize: putting auxiliary files in AC_CONFIG_AUX_DIR, 'build-aux'.
+libtoolize: copying file 'build-aux/ltmain.sh'
+libtoolize: putting macros in AC_CONFIG_MACRO_DIRS, 'build-aux/m4'.
+libtoolize: copying file 'build-aux/m4/libtool.m4'
+libtoolize: copying file 'build-aux/m4/ltoptions.m4'
+libtoolize: copying file 'build-aux/m4/ltsugar.m4'
+libtoolize: copying file 'build-aux/m4/ltversion.m4'
+libtoolize: copying file 'build-aux/m4/lt~obsolete.m4'
+autoreconf: configure.ac: not using Intltool
+autoreconf: configure.ac: not using Gtkdoc
+autoreconf: running: aclocal --force -I build-aux/m4
+autoreconf: running: /nix/store/dvmmlmwmgvbwbcsabvpg3clf7m71h9hf-autoconf-2.72/bin/autoconf --force
+autoreconf: running: /nix/store/dvmmlmwmgvbwbcsabvpg3clf7m71h9hf-autoconf-2.72/bin/autoheader --force
+autoreconf: running: automake --add-missing --copy --force-missing
+configure.ac:45: installing 'build-aux/compile'
+configure.ac:45: installing 'build-aux/config.guess'
+configure.ac:45: installing 'build-aux/config.sub'
+configure.ac:28: installing 'build-aux/install-sh'
+configure.ac:28: installing 'build-aux/missing'
+Makefile.am: installing 'build-aux/depcomp'
+parallel-tests: installing 'build-aux/test-driver'
+autoreconf: 'build-aux/install-sh' is updated
+autoreconf: Leaving directory 'src/univalue'
+autoreconf: configure.ac: adding subdirectory src/secp256k1 to autoreconf
+autoreconf: Entering directory 'src/secp256k1'
+autoreconf: configure.ac: not using Gettext
+autoreconf: running: aclocal --force -I build-aux/m4
+autoreconf: configure.ac: tracing
+autoreconf: running: libtoolize --copy --force
+libtoolize: putting auxiliary files in AC_CONFIG_AUX_DIR, 'build-aux'.
+libtoolize: copying file 'build-aux/ltmain.sh'
+libtoolize: putting macros in AC_CONFIG_MACRO_DIRS, 'build-aux/m4'.
+libtoolize: copying file 'build-aux/m4/libtool.m4'
+libtoolize: copying file 'build-aux/m4/ltoptions.m4'
+libtoolize: copying file 'build-aux/m4/ltsugar.m4'
+libtoolize: copying file 'build-aux/m4/ltversion.m4'
+libtoolize: copying file 'build-aux/m4/lt~obsolete.m4'
+autoreconf: configure.ac: not using Intltool
+autoreconf: configure.ac: not using Gtkdoc
+autoreconf: running: aclocal --force -I build-aux/m4
+autoreconf: running: /nix/store/dvmmlmwmgvbwbcsabvpg3clf7m71h9hf-autoconf-2.72/bin/autoconf --force
+autoreconf: running: /nix/store/dvmmlmwmgvbwbcsabvpg3clf7m71h9hf-autoconf-2.72/bin/autoheader --force
+autoreconf: running: automake --add-missing --copy --force-missing
+configure.ac:40: installing 'build-aux/ar-lib'
+configure.ac:35: installing 'build-aux/compile'
+configure.ac:24: installing 'build-aux/config.guess'
+configure.ac:24: installing 'build-aux/config.sub'
+configure.ac:30: installing 'build-aux/install-sh'
+configure.ac:30: installing 'build-aux/missing'
+Makefile.am: installing 'build-aux/depcomp'
+parallel-tests: installing 'build-aux/test-driver'
+autoreconf: Leaving directory 'src/secp256k1'
+autoreconf: running: libtoolize --copy --force
+libtoolize: putting auxiliary files in AC_CONFIG_AUX_DIR, 'build-aux'.
+libtoolize: copying file 'build-aux/ltmain.sh'
+libtoolize: putting macros in AC_CONFIG_MACRO_DIRS, 'build-aux/m4'.
+libtoolize: copying file 'build-aux/m4/libtool.m4'
+libtoolize: copying file 'build-aux/m4/ltoptions.m4'
+libtoolize: copying file 'build-aux/m4/ltsugar.m4'
+libtoolize: copying file 'build-aux/m4/ltversion.m4'
+libtoolize: copying file 'build-aux/m4/lt~obsolete.m4'
+autoreconf: configure.ac: not using Intltool
+autoreconf: configure.ac: not using Gtkdoc
+autoreconf: running: aclocal --force -I build-aux/m4
+autoreconf: running: /nix/store/dvmmlmwmgvbwbcsabvpg3clf7m71h9hf-autoconf-2.72/bin/autoconf --force
+autoreconf: running: /nix/store/dvmmlmwmgvbwbcsabvpg3clf7m71h9hf-autoconf-2.72/bin/autoheader --force
+autoreconf: running: automake --add-missing --copy --force-missing
+configure.ac:74: installing 'build-aux/compile'
+configure.ac:24: installing 'build-aux/config.guess'
+configure.ac:24: installing 'build-aux/config.sub'
+configure.ac:34: installing 'build-aux/install-sh'
+configure.ac:34: installing 'build-aux/missing'
+src/Makefile.am: installing 'build-aux/depcomp'
+parallel-tests: installing 'build-aux/test-driver'
+autoreconf: Leaving directory '.'
+Running phase: configurePhase
+fixing libtool script ./build-aux/ltmain.sh
+fixing libtool script ./src/secp256k1/build-aux/ltmain.sh
+fixing libtool script ./src/univalue/build-aux/ltmain.sh
+./configure
+./src/secp256k1/configure
+./src/univalue/configure
+patching script interpreter paths in ./configure
+./configure: interpreter directive changed from "#! /bin/sh" to "/nix/store/4bj2kxdm1462fzcc2i2s4dn33g2angcc-bash-5.2p32/bin/sh"
+configure flags: --disable-static --disable-dependency-tracking --prefix=/nix/store/0f11355rcw8k8i4x6kry8hf95aydqfca-dogecoin-core-1.14.7 --with-incompatible-bdb --with-boost-libdir=/nix/store/njw3ph2amcyf5xnwsn4q4n6fcvanl4r1-boost-1.81.0/lib
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking for a BSD-compatible install... /nix/store/w1iq3315z63558j04gnlzdd2yk1v1hfz-coreutils-9.5/bin/install -c
+checking whether build environment is sane... yes
+checking for a race-free mkdir -p... /nix/store/w1iq3315z63558j04gnlzdd2yk1v1hfz-coreutils-9.5/bin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking whether to enable maintainer-specific portions of Makefiles... yes
+checking whether make supports nested variables... (cached) yes
+checking whether the C++ compiler works... yes
+checking for C++ compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether the compiler supports GNU C++... yes
+checking whether g++ accepts -g... yes
+checking for g++ option to enable C++11 features... none needed
+checking whether make supports the include directive... yes (GNU style)
+checking dependency style of g++... none
+checking whether g++ supports C++11 features with -std=c++11... yes
+checking whether std::atomic can be used without link library... yes
+checking whether the compiler supports GNU Objective C++... no
+checking whether g++ -std=c++11 accepts -g... no
+checking dependency style of g++ -std=c++11... none
+checking how to print strings... printf
+checking for gcc... gcc
+checking whether the compiler supports GNU C... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to enable C11 features... none needed
+checking whether gcc understands -c and -o together... yes
+checking dependency style of gcc... none
+checking for a sed that does not truncate output... /nix/store/d58flzaagmfb5pyvmknly4cnws45nc80-gnused-4.9/bin/sed
+checking for grep that handles long lines and -e... /nix/store/7adzfq6lz76h928gmws5sn6nkli14ml6-gnugrep-3.11/bin/grep
+checking for egrep... /nix/store/7adzfq6lz76h928gmws5sn6nkli14ml6-gnugrep-3.11/bin/grep -E
+checking for fgrep... /nix/store/7adzfq6lz76h928gmws5sn6nkli14ml6-gnugrep-3.11/bin/grep -F
+checking for ld used by gcc... ld
+checking if the linker (ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... nm
+checking the name lister (nm) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking how to convert x86_64-pc-linux-gnu file names to x86_64-pc-linux-gnu format... func_convert_file_noop
+checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for ld option to reload object files... -r
+checking for file... file
+checking for objdump... objdump
+checking how to recognize dependent libraries... (cached) pass_all
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for archiver @FILE support... @
+checking for strip... strip
+checking for ranlib... ranlib
+checking command to parse nm output from gcc object... ok
+checking for sysroot... no
+checking for a working dd... /nix/store/w1iq3315z63558j04gnlzdd2yk1v1hfz-coreutils-9.5/bin/dd
+checking how to truncate binary pipes... /nix/store/w1iq3315z63558j04gnlzdd2yk1v1hfz-coreutils-9.5/bin/dd bs=4096 count=1
+checking for mt... no
+checking if : is a manifest tool... no
+checking for stdio.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for strings.h... yes
+checking for sys/stat.h... yes
+checking for sys/types.h... yes
+checking for unistd.h... yes
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if gcc supports -fno-rtti -fno-exceptions... no
+checking for gcc option to produce PIC... -fPIC -DPIC
+checking if gcc PIC flag -fPIC -DPIC works... yes
+checking if gcc static flag -static works... no
+checking if gcc supports -c -o file.o... yes
+checking if gcc supports -c -o file.o... (cached) yes
+checking whether the gcc linker (ld -m elf_x86_64) supports shared libraries... yes
+checking whether -lc should be explicitly linked in... no
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... yes
+checking whether to build static libraries... no
+checking how to run the C++ preprocessor... g++ -std=c++11 -E
+checking for ld used by g++ -std=c++11... ld -m elf_x86_64
+checking if the linker (ld -m elf_x86_64) is GNU ld... yes
+checking whether the g++ -std=c++11 linker (ld -m elf_x86_64) supports shared libraries... yes
+checking for g++ -std=c++11 option to produce PIC... -fPIC -DPIC
+checking if g++ -std=c++11 PIC flag -fPIC -DPIC works... yes
+checking if g++ -std=c++11 static flag -static works... no
+checking if g++ -std=c++11 supports -c -o file.o... yes
+checking if g++ -std=c++11 supports -c -o file.o... (cached) yes
+checking whether the g++ -std=c++11 linker (ld -m elf_x86_64) supports shared libraries... yes
+checking dynamic linker characteristics... (cached) GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking for ar... /nix/store/lbk30k56awz9vz9qpid93fkjns0xwlhd-gcc-wrapper-13.3.0/bin/ar
+checking for ranlib... /nix/store/lbk30k56awz9vz9qpid93fkjns0xwlhd-gcc-wrapper-13.3.0/bin/ranlib
+checking for strip... /nix/store/lbk30k56awz9vz9qpid93fkjns0xwlhd-gcc-wrapper-13.3.0/bin/strip
+checking for gcov... /nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/bin/gcov
+checking for lcov... no
+checking for python3.6... no
+checking for python3.5... no
+checking for python3.4... no
+checking for python3... no
+checking for python2.7... no
+checking for python2... no
+checking for python... no
+checking for genhtml... no
+checking for git... no
+checking for ccache... no
+checking for xgettext... /nix/store/5i7vyd1n23g84fljnp9y80yvz6b7k9c4-gettext-0.21.1/bin/xgettext
+checking for hexdump... /nix/store/2lx8zljg14lpyicrb41191sayqa7h0pr-util-linux-2.39.4-bin/bin/hexdump
+checking for objcopy... /nix/store/lbk30k56awz9vz9qpid93fkjns0xwlhd-gcc-wrapper-13.3.0/bin/objcopy
+checking whether C++ compiler accepts -Werror... yes
+checking whether C++ compiler accepts -Wall... yes
+checking whether C++ compiler accepts -Wextra... yes
+checking whether C++ compiler accepts -Wformat... yes
+checking whether C++ compiler accepts -Wvla... yes
+checking whether C++ compiler accepts -Wformat-security... yes
+checking whether C++ compiler accepts -Wunused-parameter... yes
+checking whether C++ compiler accepts -Wself-assign... no
+checking whether C++ compiler accepts -Wunused-local-typedef... no
+checking whether C++ compiler accepts -Wdeprecated-register... no
+checking pkg-config is at least version 0.9.0... yes
+checking whether byte ordering is bigendian... no
+checking how to run the C preprocessor... gcc -E
+checking for egrep -e... (cached) /nix/store/7adzfq6lz76h928gmws5sn6nkli14ml6-gnugrep-3.11/bin/grep -E
+checking whether gcc is Clang... no
+checking whether pthreads work with "-pthread" and "-lpthread"... yes
+checking for joinable pthread attribute... PTHREAD_CREATE_JOINABLE
+checking whether more special flags are required for pthreads... no
+checking for PTHREAD_PRIO_INHERIT... yes
+checking for gcc option to enable large file support... none needed
+checking for g++ -std=c++11 options needed to detect all undeclared functions... none needed
+checking whether strerror_r is declared... yes
+checking whether strerror_r returns char *... yes
+checking whether the linker accepts -Wl,--large-address-aware... no
+checking for __attribute__((visibility))... yes
+checking for __attribute__((dllexport))... no
+checking for __attribute__((dllimport))... no
+checking for library containing clock_gettime... none required
+checking whether C++ compiler accepts -fPIC... yes
+checking whether C++ compiler accepts -Wstack-protector... yes
+checking whether C++ compiler accepts -fstack-protector-all... yes
+checking whether C++ preprocessor accepts -D_FORTIFY_SOURCE=2... yes
+checking whether C++ preprocessor accepts -U_FORTIFY_SOURCE... yes
+checking whether the linker accepts -Wl,--dynamicbase... no
+checking whether the linker accepts -Wl,--nxcompat... no
+checking whether the linker accepts -Wl,--high-entropy-va... no
+checking whether the linker accepts -Wl,-z,relro... yes
+checking whether the linker accepts -Wl,-z,now... yes
+checking whether C++ compiler accepts -fPIE... yes
+checking whether the linker accepts -pie... yes
+checking for endian.h... yes
+checking for sys/endian.h... no
+checking for byteswap.h... yes
+checking for stdio.h... (cached) yes
+checking for stdlib.h... (cached) yes
+checking for unistd.h... (cached) yes
+checking for strings.h... (cached) yes
+checking for sys/types.h... (cached) yes
+checking for sys/stat.h... (cached) yes
+checking for sys/select.h... yes
+checking for sys/prctl.h... yes
+checking whether strnlen is declared... yes
+checking whether daemon is declared... yes
+checking whether le16toh is declared... yes
+checking whether le32toh is declared... yes
+checking whether le64toh is declared... yes
+checking whether htole16 is declared... yes
+checking whether htole32 is declared... yes
+checking whether htole64 is declared... yes
+checking whether be16toh is declared... yes
+checking whether be32toh is declared... yes
+checking whether be64toh is declared... yes
+checking whether htobe16 is declared... yes
+checking whether htobe32 is declared... yes
+checking whether htobe64 is declared... yes
+checking whether bswap_16 is declared... yes
+checking whether bswap_32 is declared... yes
+checking whether bswap_64 is declared... yes
+checking for MSG_NOSIGNAL... yes
+checking for mallopt M_ARENA_MAX... yes
+checking for visibility attribute... yes
+checking for Berkeley DB C++ headers... default
+checking for main in -ldb_cxx-5.3... yes
+checking for miniupnpc/miniwget.h... yes
+checking for main in -lminiupnpc... yes
+checking for miniupnpc/miniupnpc.h... yes
+checking for main in -lminiupnpc... (cached) yes
+checking for miniupnpc/upnpcommands.h... yes
+checking for main in -lminiupnpc... (cached) yes
+checking for miniupnpc/upnperrors.h... yes
+checking for main in -lminiupnpc... (cached) yes
+checking for Qt5Core Qt5Gui Qt5Network Qt5Widgets Qt5PrintSupport... no
+checking for QtCore QtGui QtNetwork... no
+configure: WARNING: Qt dependencies not found; dogecoin-qt frontend will not be built
+checking whether to build Dogecoin Core GUI... no (Qt5)
+checking for boostlib >= 1.60.0... yes
+ok
+checking whether the Boost::System library is available... yes
+checking for exit in -lboost_system... yes
+checking whether the Boost::Filesystem library is available... yes
+checking for exit in -lboost_filesystem... yes
+checking whether the Boost::Program_Options library is available... yes
+checking for exit in -lboost_program_options... yes
+checking whether the Boost::Thread library is available... yes
+checking for exit in -lboost_thread... yes
+checking whether the Boost::Chrono library is available... yes
+checking for exit in -lboost_chrono... yes
+checking for fdatasync... yes
+checking for F_FULLFSYNC... no
+checking for O_CLOEXEC... yes
+checking whether the Boost::Unit_Test_Framework library is available... yes
+checking for dynamic linked boost test... yes
+checking for libssl... yes
+checking for libcrypto... yes
+checking for libevent... yes
+checking for libevent_pthreads... yes
+checking for libzmq >= 4... no
+configure: WARNING: libzmq version 4.x or greater not found, disabling
+checking whether EVP_MD_CTX_new is declared... yes
+checking whether to build dogecoind... yes
+checking whether to build utils (dogecoin-cli dogecoin-tx)... yes
+checking whether to build libraries... yes
+checking if ccache should be used... no
+checking if wallet should be enabled... yes
+checking whether to build with support for UPnP... yes
+checking whether to build with UPnP enabled by default... no
+checking whether to build test_dogecoin... yes
+checking whether to reduce exports... no
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating libbitcoinconsensus.pc
+config.status: creating Makefile
+config.status: creating src/Makefile
+config.status: creating doc/man/Makefile
+config.status: creating share/setup.nsi
+config.status: creating share/qt/Info.plist
+config.status: creating src/test/buildenv.py
+config.status: creating qa/pull-tester/tests_config.py
+config.status: creating contrib/devtools/split-debug.sh
+config.status: creating src/config/bitcoin-config.h
+config.status: executing depfiles commands
+config.status: executing libtool commands
+=== configuring in src/univalue (/build/dogecoin-1.14.7/src/univalue)
+configure: running /nix/store/4bj2kxdm1462fzcc2i2s4dn33g2angcc-bash-5.2p32/bin/bash ./configure --disable-option-checking '--prefix=/nix/store/0f11355rcw8k8i4x6kry8hf95aydqfca-dogecoin-core-1.14.7'  '--disable-static' '--disable-dependency-tracking' '--with-incompatible-bdb' '--with-boost-libdir=/nix/store/njw3ph2amcyf5xnwsn4q4n6fcvanl4r1-boost-1.81.0/lib' 'CXX=g++' 'CC=gcc' 'PKG_CONFIG=pkg-config' 'PKG_CONFIG_PATH=/nix/store/wj49cdd0jipxgdagarwvmmhbswr6p47w-file-5.45-dev/lib/pkgconfig:/nix/store/xznbpwh1sxaamd2srd1i80il422k6kfc-openssl-3.0.14-dev/lib/pkgconfig:/nix/store/d6l9q9a0j5cb2p0r4v2b3wblv0rxiy8i-util-linux-2.39.4-dev/lib/pkgconfig:/nix/store/b3a0wh9v9md9kc4qdixsbwjy3799077r-boost-1.81.0-dev/lib/pkgconfig:/nix/store/vsygj2vzwqr9x7rzq4v3prcv2blkggmx-zlib-1.3.1-dev/lib/pkgconfig:/nix/store/l418cdyzlmrb36c7am0kvmvgb7wji42w-libevent-2.1.12-dev/lib/pkgconfig:/nix/store/6ck4qv6f5qk03n4fnr25mj3l2mfh736l-miniupnpc-2.2.8/lib/pkgconfig:/nix/store/mx6a41pny5ir45z4mvj9ln2ma91kl65v-protobuf-25.4/lib/pkgconfig:/nix/store/kjmzrl29dk46iyf57nz1pmpybkmx6k41-abseil-cpp-20240722.0/lib/pkgconfig:/nix/store/w3fm119z692mnxmbd2s5ar7mnl1px771-qrencode-4.1.1-dev/lib/pkgconfig' '--disable-shared' '--with-pic' '--with-bignum=no' '--enable-module-recovery' --cache-file=/dev/null --srcdir=.
+checking whether make supports nested variables... yes
+checking for a BSD-compatible install... /nix/store/w1iq3315z63558j04gnlzdd2yk1v1hfz-coreutils-9.5/bin/install -c
+checking whether build environment is sane... yes
+checking for a race-free mkdir -p... /nix/store/w1iq3315z63558j04gnlzdd2yk1v1hfz-coreutils-9.5/bin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking how to print strings... printf
+checking whether make supports the include directive... yes (GNU style)
+checking for gcc... gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether the compiler supports GNU C... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to enable C11 features... none needed
+checking whether gcc understands -c and -o together... yes
+checking dependency style of gcc... none
+checking for a sed that does not truncate output... /nix/store/d58flzaagmfb5pyvmknly4cnws45nc80-gnused-4.9/bin/sed
+checking for grep that handles long lines and -e... /nix/store/7adzfq6lz76h928gmws5sn6nkli14ml6-gnugrep-3.11/bin/grep
+checking for egrep... /nix/store/7adzfq6lz76h928gmws5sn6nkli14ml6-gnugrep-3.11/bin/grep -E
+checking for fgrep... /nix/store/7adzfq6lz76h928gmws5sn6nkli14ml6-gnugrep-3.11/bin/grep -F
+checking for ld used by gcc... ld -m elf_x86_64
+checking if the linker (ld -m elf_x86_64) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... nm
+checking the name lister (nm) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking how to convert x86_64-pc-linux-gnu file names to x86_64-pc-linux-gnu format... func_convert_file_noop
+checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for ld -m elf_x86_64 option to reload object files... -r
+checking for file... file
+checking for objdump... objdump
+checking how to recognize dependent libraries... (cached) pass_all
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for archiver @FILE support... @
+checking for strip... /nix/store/lbk30k56awz9vz9qpid93fkjns0xwlhd-gcc-wrapper-13.3.0/bin/strip
+checking for ranlib... /nix/store/lbk30k56awz9vz9qpid93fkjns0xwlhd-gcc-wrapper-13.3.0/bin/ranlib
+checking command to parse nm output from gcc object... ok
+checking for sysroot... no
+checking for a working dd... /nix/store/w1iq3315z63558j04gnlzdd2yk1v1hfz-coreutils-9.5/bin/dd
+checking how to truncate binary pipes... /nix/store/w1iq3315z63558j04gnlzdd2yk1v1hfz-coreutils-9.5/bin/dd bs=4096 count=1
+checking for mt... no
+checking if : is a manifest tool... no
+checking for stdio.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for strings.h... yes
+checking for sys/stat.h... yes
+checking for sys/types.h... yes
+checking for unistd.h... yes
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if gcc supports -fno-rtti -fno-exceptions... no
+checking for gcc option to produce PIC... -fPIC -DPIC
+checking if gcc PIC flag -fPIC -DPIC works... yes
+checking if gcc static flag -static works... no
+checking if gcc supports -c -o file.o... yes
+checking if gcc supports -c -o file.o... (cached) yes
+checking whether the gcc linker (ld -m elf_x86_64 -m elf_x86_64) supports shared libraries... yes
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... no
+checking whether to build static libraries... yes
+checking whether the compiler supports GNU C++... yes
+checking whether g++ accepts -g... yes
+checking for g++ option to enable C++11 features... none needed
+checking dependency style of g++... none
+checking how to run the C++ preprocessor... g++ -E
+checking for ld used by g++... ld -m elf_x86_64 -m elf_x86_64
+checking if the linker (ld -m elf_x86_64 -m elf_x86_64) is GNU ld... yes
+checking whether the g++ linker (ld -m elf_x86_64 -m elf_x86_64) supports shared libraries... yes
+checking for g++ option to produce PIC... -fPIC -DPIC
+checking if g++ PIC flag -fPIC -DPIC works... yes
+checking if g++ static flag -static works... no
+checking if g++ supports -c -o file.o... yes
+checking if g++ supports -c -o file.o... (cached) yes
+checking whether the g++ linker (ld -m elf_x86_64 -m elf_x86_64) supports shared libraries... yes
+checking dynamic linker characteristics... (cached) GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether g++ supports C++11 features with -std=c++11... yes
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating pc/libunivalue.pc
+config.status: creating pc/libunivalue-uninstalled.pc
+config.status: creating univalue-config.h
+config.status: executing depfiles commands
+config.status: executing libtool commands
+=== configuring in src/secp256k1 (/build/dogecoin-1.14.7/src/secp256k1)
+configure: running /nix/store/4bj2kxdm1462fzcc2i2s4dn33g2angcc-bash-5.2p32/bin/bash ./configure --disable-option-checking '--prefix=/nix/store/0f11355rcw8k8i4x6kry8hf95aydqfca-dogecoin-core-1.14.7'  '--disable-static' '--disable-dependency-tracking' '--with-incompatible-bdb' '--with-boost-libdir=/nix/store/njw3ph2amcyf5xnwsn4q4n6fcvanl4r1-boost-1.81.0/lib' 'CXX=g++' 'CC=gcc' 'PKG_CONFIG=pkg-config' 'PKG_CONFIG_PATH=/nix/store/wj49cdd0jipxgdagarwvmmhbswr6p47w-file-5.45-dev/lib/pkgconfig:/nix/store/xznbpwh1sxaamd2srd1i80il422k6kfc-openssl-3.0.14-dev/lib/pkgconfig:/nix/store/d6l9q9a0j5cb2p0r4v2b3wblv0rxiy8i-util-linux-2.39.4-dev/lib/pkgconfig:/nix/store/b3a0wh9v9md9kc4qdixsbwjy3799077r-boost-1.81.0-dev/lib/pkgconfig:/nix/store/vsygj2vzwqr9x7rzq4v3prcv2blkggmx-zlib-1.3.1-dev/lib/pkgconfig:/nix/store/l418cdyzlmrb36c7am0kvmvgb7wji42w-libevent-2.1.12-dev/lib/pkgconfig:/nix/store/6ck4qv6f5qk03n4fnr25mj3l2mfh736l-miniupnpc-2.2.8/lib/pkgconfig:/nix/store/mx6a41pny5ir45z4mvj9ln2ma91kl65v-protobuf-25.4/lib/pkgconfig:/nix/store/kjmzrl29dk46iyf57nz1pmpybkmx6k41-abseil-cpp-20240722.0/lib/pkgconfig:/nix/store/w3fm119z692mnxmbd2s5ar7mnl1px771-qrencode-4.1.1-dev/lib/pkgconfig' '--disable-shared' '--with-pic' '--with-bignum=no' '--enable-module-recovery' --cache-file=/dev/null --srcdir=.
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking for a BSD-compatible install... /nix/store/w1iq3315z63558j04gnlzdd2yk1v1hfz-coreutils-9.5/bin/install -c
+checking whether build environment is sane... yes
+checking for a race-free mkdir -p... /nix/store/w1iq3315z63558j04gnlzdd2yk1v1hfz-coreutils-9.5/bin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking whether make supports nested variables... (cached) yes
+checking for gcc... gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether the compiler supports GNU C... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to enable C11 features... none needed
+checking whether gcc understands -c and -o together... yes
+checking whether make supports the include directive... yes (GNU style)
+checking dependency style of gcc... none
+checking dependency style of gcc... none
+checking the archiver (/nix/store/lbk30k56awz9vz9qpid93fkjns0xwlhd-gcc-wrapper-13.3.0/bin/ar) interface... ar
+checking how to print strings... printf
+checking for a sed that does not truncate output... /nix/store/d58flzaagmfb5pyvmknly4cnws45nc80-gnused-4.9/bin/sed
+checking for grep that handles long lines and -e... /nix/store/7adzfq6lz76h928gmws5sn6nkli14ml6-gnugrep-3.11/bin/grep
+checking for egrep... /nix/store/7adzfq6lz76h928gmws5sn6nkli14ml6-gnugrep-3.11/bin/grep -E
+checking for fgrep... /nix/store/7adzfq6lz76h928gmws5sn6nkli14ml6-gnugrep-3.11/bin/grep -F
+checking for ld used by gcc... ld -m elf_x86_64
+checking if the linker (ld -m elf_x86_64) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... nm
+checking the name lister (nm) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking how to convert x86_64-pc-linux-gnu file names to x86_64-pc-linux-gnu format... func_convert_file_noop
+checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for ld -m elf_x86_64 option to reload object files... -r
+checking for file... file
+checking for objdump... objdump
+checking how to recognize dependent libraries... (cached) pass_all
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for archiver @FILE support... @
+checking for strip... /nix/store/lbk30k56awz9vz9qpid93fkjns0xwlhd-gcc-wrapper-13.3.0/bin/strip
+checking for ranlib... /nix/store/lbk30k56awz9vz9qpid93fkjns0xwlhd-gcc-wrapper-13.3.0/bin/ranlib
+checking command to parse nm output from gcc object... ok
+checking for sysroot... no
+checking for a working dd... /nix/store/w1iq3315z63558j04gnlzdd2yk1v1hfz-coreutils-9.5/bin/dd
+checking how to truncate binary pipes... /nix/store/w1iq3315z63558j04gnlzdd2yk1v1hfz-coreutils-9.5/bin/dd bs=4096 count=1
+checking for mt... no
+checking if : is a manifest tool... no
+checking for stdio.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for strings.h... yes
+checking for sys/stat.h... yes
+checking for sys/types.h... yes
+checking for unistd.h... yes
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if gcc supports -fno-rtti -fno-exceptions... no
+checking for gcc option to produce PIC... -fPIC -DPIC
+checking if gcc PIC flag -fPIC -DPIC works... yes
+checking if gcc static flag -static works... no
+checking if gcc supports -c -o file.o... yes
+checking if gcc supports -c -o file.o... (cached) yes
+checking whether the gcc linker (ld -m elf_x86_64 -m elf_x86_64) supports shared libraries... yes
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... no
+checking whether to build static libraries... yes
+checking if gcc supports -Werror=unknown-warning-option... no
+checking if gcc supports -std=c89 -pedantic -Wno-long-long -Wnested-externs -Wshadow -Wstrict-prototypes -Wundef... yes
+checking if gcc supports -Wno-overlength-strings... yes
+checking if gcc supports -Wall... yes
+checking if gcc supports -Wno-unused-function... yes
+checking if gcc supports -Wextra... yes
+checking if gcc supports -Wcast-align... yes
+checking if gcc supports -Wcast-align=strict... yes
+checking if gcc supports -Wconditional-uninitialized... no
+checking if gcc supports -fvisibility=hidden... yes
+checking for x86_64 assembly availability... yes
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating libsecp256k1.pc
+config.status: creating src/libsecp256k1-config.h
+config.status: executing depfiles commands
+config.status: executing libtool commands
+
+Build Options:
+  with external callbacks = no
+  with benchmarks         = yes
+  with tests              = yes
+  with coverage           = no
+  with examples           = no
+  module ecdh             = no
+  module recovery         = yes
+  module extrakeys        = no
+  module schnorrsig       = no
+
+  asm                     = x86_64
+  ecmult window size      = 15
+  ecmult gen prec. bits   = 4
+
+  valgrind                = no
+  CC                      = gcc
+  CPPFLAGS                =  
+  SECP_CFLAGS             = -O2  -std=c89 -pedantic -Wno-long-long -Wnested-externs -Wshadow -Wstrict-prototypes -Wundef -Wno-overlength-strings -Wall -Wno-unused-function -Wextra -Wcast-align -Wcast-align=strict -fvisibility=hidden 
+  CFLAGS                  = -g -O2
+  LDFLAGS                 = 
+Fixing libtool for -rpath problems.
+
+Options used to compile and link:
+  with wallet   = yes
+  with gui / qt = no
+  with zmq      = no
+  with test     = yes
+  with bench    = yes
+  with upnp     = yes
+  debug enabled = no
+  werror        = no
+
+  experimental  = no
+
+  target os     = linux
+  build os      = 
+
+  CC            = gcc
+  CFLAGS        = -g -O2
+  CPPFLAGS      =  -DHAVE_BUILD_INFO -D__STDC_FORMAT_MACROS
+  CXX           = g++ -std=c++11
+  CXXFLAGS      = -g -O2 -Wall -Wextra -Wformat -Wvla -Wformat-security -Wno-unused-parameter
+  LDFLAGS       = 
+
+Running phase: buildPhase
+build flags: SHELL=/nix/store/4bj2kxdm1462fzcc2i2s4dn33g2angcc-bash-5.2p32/bin/bash
+Making all in src
+make[1]: Entering directory '/build/dogecoin-1.14.7/src'
+make[2]: Entering directory '/build/dogecoin-1.14.7/src'
+  CXX      dogecoind-bitcoind.o
+  CXX      libdogecoin_server_a-addrman.o
+  CXX      libdogecoin_server_a-addrdb.o
+  CXX      libdogecoin_server_a-bloom.o
+  CXX      libdogecoin_server_a-blockencodings.o
+In file included from /nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/bits/exception_ptr.h:41,
+                 from /nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/exception:164,
+                 from /nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/stdexcept:38,
+                 from ./uint256.h:11,
+                 from ./consensus/params.h:10,
+                 from ./auxpow.h:10,
+                 from primitives/block.h:10,
+                 from blockencodings.h:8,
+                 from blockencodings.cpp:5:
+In function 'std::_Require<std::__not_<std::__is_tuple_like<_Tp> >, std::is_move_constructible<_Tp>, std::is_move_assignable<_Tp> > std::swap(_Tp&, _Tp&) [with _Tp = prevector<28, unsigned char>::direct_or_indirect]',
+    inlined from 'void prevector<N, T, Size, Diff>::swap(prevector<N, T, Size, Diff>&) [with unsigned int N = 28; T = unsigned char; Size = unsigned int; Diff = int]' at ./prevector.h:430:18,
+    inlined from 'void CScript::clear()' at ./script/script.h:643:27,
+    inlined from 'void CTxOut::SetNull()' at ./primitives/transaction.h:160:27,
+    inlined from 'CTxOut::CTxOut()' at ./primitives/transaction.h:144:16,
+    inlined from 'void Serialize(Stream&, const std::vector<T, A>&) [with Stream = CSizeComputer; T = CTxOut; A = std::allocator<CTxOut>]' at ./serialize.h:656:27,
+    inlined from 'CSizeComputer& CSizeComputer::operator<<(const T&) [with T = std::vector<CTxOut>]' at ./serialize.h:876:20,
+    inlined from 'void SerializeTransaction(const TxType&, Stream&) [with Stream = CSizeComputer; TxType = CTransaction]' at ./primitives/transaction.h:265:7:
+/nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/bits/move.h:197:11: warning: '<unnamed>.prevector<28, unsigned char, unsigned int, int>::_union' is used uninitialized [8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wuninitialized-Wuninitialized8;;]
+  197 |       _Tp __tmp = _GLIBCXX_MOVE(__a);
+      |           ^~~~~
+In file included from ./primitives/transaction.h:11,
+                 from ./auxpow.h:13:
+./script/script.h: In function 'void SerializeTransaction(const TxType&, Stream&) [with Stream = CSizeComputer; TxType = CTransaction]':
+./script/script.h:643:21: note: '<anonymous>' declared here
+  643 |         CScriptBase().swap(*this);
+      |                     ^
+In function 'std::_Require<std::__not_<std::__is_tuple_like<_Tp> >, std::is_move_constructible<_Tp>, std::is_move_assignable<_Tp> > std::swap(_Tp&, _Tp&) [with _Tp = prevector<28, unsigned char>::direct_or_indirect]',
+    inlined from 'void prevector<N, T, Size, Diff>::swap(prevector<N, T, Size, Diff>&) [with unsigned int N = 28; T = unsigned char; Size = unsigned int; Diff = int]' at ./prevector.h:430:18,
+    inlined from 'void CScript::clear()' at ./script/script.h:643:27,
+    inlined from 'void CTxOut::SetNull()' at ./primitives/transaction.h:160:27,
+    inlined from 'CTxOut::CTxOut()' at ./primitives/transaction.h:144:16,
+    inlined from 'void Serialize(Stream&, const std::vector<T, A>&) [with Stream = CSizeComputer; T = CTxOut; A = std::allocator<CTxOut>]' at ./serialize.h:656:27,
+    inlined from 'CSizeComputer& CSizeComputer::operator<<(const T&) [with T = std::vector<CTxOut>]' at ./serialize.h:876:20,
+    inlined from 'void SerializeTransaction(const TxType&, Stream&) [with Stream = CSizeComputer; TxType = CTransaction]' at ./primitives/transaction.h:265:7:
+/nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/bits/move.h:198:7: warning: '<unnamed>.CTxOut::scriptPubKey.CScript::<unnamed>.prevector<28, unsigned char, unsigned int, int>::_union' is used uninitialized [8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wuninitialized-Wuninitialized8;;]
+  198 |       __a = _GLIBCXX_MOVE(__b);
+      |       ^~~
+In file included from ./primitives/pureheader.h:9,
+                 from ./auxpow.h:12:
+./serialize.h: In function 'void SerializeTransaction(const TxType&, Stream&) [with Stream = CSizeComputer; TxType = CTransaction]':
+./serialize.h:656:27: note: '<anonymous>' declared here
+  656 |     Serialize_impl(os, v, T());
+      |                           ^~~
+In function 'std::_Require<std::__not_<std::__is_tuple_like<_Tp> >, std::is_move_constructible<_Tp>, std::is_move_assignable<_Tp> > std::swap(_Tp&, _Tp&) [with _Tp = prevector<28, unsigned char>::direct_or_indirect]',
+    inlined from 'void prevector<N, T, Size, Diff>::swap(prevector<N, T, Size, Diff>&) [with unsigned int N = 28; T = unsigned char; Size = unsigned int; Diff = int]' at ./prevector.h:430:18,
+    inlined from 'void CScript::clear()' at ./script/script.h:643:27,
+    inlined from 'void CTxOut::SetNull()' at ./primitives/transaction.h:160:27,
+    inlined from 'CTxOut::CTxOut()' at ./primitives/transaction.h:144:16,
+    inlined from 'void Serialize(Stream&, const std::vector<T, A>&) [with Stream = CDataStream; T = CTxOut; A = std::allocator<CTxOut>]' at ./serialize.h:656:27,
+    inlined from 'CDataStream& CDataStream::operator<<(const T&) [with T = std::vector<CTxOut>]' at streams.h:399:20,
+    inlined from 'void SerializeTransaction(const TxType&, Stream&) [with Stream = CDataStream; TxType = CTransaction]' at ./primitives/transaction.h:265:7:
+/nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/bits/move.h:197:11: warning: '<unnamed>.prevector<28, unsigned char, unsigned int, int>::_union' may be used uninitialized [8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wmaybe-uninitialized-Wmaybe-uninitialized8;;]
+  197 |       _Tp __tmp = _GLIBCXX_MOVE(__a);
+      |           ^~~~~
+./script/script.h: In function 'void SerializeTransaction(const TxType&, Stream&) [with Stream = CDataStream; TxType = CTransaction]':
+./script/script.h:643:21: note: '<anonymous>' declared here
+  643 |         CScriptBase().swap(*this);
+      |                     ^
+In function 'std::_Require<std::__not_<std::__is_tuple_like<_Tp> >, std::is_move_constructible<_Tp>, std::is_move_assignable<_Tp> > std::swap(_Tp&, _Tp&) [with _Tp = prevector<28, unsigned char>::direct_or_indirect]',
+    inlined from 'void prevector<N, T, Size, Diff>::swap(prevector<N, T, Size, Diff>&) [with unsigned int N = 28; T = unsigned char; Size = unsigned int; Diff = int]' at ./prevector.h:430:18,
+    inlined from 'void CScript::clear()' at ./script/script.h:643:27,
+    inlined from 'void CTxOut::SetNull()' at ./primitives/transaction.h:160:27,
+    inlined from 'CTxOut::CTxOut()' at ./primitives/transaction.h:144:16,
+    inlined from 'void Serialize(Stream&, const std::vector<T, A>&) [with Stream = CDataStream; T = CTxOut; A = std::allocator<CTxOut>]' at ./serialize.h:656:27,
+    inlined from 'CDataStream& CDataStream::operator<<(const T&) [with T = std::vector<CTxOut>]' at streams.h:399:20,
+    inlined from 'void SerializeTransaction(const TxType&, Stream&) [with Stream = CDataStream; TxType = CTransaction]' at ./primitives/transaction.h:265:7:
+/nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/bits/move.h:198:7: warning: '<unnamed>.CTxOut::scriptPubKey.CScript::<unnamed>.prevector<28, unsigned char, unsigned int, int>::_union' may be used uninitialized [8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wmaybe-uninitialized-Wmaybe-uninitialized8;;]
+  198 |       __a = _GLIBCXX_MOVE(__b);
+      |       ^~~
+./serialize.h: In function 'void SerializeTransaction(const TxType&, Stream&) [with Stream = CDataStream; TxType = CTransaction]':
+./serialize.h:656:27: note: '<anonymous>' declared here
+  656 |     Serialize_impl(os, v, T());
+      |                           ^~~
+  CXX      libdogecoin_server_a-chain.o
+  CXX      libdogecoin_server_a-checkpoints.o
+  CXX      libdogecoin_server_a-httprpc.o
+  CXX      libdogecoin_server_a-httpserver.o
+  CXX      libdogecoin_server_a-init.o
+  CXX      libdogecoin_server_a-dbwrapper.o
+  CXX      libdogecoin_server_a-merkleblock.o
+  CXX      libdogecoin_server_a-miner.o
+In file included from /nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/bits/exception_ptr.h:41,
+                 from /nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/exception:164,
+                 from /nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/stdexcept:38,
+                 from ./uint256.h:11,
+                 from ./consensus/params.h:10,
+                 from ./auxpow.h:10,
+                 from primitives/block.h:10,
+                 from miner.h:10,
+                 from miner.cpp:7:
+In function 'std::_Require<std::__not_<std::__is_tuple_like<_Tp> >, std::is_move_constructible<_Tp>, std::is_move_assignable<_Tp> > std::swap(_Tp&, _Tp&) [with _Tp = prevector<28, unsigned char>::direct_or_indirect]',
+    inlined from 'void prevector<N, T, Size, Diff>::swap(prevector<N, T, Size, Diff>&) [with unsigned int N = 28; T = unsigned char; Size = unsigned int; Diff = int]' at ./prevector.h:430:18,
+    inlined from 'void CScript::clear()' at ./script/script.h:643:27,
+    inlined from 'void CTxOut::SetNull()' at ./primitives/transaction.h:160:27,
+    inlined from 'CTxOut::CTxOut()' at ./primitives/transaction.h:144:16,
+    inlined from 'void std::_Construct(_Tp*, _Args&& ...) [with _Tp = CTxOut; _Args = {}]' at /nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/bits/stl_construct.h:119:7,
+    inlined from 'static _ForwardIterator std::__uninitialized_default_n_1<_TrivialValueType>::__uninit_default_n(_ForwardIterator, _Size) [with _ForwardIterator = CTxOut*; _Size = long unsigned int; bool _TrivialValueType = false]' at /nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/bits/stl_uninitialized.h:643:18,
+    inlined from '_ForwardIterator std::__uninitialized_default_n(_ForwardIterator, _Size) [with _ForwardIterator = CTxOut*; _Size = long unsigned int]' at /nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/bits/stl_uninitialized.h:712:20,
+    inlined from '_ForwardIterator std::__uninitialized_default_n_a(_ForwardIterator, _Size, allocator<_Tp>&) [with _ForwardIterator = CTxOut*; _Size = long unsigned int; _Tp = CTxOut]' at /nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/bits/stl_uninitialized.h:779:44,
+    inlined from 'void std::vector<_Tp, _Alloc>::_M_default_append(size_type) [with _Tp = CTxOut; _Alloc = std::allocator<CTxOut>]' at /nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/bits/vector.tcc:650:35:
+/nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/bits/move.h:197:11: warning: '<unnamed>.prevector<28, unsigned char, unsigned int, int>::_union' may be used uninitialized [8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wmaybe-uninitialized-Wmaybe-uninitialized8;;]
+  197 |       _Tp __tmp = _GLIBCXX_MOVE(__a);
+      |           ^~~~~
+In file included from ./primitives/transaction.h:11,
+                 from ./auxpow.h:13:
+./script/script.h: In member function 'void std::vector<_Tp, _Alloc>::_M_default_append(size_type) [with _Tp = CTxOut; _Alloc = std::allocator<CTxOut>]':
+./script/script.h:643:21: note: '<anonymous>' declared here
+  643 |         CScriptBase().swap(*this);
+      |                     ^
+In function 'std::_Require<std::__not_<std::__is_tuple_like<_Tp> >, std::is_move_constructible<_Tp>, std::is_move_assignable<_Tp> > std::swap(_Tp&, _Tp&) [with _Tp = prevector<28, unsigned char>::direct_or_indirect]',
+    inlined from 'void prevector<N, T, Size, Diff>::swap(prevector<N, T, Size, Diff>&) [with unsigned int N = 28; T = unsigned char; Size = unsigned int; Diff = int]' at ./prevector.h:430:18,
+    inlined from 'void CScript::clear()' at ./script/script.h:643:27,
+    inlined from 'void CTxOut::SetNull()' at ./primitives/transaction.h:160:27,
+    inlined from 'CTxOut::CTxOut()' at ./primitives/transaction.h:144:16,
+    inlined from 'void std::_Construct(_Tp*, _Args&& ...) [with _Tp = CTxOut; _Args = {}]' at /nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/bits/stl_construct.h:119:7,
+    inlined from 'static _ForwardIterator std::__uninitialized_default_n_1<_TrivialValueType>::__uninit_default_n(_ForwardIterator, _Size) [with _ForwardIterator = CTxOut*; _Size = long unsigned int; bool _TrivialValueType = false]' at /nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/bits/stl_uninitialized.h:643:18,
+    inlined from '_ForwardIterator std::__uninitialized_default_n(_ForwardIterator, _Size) [with _ForwardIterator = CTxOut*; _Size = long unsigned int]' at /nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/bits/stl_uninitialized.h:712:20,
+    inlined from '_ForwardIterator std::__uninitialized_default_n_a(_ForwardIterator, _Size, allocator<_Tp>&) [with _ForwardIterator = CTxOut*; _Size = long unsigned int; _Tp = CTxOut]' at /nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/bits/stl_uninitialized.h:779:44,
+    inlined from 'void std::vector<_Tp, _Alloc>::_M_default_append(size_type) [with _Tp = CTxOut; _Alloc = std::allocator<CTxOut>]' at /nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/bits/vector.tcc:684:41:
+/nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/bits/move.h:197:11: warning: '<unnamed>.prevector<28, unsigned char, unsigned int, int>::_union' may be used uninitialized [8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wmaybe-uninitialized-Wmaybe-uninitialized8;;]
+  197 |       _Tp __tmp = _GLIBCXX_MOVE(__a);
+      |           ^~~~~
+./script/script.h: In member function 'void std::vector<_Tp, _Alloc>::_M_default_append(size_type) [with _Tp = CTxOut; _Alloc = std::allocator<CTxOut>]':
+./script/script.h:643:21: note: '<anonymous>' declared here
+  643 |         CScriptBase().swap(*this);
+      |                     ^
+  CXX      libdogecoin_server_a-net.o
+net.cpp: In function 'void ThreadMapPort()':
+net.cpp:1491:25: error: too few arguments to function 'int UPNP_GetValidIGD(UPNPDev*, UPNPUrls*, IGDdatas*, char*, int, char*, int)'
+ 1491 |     r = UPNP_GetValidIGD(devlist, &urls, &data, lanaddr, sizeof(lanaddr));
+      |         ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from net.cpp:33:
+/nix/store/6ck4qv6f5qk03n4fnr25mj3l2mfh736l-miniupnpc-2.2.8/include/miniupnpc/miniupnpc.h:122:1: note: declared here
+  122 | UPNP_GetValidIGD(struct UPNPDev * devlist,
+      | ^~~~~~~~~~~~~~~~
+make[2]: *** [Makefile:6083: libdogecoin_server_a-net.o] Error 1
+make[2]: Leaving directory '/build/dogecoin-1.14.7/src'
+make[1]: *** [Makefile:9830: all-recursive] Error 1
+make[1]: Leaving directory '/build/dogecoin-1.14.7/src'
+make: *** [Makefile:694: all-recursive] Error 1
+error: builder for '/nix/store/mhs0frsaabfm894ljvxkn98s6lkqdfcf-dogecoin-core-1.14.7.drv' failed with exit code 2;
+       last 25 log lines:
+       >     inlined from 'static _ForwardIterator std::__uninitialized_default_n_1<_TrivialValueType>::__uninit_default_n(_ForwardIterator, _Size) [with _ForwardIterator = CTxOut*; _Size = long unsigned int; bool _TrivialValueType = false]' at /nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/bits/stl_uninitialized.h:643:18,
+       >     inlined from '_ForwardIterator std::__uninitialized_default_n(_ForwardIterator, _Size) [with _ForwardIterator = CTxOut*; _Size = long unsigned int]' at /nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/bits/stl_uninitialized.h:712:20,
+       >     inlined from '_ForwardIterator std::__uninitialized_default_n_a(_ForwardIterator, _Size, allocator<_Tp>&) [with _ForwardIterator = CTxOut*; _Size = long unsigned int; _Tp = CTxOut]' at /nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/bits/stl_uninitialized.h:779:44,
+       >     inlined from 'void std::vector<_Tp, _Alloc>::_M_default_append(size_type) [with _Tp = CTxOut; _Alloc = std::allocator<CTxOut>]' at /nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/bits/vector.tcc:684:41:
+       > /nix/store/wl7xs26116sswgw18pnc3yw9r5gxr6hx-gcc-13.3.0/include/c++/13.3.0/bits/move.h:197:11: warning: '<unnamed>.prevector<28, unsigned char, unsigned int, int>::_union' may be used uninitialized [8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wmaybe-uninitialized-Wmaybe-uninitialized8;;]
+       >   197 |       _Tp __tmp = _GLIBCXX_MOVE(__a);
+       >       |           ^~~~~
+       > ./script/script.h: In member function 'void std::vector<_Tp, _Alloc>::_M_default_append(size_type) [with _Tp = CTxOut; _Alloc = std::allocator<CTxOut>]':
+       > ./script/script.h:643:21: note: '<anonymous>' declared here
+       >   643 |         CScriptBase().swap(*this);
+       >       |                     ^
+       >   CXX      libdogecoin_server_a-net.o
+       > net.cpp: In function 'void ThreadMapPort()':
+       > net.cpp:1491:25: error: too few arguments to function 'int UPNP_GetValidIGD(UPNPDev*, UPNPUrls*, IGDdatas*, char*, int, char*, int)'
+       >  1491 |     r = UPNP_GetValidIGD(devlist, &urls, &data, lanaddr, sizeof(lanaddr));
+       >       |         ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       > In file included from net.cpp:33:
+       > /nix/store/6ck4qv6f5qk03n4fnr25mj3l2mfh736l-miniupnpc-2.2.8/include/miniupnpc/miniupnpc.h:122:1: note: declared here
+       >   122 | UPNP_GetValidIGD(struct UPNPDev * devlist,
+       >       | ^~~~~~~~~~~~~~~~
+       > make[2]: *** [Makefile:6083: libdogecoin_server_a-net.o] Error 1
+       > make[2]: Leaving directory '/build/dogecoin-1.14.7/src'
+       > make[1]: *** [Makefile:9830: all-recursive] Error 1
+       > make[1]: Leaving directory '/build/dogecoin-1.14.7/src'
+       > make: *** [Makefile:694: all-recursive] Error 1
+       For full logs, run 'nix-store -l /nix/store/mhs0frsaabfm894ljvxkn98s6lkqdfcf-dogecoin-core-1.14.7.drv'.
