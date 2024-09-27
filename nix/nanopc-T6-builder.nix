@@ -6,6 +6,11 @@ let
     text = builtins.readFile ./nanopc-T6.nix;
   };
 
+  kernelConfigFile = pkgs.writeTextFile {
+    name = "nanopc-T6_linux_defconfig";
+    text = builtins.readFile ./nanopc-T6_linux_defconfig;
+  };
+
   baseFile = pkgs.writeTextFile {
     name = "base.nix";
     text = builtins.readFile ./base.nix;
@@ -33,6 +38,7 @@ in
     mkdir -p /opt/nixos
     echo "nanopc-T6" >> /opt/build-type
     cp ${nanopc-T6File} /etc/nixos/configuration.nix
+    cp ${kernelConfigFile} /etc/nixos/nanopc-T6_linux_defconfig
     cp ${baseFile} /etc/nixos/base.nix
     cp ${dogeboxFile} /etc/nixos/dogebox.nix
     cp ${dogeboxdFile} /etc/nixos/dogeboxd.nix

@@ -56,7 +56,7 @@ in
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-label/DOGEBOX_EMMC";
+    { device = "/dev/disk/by-label/nixos";
       fsType = "ext4";
     };
 
