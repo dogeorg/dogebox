@@ -9,9 +9,9 @@ nix-shell
 make nanopc-T6
 ```
 
-Take a note of the location of the built image.
+The last line of output should tell you where the resulting image is located.  Copy it into the build tree (or somewhere that has write access) and take note of it's location.
 
-The SD images are built with a fork of FriendlyElec's sd-fuse_rk3588 for now. The following steps will be automated or replaced.
+The SD images are built with a fork of FriendlyElec's sd-fuse_rk3588 for now. They need to be run on a debian-based x86_64 machine. The following steps will be automated or replaced soon.
 
 ### SD
 
@@ -31,8 +31,9 @@ mount -o loop,offset=$((2048 * 512)) <location of the image created in the first
 ./build-rootfs-img.sh /mnt nixos-arm64
 umount /mnt
 ```
+This should give you a 'rootfs.img' and a 'parameter.txt' in the nixos-arm64 output directory.
 
-You can use prebuilt artifacts from this point, but if you intend to build the u-boot bootoarder from source, clone it's repository.
+Clone the bootloader (u-boot)'s repository and build for the nanopc-t6.
 If aarch64 cross compiling is not set up, the build script shoul fail with instructions containing what it's looking for.
 ```
 cd out
@@ -42,16 +43,12 @@ git checkout nanopi6-v2017.09
 cd ../../
 ./build-uboot.sh nixos-arm64 nanopc-t6
 ```
+This should give you a 'uboot.img' in the nixos-arm64 output directory.
 
-Add any remaining artifacts to the 'nixos-arm64' directory
+Copy the first stage bootloader from the prebuilt directory.
+(Building this from source isn't covered here yet, the tooling is in https://github.com/friendlyarm/rkbin)
 ```
-idbloader.img
-uboot.img
-misc.img
-dtbo.img
-resource.img
-kernel.img
-boot.img
+cp prebuilt/idbloader.img nixos-arm64
 ```
 
 Run the image builing script
