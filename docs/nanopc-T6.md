@@ -1,8 +1,8 @@
 # NanoPC T6 Hardware Support
 
-WIP
-
 ## Linux kernel
+
+*The kernel is now included in the nix files for the T6, the following notes were used to build it*
 
 The NanoPC T6 can boot a mainline Linux kernel, but will lack video support.
 
@@ -34,5 +34,6 @@ Documentation used for NixOS/Dogebox support:
 
 ## Device peripheral firmware
 
-https://github.com/friendlyarm/sd-fuse_rk3588.git
-prebuilt/firmware/install.sh
+Firmware is sourced from the repository https://github.com/friendlyarm/sd-fuse_rk3588.git
+
+Steps in the rk3588-firmware package are based off the contents of prebuilt/firmware/install.sh inside this repository.
