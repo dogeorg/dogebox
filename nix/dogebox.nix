@@ -1,8 +1,6 @@
-{ lib, pkgs, ... }:
+{ lib, pkgs, /*rm*/dogebox ? import <dogebox> { inherit pkgs; },/*rm*/... }:
 
-let
-  dogebox = import <dogebox> { inherit pkgs; };
-in
+/*inject*/
 {
   imports = [
     ./dkm.nix
@@ -32,6 +30,16 @@ in
   environment.etc."first-boot-script.sh" = {
     text = ''
       #${pkgs.bash}/bin/bash
+
+      ${pkgs.gnused}/bin/sed -i 's|/\*rm\*/.*/\*rm\*/||g' /etc/nixos/dogebox.nix
+      ${pkgs.gnused}/bin/sed -i '/\/\*inject\*\//a let dogebox = import <dogebox> { inherit pkgs; }; in' /etc/nixos/dogebox.nix
+
+      ${pkgs.gnused}/bin/sed -i 's|/\*rm\*/.*/\*rm\*/||g' /etc/nixos/dogeboxd.nix
+      ${pkgs.gnused}/bin/sed -i '/\/\*inject\*\//a let dogebox = import <dogebox> { inherit pkgs; }; in' /etc/nixos/dogeboxd.nix
+
+      ${pkgs.gnused}/bin/sed -i 's|/\*rm\*/.*/\*rm\*/||g' /etc/nixos/dkm.nix
+      ${pkgs.gnused}/bin/sed -i '/\/\*inject\*\//a let dogebox = import <dogebox> { inherit pkgs; }; in' /etc/nixos/dkm.nix
+
       if [ ! -f /opt/first-boot-done ]; then
         echo "Sleeping for 10 seconds to ensure network is actually up..."
         sleep 10

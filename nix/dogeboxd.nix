@@ -1,8 +1,6 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, /*rm*/dogebox ? import <dogebox>,/*rm*/... }:
 
-let
-  dogebox = import <dogebox> { inherit pkgs; };
-in
+/*inject*/
 {
   environment.systemPackages = [
     pkgs.systemd
@@ -31,8 +29,6 @@ in
   systemd.tmpfiles.rules = [
     "d /opt/dogebox 0700 dogeboxd dogebox -"
   ];
-
-  # TODO: Add /bin to $PATH
 
   systemd.services.dogeboxd = {
     after = [ "network.target" ];

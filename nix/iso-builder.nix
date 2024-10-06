@@ -1,9 +1,9 @@
 { pkgs, ... }:
 
 let
-  vboxFile = pkgs.writeTextFile {
-    name = "vbox.nix";
-    text = builtins.readFile ./vbox.nix;
+  isoFile = pkgs.writeTextFile {
+    name = "iso.nix";
+    text = builtins.readFile ./iso.nix;
   };
 
   baseFile = pkgs.writeTextFile {
@@ -27,11 +27,12 @@ let
   };
 in
 {
-  imports = [ ./vbox.nix ];
+  imports = [ ./iso.nix ];
 
   system.activationScripts.copyFiles = ''
-    echo "vbox" >> /opt/build-type
-    cp ${vboxFile} /etc/nixos/configuration.nix
+    mkdir -p /opt/nixos
+    echo "iso" >> /opt/build-type
+    cp ${isoFile} /etc/nixos/configuration.nix
     cp ${baseFile} /etc/nixos/base.nix
     cp ${dogeboxFile} /etc/nixos/dogebox.nix
     cp ${dogeboxdFile} /etc/nixos/dogeboxd.nix

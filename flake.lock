@@ -1,0 +1,80 @@
+{
+  "nodes": {
+    "dogebox": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1728027367,
+        "narHash": "sha256-ALzaJEbU6BfvtW8VxMaX8tKLj9oAm/NupPGdroYBj1M=",
+        "owner": "dogeorg",
+        "repo": "dogebox-nur-packages",
+        "rev": "22e2e8041f9d857861c9b60bcefd6f0291fa5c56",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dogeorg",
+        "repo": "dogebox-nur-packages",
+        "type": "github"
+      }
+    },
+    "nixlib": {
+      "locked": {
+        "lastModified": 1727571693,
+        "narHash": "sha256-b7sFVeqMtz8xntCL3tBY3O8suTg5PeF53LTL3eCcKyc=",
+        "owner": "nix-community",
+        "repo": "nixpkgs.lib",
+        "rev": "bb58a3bf239e03fca9d51062e2fe028a4ea5a3d1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nixpkgs.lib",
+        "type": "github"
+      }
+    },
+    "nixos-generators": {
+      "inputs": {
+        "nixlib": "nixlib",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1727917377,
+        "narHash": "sha256-eefXdEPUMuhiV6Vy3ASSyApCseE9OoKDgL/G6qenw/4=",
+        "owner": "nix-community",
+        "repo": "nixos-generators",
+        "rev": "9ae128172f823956e54947fe471bc6dfa670ecb4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nixos-generators",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1728067476,
+        "narHash": "sha256-/uJcVXuBt+VFCPQIX+4YnYrHaubJSx4HoNsJVNRgANM=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "6e6b3dd395c3b1eb9be9f2d096383a8d05add030",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-24.05",
+        "type": "indirect"
+      }
+    },
+    "root": {
+      "inputs": {
+        "dogebox": "dogebox",
+        "nixos-generators": "nixos-generators",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

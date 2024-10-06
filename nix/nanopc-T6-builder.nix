@@ -1,6 +1,8 @@
-{ pkgs, ... }:
+{ pkgs ? import <nixpkgs> {}, ... }:
 
 let
+  dogebox = import <dogebox> { inherit pkgs; };
+
   nanopc-T6File = pkgs.writeTextFile {
     name = "nanopc-T6.nix";
     text = builtins.readFile ./nanopc-T6.nix;
@@ -30,9 +32,17 @@ let
     name = "dkm.nix";
     text = builtins.readFile ./dkm.nix;
   };
+
+#  firmwareFile = pkgs.writeTextFile {
+#    name = "firmware.nix";
+#    text = builtins.readFile ./firmware.nix;
+#  };
 in
 {
-  imports = [ ./nanopc-T6.nix ];
+  imports = [
+    #./nanopc-T6-firmware.nix
+    ./nanopc-T6.nix
+  ];
 
   system.activationScripts.copyFiles = ''
     mkdir -p /opt/nixos
@@ -43,5 +53,6 @@ in
     cp ${dogeboxFile} /etc/nixos/dogebox.nix
     cp ${dogeboxdFile} /etc/nixos/dogeboxd.nix
     cp ${dkmFile} /etc/nixos/dkm.nix
+    #cp ''${firmwareFile} /etc/nixos/firmware.nix
   '';
 }

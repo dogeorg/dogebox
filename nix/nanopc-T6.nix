@@ -1,12 +1,17 @@
-{ pkgs, ... }:
+{ pkgs ? import <nixpkgs> {}, lib, ... }:
 
-let
-  dogebox = import <dogebox> { inherit pkgs; };
-in
 {
-  imports = [ 
-    ./base.nix
-  ];
+  imports =
+    # If we have an overlay for /opt specified, load that first.
+    lib.optional (builtins.pathExists /etc/nixos/opt-overlay.nix) /etc/nixos/opt-overlay.nix
+
+    # If we've done our initial "setup", then import our firmware and base file.
+    ++ lib.optional (builtins.pathExists /etc/largest-disk-formatted) /etc/nixos/firmware.nix
+    ++ lib.optional (builtins.pathExists /etc/largest-disk-formatted) /etc/nixos/base.nix
+  ;
+
+  # Duplicate this here as base.nix is optionally imported.
+  system.stateVersion = "24.05";
 
   nixpkgs.overlays = [
     (final: super: {
@@ -22,11 +27,11 @@ in
 
   boot.kernelPackages = let
     linux_rk3588_pkg = {
-                        fetchFromGitHub,
-                        linuxManualConfig,
-                        ubootTools,
-                         ...
-                      } :
+      fetchFromGitHub,
+      linuxManualConfig,
+      ubootTools,
+      ...
+    } :
     (linuxManualConfig rec {
       modDirVersion = "6.1.57";
       version = modDirVersion;
@@ -39,9 +44,7 @@ in
       };
 
       configfile = ./nanopc-T6_linux_defconfig;
-      
       allowImportFromDerivation = true;
-
     })
     .overrideAttrs (old: {
       nativeBuildInputs = old.nativeBuildInputs ++ [ubootTools];
@@ -67,8 +70,47 @@ in
     screen
   ];
 
+  #systemd.services.formatLargestDisk = {
+  #  description = "Formats the largest disk to ext4";
+  #  unitConfig = {
+  #    type = "oneshot";
+  #    after = [ "sysinit.target" ];
+  #  };##
+
+  #  script = ''
+  #    if [ ! -e /etc/largest-disk-formatted ]; then
+  #      largest_disk=$(lsblk -dno NAME,SIZE,MOUNTPOINT | awk '$3 == "" {print $1, $2}' | sort -rh -k2 | head -n1 | awk '{print $1}')
+
+  #      if [ -z "$largest_disk" ]; then
+  #        echo "No suitable data disk found."
+  #        exit 1
+  #      fi
+
+  #      echo "Largest unmounted disk found: $largest_disk"
+  #      echo "Formatting as ext4..."
+  #      mkfs.ext4 /dev/$largest_disk
+
+   #     cat <<EOF > /etc/nixos/opt-overlay.nix
+#{ ... }:
+
+#{
+#  fileSystems."/opt" = {
+#    device = "/dev/''${largest_disk}";
+#    fsType = "ext4";
+#  };
+#}
+#        EOF
+
+ #       echo "/dev/$largest_disk" > /etc/largest-disk
+ #       touch /etc/largest-disk-formatted
+  #    fi
+  #  '';
+
+   # wantedBy = [ "basic.target" "runOnceOnFirstBoot.service" ];
+ # };
+
   systemd.services.resizerootfs = {
-    description = "Expands root filesystem on first boot";
+    description = "Expands root filesystem of boot deviceon first boot";
     unitConfig = {
       type = "oneshot";
       after = [ "sysinit.target" ];
@@ -87,18 +129,6 @@ in
           touch /etc/fs.resized
         fi
     '';
-    wantedBy = [ "basic.target" ];
+    wantedBy = [ "basic.target" "runOnceOnFirstBoot.service" ];
   };
-
-  system.activationScripts.rk3588-firmware = ''
-    for i in /etc/firmware /lib/firmware /system;
-    do
-      [ -L $i ] && echo "Removing old symlink $i" && rm $i
-      [ -e $i ] && echo "Moving $i out of the way" && mv $i $i.`date -I`
-    done
-    echo "Adding new firmware symlinks"
-    ln -sf ${dogebox.rk3588-firmware}/etc/firmware/ /etc/firmware
-    ln -sf ${dogebox.rk3588-firmware}/lib/firmware/ /lib/firmware
-    ln -sf ${dogebox.rk3588-firmware}/system/ /system
-  '';
 }

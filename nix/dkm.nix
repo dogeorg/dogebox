@@ -1,8 +1,6 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, /*rm*/dogebox ? import <dogebox>,/*rm*/... }:
 
-let
-  dogebox = import <dogebox> { inherit pkgs; };
-in
+/*inject*/
 {
   environment.systemPackages = [
     dogebox.dkm
