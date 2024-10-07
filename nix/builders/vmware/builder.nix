@@ -3,31 +3,31 @@
 let
   vmwareFile = pkgs.writeTextFile {
     name = "vmware.nix";
-    text = builtins.readFile ../dbx/vmware.nix;
+    text = builtins.readFile ./base.nix;
   };
 
   baseFile = pkgs.writeTextFile {
     name = "base.nix";
-    text = builtins.readFile ../dbx/base.nix;
+    text = builtins.readFile ../../dbx/base.nix;
   };
 
   dogeboxFile = pkgs.writeTextFile {
     name = "dogebox.nix";
-    text = builtins.readFile ../dbx/dogebox.nix;
+    text = builtins.readFile ../../dbx/dogebox.nix;
   };
 
   dogeboxdFile = pkgs.writeTextFile {
     name = "dogeboxd.nix";
-    text = builtins.readFile ../dbx/dogeboxd.nix;
+    text = builtins.readFile ../../dbx/dogeboxd.nix;
   };
 
   dkmFile = pkgs.writeTextFile {
     name = "dkm.nix";
-    text = builtins.readFile ../dbx/dkm.nix;
+    text = builtins.readFile ../../dbx/dkm.nix;
   };
 in
 {
-  imports = [ ../dbx/vmware.nix ];
+  imports = [ ../../dbx/vmware.nix ];
 
   vmware.baseImageSize = 6144;
 

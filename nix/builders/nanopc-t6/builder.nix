@@ -5,43 +5,43 @@ let
 
   nanopc-T6File = pkgs.writeTextFile {
     name = "nanopc-T6.nix";
-    text = builtins.readFile ../dbx/nanopc-T6.nix;
+    text = builtins.readFile ./base.nix;
   };
 
   kernelConfigFile = pkgs.writeTextFile {
     name = "nanopc-T6_linux_defconfig";
-    text = builtins.readFile ../dbx/nanopc-T6_linux_defconfig;
+    text = builtins.readFile ../../dbx/nanopc-T6_linux_defconfig;
   };
 
   baseFile = pkgs.writeTextFile {
     name = "base.nix";
-    text = builtins.readFile ../dbx/base.nix;
+    text = builtins.readFile ../../dbx/base.nix;
   };
 
   dogeboxFile = pkgs.writeTextFile {
     name = "dogebox.nix";
-    text = builtins.readFile ../dbx/dogebox.nix;
+    text = builtins.readFile ../../dbx/dogebox.nix;
   };
 
   dogeboxdFile = pkgs.writeTextFile {
     name = "dogeboxd.nix";
-    text = builtins.readFile ../dbx/dogeboxd.nix;
+    text = builtins.readFile ../../dbx/dogeboxd.nix;
   };
 
   dkmFile = pkgs.writeTextFile {
     name = "dkm.nix";
-    text = builtins.readFile ../dbx/dkm.nix;
+    text = builtins.readFile ../../dbx/dkm.nix;
   };
 
 #  firmwareFile = pkgs.writeTextFile {
 #    name = "firmware.nix";
-#    text = builtins.readFile ../dbx/firmware.nix;
+#    text = builtins.readFile ../../dbx/firmware.nix;
 #  };
 in
 {
   imports = [
-    #../dbx/nanopc-T6-firmware.nix
-    ../dbx/nanopc-T6.nix
+    #../../dbx/nanopc-T6-firmware.nix
+    ../../dbx/nanopc-T6.nix
   ];
 
   system.activationScripts.copyFiles = ''

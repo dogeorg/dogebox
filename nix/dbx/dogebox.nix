@@ -22,7 +22,7 @@
   security.sudo.wheelNeedsPassword = false;
 
   # These will be overridden by the included dogebox.nix file above, but set defaults.
-  networking.wireless.enable = lib.mkDefault false;
+  networking.wireless.enable = lib.mkForce false;
   networking.networkmanager.enable = lib.mkForce false;
 
   networking.firewall.enable = true;
@@ -32,19 +32,16 @@
       #${pkgs.bash}/bin/bash
 
       # Remove <dogebox> flake import
-      ${pkgs.gnused}/bin/sed -i 's|/\*rm\*/.*/\*rm\*/||g' /etc/nixos/dogebox.nix
-      ${pkgs.gnused}/bin/sed -i 's|/\*rm\*/.*/\*rm\*/||g' /etc/nixos/dogeboxd.nix
-      ${pkgs.gnused}/bin/sed -i 's|/\*rm\*/.*/\*rm\*/||g' /etc/nixos/dkm.nix
+      ${pkgs.gnused}/bin/sed -i 's|/\*rm\*/.*/\*rm\*/||g' /etc/nixos/*.nix
 
       # Add <dogebox> channel import
-      ${pkgs.gnused}/bin/sed -i '/\/\*inject\*\//a let dogebox = import <dogebox> { inherit pkgs; }; in' /etc/nixos/dogeboxd.nix
-      ${pkgs.gnused}/bin/sed -i '/\/\*inject\*\//a let dogebox = import <dogebox> { inherit pkgs; }; in' /etc/nixos/dogebox.nix
-      ${pkgs.gnused}/bin/sed -i '/\/\*inject\*\//a let dogebox = import <dogebox> { inherit pkgs; }; in' /etc/nixos/dkm.nix
+      ${pkgs.gnused}/bin/sed -i '/\/\*inject\*\//a let dogebox = import <dogebox> { inherit pkgs; }; in' /etc/nixos/*.nix
 
       # Remove /*inject*/ line.
-      ${pkgs.gnused}/bin/sed -i 's|/\*inject\*/||g' /etc/nixos/dogeboxd.nix
-      ${pkgs.gnused}/bin/sed -i 's|/\*inject\*/||g' /etc/nixos/dogebox.nix
-      ${pkgs.gnused}/bin/sed -i 's|/\*inject\*/||g' /etc/nixos/dkm.nix
+      ${pkgs.gnused}/bin/sed -i 's|/\*inject\*/||g' /etc/nixos/*.nix
+
+      # Replace any ../../dbx/ references with ./ to make everything flat.
+      ${pkgs.gnused}/bin/sed -i 's|\.\.\/\.\.\/dbx\/|\.\/|g' /etc/nixos/*.nix
 
       if [ ! -f /opt/first-boot-done ]; then
         echo "Sleeping for 10 seconds to ensure network is actually up..."

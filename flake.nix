@@ -35,6 +35,6 @@
     vm-x86_64 = base "x86_64-linux" ./nix/builders/default/builder.nix "vm" dbxX64;
 
     iso-x86_64 = base "x86_64-linux" ./nix/builders/iso/builder.nix "install-iso" dbxX64;
-    iso-aarch64 = base "aarch64-linux" ./nix/builders/iso/builder/builder.nix "install-iso" dbxArm64;
+    iso-aarch64 = base "aarch64-linux" ./nix/builders/iso/builder.nix "install-iso" dbxArm64;
   };
 }

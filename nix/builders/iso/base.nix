@@ -1,5 +1,5 @@
 {
-  imports = [ ./base.nix ];
+  imports = [ ../../dbx/base.nix ];
 
   fileSystems = {
     "/" = {
