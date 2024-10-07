@@ -1,10 +1,12 @@
-{ pkgs, ... }:
+{ pkgs, /*rm*/dogebox ? import <dogebox>,/*rm*/ ... }:
 
-let
-  dogebox = import <dogebox> { inherit pkgs; };
-in
+/*inject*/
 {
   system.activationScripts.rk3588-firmware = ''
+    mkdir -p /etc/firmware
+    mkdir -p /lib/firmware
+    mkdir -p /system
+
     for i in /etc/firmware /lib/firmware /system;
     do
       [ -L $i ] && echo "Removing old symlink $i" && rm $i

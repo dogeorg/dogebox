@@ -5,10 +5,11 @@
     # If we have an overlay for /opt specified, load that first.
     lib.optional (builtins.pathExists /etc/nixos/opt-overlay.nix) /etc/nixos/opt-overlay.nix
 
-    # If we've done our initial "setup", then import our firmware and base file.
-    ++ lib.optional (builtins.pathExists /etc/largest-disk-formatted) /etc/nixos/firmware.nix
-    ++ lib.optional (builtins.pathExists /etc/largest-disk-formatted) /etc/nixos/base.nix
-  ;
+    ++
+    [
+      ./firmware.nix
+      ../../dbx/base.nix
+    ];
 
   # Duplicate this here as base.nix is optionally imported.
   system.stateVersion = "24.05";
@@ -19,6 +20,9 @@
         super.makeModulesClosure (x // { allowMissing = true; });
     })
   ];
+
+  # Show everything in the tty console instead of serial.
+  boot.kernelParams = [ "console=tty0" ];
 
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
   boot.loader.grub.enable = false;
