@@ -34,7 +34,7 @@
     vbox-x86_64 = base "x86_64-linux" ./nix/vbox-builder.nix "virtualbox" dbxX64;
     vm-x86_64 = base "x86_64-linux" ./nix/default-builder.nix "vm" dbxX64;
 
-    iso-x86_64 = base "x86_64-linux" ./nix/iso-builder.nix "iso" dbxX64;
-    iso-aarch64 = base "aarch64-linux" ./nix/iso-builder.nix "iso" dbxArm64;
+    iso-x86_64 = base "x86_64-linux" ./nix/iso-builder.nix "install-iso" dbxX64;
+    iso-aarch64 = base "aarch64-linux" ./nix/iso-builder.nix "install-iso" dbxArm64;
   };
 }
