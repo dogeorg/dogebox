@@ -3,7 +3,7 @@
 {
   imports = [ 
     (modulesPath + "/virtualisation/proxmox-lxc.nix")
-    ./base.nix
+    ../dbx/base.nix
   ];
 
 }

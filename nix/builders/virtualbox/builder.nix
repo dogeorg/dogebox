@@ -1,38 +1,38 @@
 { pkgs, ... }:
 
 let
-  qemuFile = pkgs.writeTextFile {
-    name = "qemu.nix";
-    text = builtins.readFile ./qemu.nix;
+  vboxFile = pkgs.writeTextFile {
+    name = "vbox.nix";
+    text = builtins.readFile ../dbx/vbox.nix;
   };
 
   baseFile = pkgs.writeTextFile {
     name = "base.nix";
-    text = builtins.readFile ./base.nix;
+    text = builtins.readFile ../dbx/base.nix;
   };
 
   dogeboxFile = pkgs.writeTextFile {
     name = "dogebox.nix";
-    text = builtins.readFile ./dogebox.nix;
+    text = builtins.readFile ../dbx/dogebox.nix;
   };
 
   dogeboxdFile = pkgs.writeTextFile {
     name = "dogeboxd.nix";
-    text = builtins.readFile ./dogeboxd.nix;
+    text = builtins.readFile ../dbx/dogeboxd.nix;
   };
 
   dkmFile = pkgs.writeTextFile {
     name = "dkm.nix";
-    text = builtins.readFile ./dkm.nix;
+    text = builtins.readFile ../dbx/dkm.nix;
   };
 in
 {
-  imports = [ ./qemu.nix ];
+  imports = [ ../dbx/vbox.nix ];
 
   system.activationScripts.copyFiles = ''
-    mkdir -p /opt/nixos
-    echo "qemu" >> /opt/build-type
-    cp ${qemuFile} /etc/nixos/configuration.nix
+    mkdir /opt
+    echo "vbox" >> /opt/build-type
+    cp ${vboxFile} /etc/nixos/configuration.nix
     cp ${baseFile} /etc/nixos/base.nix
     cp ${dogeboxFile} /etc/nixos/dogebox.nix
     cp ${dogeboxdFile} /etc/nixos/dogeboxd.nix

@@ -30,11 +30,11 @@
       };
     };
   in {
-    t6 = base "aarch64-linux" ./nix/nanopc-T6-builder.nix "raw" dbxArm64;
-    vbox-x86_64 = base "x86_64-linux" ./nix/vbox-builder.nix "virtualbox" dbxX64;
-    vm-x86_64 = base "x86_64-linux" ./nix/default-builder.nix "vm" dbxX64;
+    t6 = base "aarch64-linux" ./nix/builders/nanopc-t6/builder.nix "raw" dbxArm64;
+    vbox-x86_64 = base "x86_64-linux" ./nix/builders/virtualbox/builder.nix "virtualbox" dbxX64;
+    vm-x86_64 = base "x86_64-linux" ./nix/builders/default/builder.nix "vm" dbxX64;
 
-    iso-x86_64 = base "x86_64-linux" ./nix/iso-builder.nix "install-iso" dbxX64;
-    iso-aarch64 = base "aarch64-linux" ./nix/iso-builder.nix "install-iso" dbxArm64;
+    iso-x86_64 = base "x86_64-linux" ./nix/builders/iso/builder.nix "install-iso" dbxX64;
+    iso-aarch64 = base "aarch64-linux" ./nix/builders/iso/builder/builder.nix "install-iso" dbxArm64;
   };
 }

@@ -1,37 +1,40 @@
 { pkgs, ... }:
 
 let
-  vboxFile = pkgs.writeTextFile {
-    name = "vbox.nix";
-    text = builtins.readFile ./vbox.nix;
+  vmwareFile = pkgs.writeTextFile {
+    name = "vmware.nix";
+    text = builtins.readFile ../dbx/vmware.nix;
   };
 
   baseFile = pkgs.writeTextFile {
     name = "base.nix";
-    text = builtins.readFile ./base.nix;
+    text = builtins.readFile ../dbx/base.nix;
   };
 
   dogeboxFile = pkgs.writeTextFile {
     name = "dogebox.nix";
-    text = builtins.readFile ./dogebox.nix;
+    text = builtins.readFile ../dbx/dogebox.nix;
   };
 
   dogeboxdFile = pkgs.writeTextFile {
     name = "dogeboxd.nix";
-    text = builtins.readFile ./dogeboxd.nix;
+    text = builtins.readFile ../dbx/dogeboxd.nix;
   };
 
   dkmFile = pkgs.writeTextFile {
     name = "dkm.nix";
-    text = builtins.readFile ./dkm.nix;
+    text = builtins.readFile ../dbx/dkm.nix;
   };
 in
 {
-  imports = [ ./vbox.nix ];
+  imports = [ ../dbx/vmware.nix ];
+
+  vmware.baseImageSize = 6144;
 
   system.activationScripts.copyFiles = ''
-    echo "vbox" >> /opt/build-type
-    cp ${vboxFile} /etc/nixos/configuration.nix
+    mkdir /opt
+    echo "vmware" >> /opt/build-type
+    cp ${vmwareFile} /etc/nixos/configuration.nix
     cp ${baseFile} /etc/nixos/base.nix
     cp ${dogeboxFile} /etc/nixos/dogebox.nix
     cp ${dogeboxdFile} /etc/nixos/dogeboxd.nix

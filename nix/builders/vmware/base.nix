@@ -1,5 +1,5 @@
 {
-  imports = [ ./base.nix ];
+  imports = [ ../dbx/base.nix ];
 
   /* Below copied from ${nixpkgs}/nixos/modules/virtualization/vmware-image.nix */
 
