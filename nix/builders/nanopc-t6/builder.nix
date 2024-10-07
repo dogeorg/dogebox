@@ -10,7 +10,7 @@ let
 
   kernelConfigFile = pkgs.writeTextFile {
     name = "nanopc-T6_linux_defconfig";
-    text = builtins.readFile ../../dbx/nanopc-T6_linux_defconfig;
+    text = builtins.readFile ./nanopc-T6_linux_defconfig;
   };
 
   baseFile = pkgs.writeTextFile {
@@ -40,8 +40,7 @@ let
 in
 {
   imports = [
-    #../../dbx/nanopc-T6-firmware.nix
-    imports = [ ./base.nix ];
+    ./base.nix
   ];
 
   system.activationScripts.copyFiles = ''
