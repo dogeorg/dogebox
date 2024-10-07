@@ -37,7 +37,7 @@
       # Add <dogebox> channel import
       ${pkgs.gnused}/bin/sed -i '/\/\*inject\*\//a let dogebox = import <dogebox> { inherit pkgs; }; in' /etc/nixos/*.nix
 
-      # Remove /*inject*/ line.
+      # Remove inject line.
       ${pkgs.gnused}/bin/sed -i 's|/\*inject\*/||g' /etc/nixos/*.nix
 
       # Replace any ../../dbx/ references with ./ to make everything flat.
