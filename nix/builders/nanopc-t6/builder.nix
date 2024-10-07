@@ -41,7 +41,7 @@ in
 {
   imports = [
     #../../dbx/nanopc-T6-firmware.nix
-    ../../dbx/nanopc-T6.nix
+    imports = [ ./base.nix ];
   ];
 
   system.activationScripts.copyFiles = ''

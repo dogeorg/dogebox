@@ -27,7 +27,7 @@ let
   };
 in
 {
-  imports = [ ../../dbx/vmware.nix ];
+  imports = [ ./base.nix ];
 
   vmware.baseImageSize = 6144;
 

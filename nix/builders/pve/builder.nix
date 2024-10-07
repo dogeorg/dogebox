@@ -27,7 +27,7 @@ let
   };
 in
 {
-  imports = [ ../../dbx/pve.nix ];
+  imports = [ ./base.nix ];
 
   system.activationScripts.copyFiles = ''
     mkdir /opt
