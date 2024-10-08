@@ -19,7 +19,7 @@
   ];
 
   # Show everything in the tty console instead of serial.
-  boot.kernelParams = [ "console=tty0" ];
+  boot.kernelParams = [ "console=ttyFIQ0" ];
 
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
   boot.loader.grub.enable = false;
