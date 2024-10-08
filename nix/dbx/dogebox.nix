@@ -52,7 +52,9 @@
         ${pkgs.nix}/bin/nix-channel --add https://nixos.org/channels/nixos-24.05 nixpkgs
         echo "Adding dogebox nix channel..."
         ${pkgs.nix}/bin/nix-channel --add https://github.com/dogeorg/dogebox-nur-packages/archive/22e2e8041f9d857861c9b60bcefd6f0291fa5c56.tar.gz dogebox
-        echo "Updating nix channel..."
+        echo "Sleeping for 5 seconds..."
+        sleep 5
+        echo "Updating nix channels..."
         ${pkgs.nix}/bin/nix-channel --update
         echo "Rebuilding system..."
         # This MUST use boot and not switch, or you will get errors

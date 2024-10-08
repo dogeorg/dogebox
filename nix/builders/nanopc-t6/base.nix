@@ -11,9 +11,6 @@
       ../../dbx/base.nix
     ];
 
-  # Duplicate this here as base.nix is optionally imported.
-  system.stateVersion = "24.05";
-
   nixpkgs.overlays = [
     (final: super: {
       makeModulesClosure = x:
