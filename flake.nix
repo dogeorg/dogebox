@@ -6,16 +6,27 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    dogebox = {
+    upstreamDogeboxChannel = {
       url = "github:dogeorg/dogebox-nur-packages";
       flake = false;
     };
   };
-  outputs = { self, nixpkgs, nixos-generators, dogebox,... } @ inputs: let
-    dbx = system: import (dogebox + "/default.nix") {
+  outputs = { self, nixpkgs, nixos-generators, upstreamDogeboxChannel,... } @ inputs: let
+    developmentMode = builtins.getEnv "dev" == "1";
+
+    devConfig = if developmentMode then
+      builtins.fromJSON (builtins.readFile ./dev.json)
+    else
+      {};
+
+    localDogeboxdPath = if devConfig.dogeboxd != null then devConfig.dogeboxd else null;
+    dogeboxNurPackagesPath = if devConfig.nur != null then devConfig.nur else upstreamDogeboxChannel;
+
+    dbx = system: import (dogeboxNurPackagesPath + "/default.nix") {
       pkgs = import nixpkgs {
         system = system;
       };
+      localDogeboxdPath = localDogeboxdPath;
     };
 
     dbxArm64 = dbx "aarch64-linux";

@@ -1,21 +1,5 @@
 {
   "nodes": {
-    "dogebox": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1728027367,
-        "narHash": "sha256-ALzaJEbU6BfvtW8VxMaX8tKLj9oAm/NupPGdroYBj1M=",
-        "owner": "dogeorg",
-        "repo": "dogebox-nur-packages",
-        "rev": "22e2e8041f9d857861c9b60bcefd6f0291fa5c56",
-        "type": "github"
-      },
-      "original": {
-        "owner": "dogeorg",
-        "repo": "dogebox-nur-packages",
-        "type": "github"
-      }
-    },
     "nixlib": {
       "locked": {
         "lastModified": 1727571693,
@@ -69,9 +53,25 @@
     },
     "root": {
       "inputs": {
-        "dogebox": "dogebox",
         "nixos-generators": "nixos-generators",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "upstreamDogeboxChannel": "upstreamDogeboxChannel"
+      }
+    },
+    "upstreamDogeboxChannel": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1728281205,
+        "narHash": "sha256-Bg3a7Cqy1ae/MyBiD3PD+zl3l2NmqNmZnxeHWjyXSBY=",
+        "owner": "dogeorg",
+        "repo": "dogebox-nur-packages",
+        "rev": "1d7816e839e77fb1d3e5d2029e370aaac9b0addd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dogeorg",
+        "repo": "dogebox-nur-packages",
+        "type": "github"
       }
     }
   },
