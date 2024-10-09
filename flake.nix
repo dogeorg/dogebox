@@ -19,8 +19,8 @@
     else
       {};
 
-    localDogeboxdPath = if devConfig.dogeboxd != null then devConfig.dogeboxd else null;
-    dogeboxNurPackagesPath = if devConfig.nur != null then devConfig.nur else upstreamDogeboxChannel;
+    localDogeboxdPath = if (builtins.hasAttr "dogeboxd" devConfig) then devConfig.dogeboxd else null;
+    dogeboxNurPackagesPath = if (builtins.hasAttr "nur" devConfig) then devConfig.nur else upstreamDogeboxChannel;
 
     dbx = system: import (dogeboxNurPackagesPath + "/default.nix") {
       pkgs = import nixpkgs {

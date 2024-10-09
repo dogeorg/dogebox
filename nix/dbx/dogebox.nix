@@ -56,6 +56,15 @@
         sleep 5
         echo "Updating nix channels..."
         ${pkgs.nix}/bin/nix-channel --update
+
+        # If we're booting from a RO media, don't bother rebuilding the system here.
+        if [ -f /opt/ro-media ]; then
+          echo "Detected read-only root filesystem. Skipping system rebuild."
+          echo "Sleeping for 5 seconds..."
+          sleep 5
+          exit 0
+        fi
+
         echo "Rebuilding system..."
         # This MUST use boot and not switch, or you will get errors
         # about nix trying to replace in-process unit files (the one executing this script)

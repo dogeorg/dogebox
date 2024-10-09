@@ -31,6 +31,7 @@ in
 
   system.activationScripts.copyFiles = ''
     mkdir /opt
+    touch /opt/ro-media
     echo "iso" >> /opt/build-type
     cp ${isoFile} /etc/nixos/configuration.nix
     cp ${baseFile} /etc/nixos/base.nix
