@@ -34,15 +34,20 @@
       modules = [ builder ];
       format = format;
       specialArgs = {
+        inherit arch;
         dogebox = dbx arch;
       };
     };
   in {
     t6 = base "aarch64" ./nix/builders/nanopc-t6/builder.nix "raw";
+
     vbox-x86_64 = base "x86_64" ./nix/builders/virtualbox/builder.nix "virtualbox";
     vm-x86_64 = base "x86_64" ./nix/builders/default/builder.nix "vm";
 
     iso-x86_64 = base "x86_64" ./nix/builders/iso/builder.nix "iso";
     iso-aarch64 = base "aarch64" ./nix/builders/iso/builder.nix "iso";
+
+    qemu-x86_64 = base "x86_64" ./nix/builders/qemu/builder.nix "qcow";
+    qemu-aarch64 = base "aarch64" ./nix/builders/qemu/builder.nix "qcow";
   };
 }

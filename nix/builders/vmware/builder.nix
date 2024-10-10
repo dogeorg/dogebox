@@ -29,7 +29,10 @@ in
 {
   imports = [ ./base.nix ];
 
-  vmware.baseImageSize = 6144;
+  vmware.memorySize = 4096;
+  vmware.vmDerivationName = "dogebox";
+  vmware.vmName = "Dogebox";
+  vmware.vmFileName = "dogebox- " + arch + ".vmdk";
 
   system.activationScripts.copyFiles = ''
     mkdir /opt

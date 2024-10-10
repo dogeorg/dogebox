@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, arch, ... }:
 
 let
   vboxFile = pkgs.writeTextFile {
@@ -28,6 +28,11 @@ let
 in
 {
   imports = [ ./base.nix ];
+
+  virtualbox.memorySize = 4096;
+  virtualbox.vmDerivationName = "dogebox";
+  virtualbox.vmName = "Dogebox";
+  virtualbox.vmFileName = "dogebox- " + arch + ".ova";
 
   system.activationScripts.copyFiles = ''
     mkdir /opt
