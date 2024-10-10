@@ -24,28 +24,25 @@
 
     dbx = system: import (dogeboxNurPackagesPath + "/default.nix") {
       pkgs = import nixpkgs {
-        system = system;
+        system = system + "-linux";
       };
       localDogeboxdPath = localDogeboxdPath;
     };
 
-    dbxArm64 = dbx "aarch64-linux";
-    dbxX64 = dbx "x86_64-linux";
-
-    base = system: builder: format: dbx: nixos-generators.nixosGenerate {
-      system = system;
+    base = arch: builder: format: nixos-generators.nixosGenerate {
+      system = arch + "-linux";
       modules = [ builder ];
       format = format;
       specialArgs = {
-        dogebox = dbx;
+        dogebox = dbx arch;
       };
     };
   in {
-    t6 = base "aarch64-linux" ./nix/builders/nanopc-t6/builder.nix "raw" dbxArm64;
-    vbox-x86_64 = base "x86_64-linux" ./nix/builders/virtualbox/builder.nix "virtualbox" dbxX64;
-    vm-x86_64 = base "x86_64-linux" ./nix/builders/default/builder.nix "vm" dbxX64;
+    t6 = base "aarch64" ./nix/builders/nanopc-t6/builder.nix "raw";
+    vbox-x86_64 = base "x86_64" ./nix/builders/virtualbox/builder.nix "virtualbox";
+    vm-x86_64 = base "x86_64" ./nix/builders/default/builder.nix "vm";
 
-    iso-x86_64 = base "x86_64-linux" ./nix/builders/iso/builder.nix "install-iso" dbxX64;
-    iso-aarch64 = base "aarch64-linux" ./nix/builders/iso/builder.nix "install-iso" dbxArm64;
+    iso-x86_64 = base "x86_64" ./nix/builders/iso/builder.nix "iso";
+    iso-aarch64 = base "aarch64" ./nix/builders/iso/builder.nix "iso";
   };
 }
