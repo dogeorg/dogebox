@@ -1,4 +1,5 @@
 {
   "nur": "/path/to/dogebox-nur-packages/",
-  "dogeboxd": "/path/to/dogeboxd/"
+  "dogeboxd": "/path/to/dogeboxd/",
+  "dpanel": "/path/to/dpanel/"
 }

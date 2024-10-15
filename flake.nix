@@ -20,6 +20,7 @@
       {};
 
     localDogeboxdPath = if (builtins.hasAttr "dogeboxd" devConfig) then devConfig.dogeboxd else null;
+    localDpanelPath = if (builtins.hasAttr "dpanel" devConfig) then devConfig.dpanel else null;
     dogeboxNurPackagesPath = if (builtins.hasAttr "nur" devConfig) then devConfig.nur else upstreamDogeboxChannel;
 
     dbx = system: import (dogeboxNurPackagesPath + "/default.nix") {
@@ -27,6 +28,7 @@
         system = system + "-linux";
       };
       localDogeboxdPath = localDogeboxdPath;
+      localDpanelPath = localDpanelPath;
     };
 
     base = arch: builder: format: nixos-generators.nixosGenerate {

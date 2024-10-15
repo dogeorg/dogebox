@@ -6,6 +6,13 @@
     pkgs.systemd
     pkgs.nixos-rebuild
     dogebox.dogeboxd
+    pkgs.parted
+    pkgs.util-linux
+    pkgs.e2fsprogs
+    pkgs.dosfstools
+    pkgs.nixos-install-tools
+    pkgs.nix
+    pkgs.git
   ];
 
   users.motd = ''
@@ -39,7 +46,7 @@
       Restart = "always";
       User = "dogeboxd";
       Group = "dogebox";
-      Environment = "PATH=/run/wrappers/bin:${pkgs.systemd}/bin:${pkgs.nixos-rebuild}/bin:${pkgs.coreutils}/bin:${pkgs.bash}/bin:$PATH";
+      Environment = "PATH=/run/wrappers/bin:${pkgs.git}/bin:${pkgs.nix}/bin:${pkgs.nixos-install-tools}/bin:${pkgs.dosfstools}/bin:${pkgs.e2fsprogs}/bin:${pkgs.parted}/bin:${pkgs.util-linux}/bin:${pkgs.systemd}/bin:${pkgs.nixos-rebuild}/bin:${pkgs.coreutils}/bin:${pkgs.bash}/bin:$PATH";
     };
   };
 
