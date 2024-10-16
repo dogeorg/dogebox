@@ -32,7 +32,7 @@ in
   virtualbox.memorySize = 4096;
   virtualbox.vmDerivationName = "dogebox";
   virtualbox.vmName = "Dogebox";
-  virtualbox.vmFileName = "dogebox- " + arch + ".ova";
+  virtualbox.vmFileName = "dogebox-${dbxRelease}-${arch}.ova";
 
   system.activationScripts.copyFiles = ''
     mkdir /opt

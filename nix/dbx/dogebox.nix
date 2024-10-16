@@ -1,4 +1,4 @@
-{ lib, pkgs, /*rm*/dogebox ? import <dogebox> { inherit pkgs; },/*rm*/... }:
+{ lib, pkgs, dbxRelease, /*rm*/dogebox ? import <dogebox> { inherit pkgs; },/*rm*/... }:
 
 /*inject*/
 {
@@ -51,7 +51,7 @@
         echo "Adding nixpkgs channel..."
         ${pkgs.nix}/bin/nix-channel --add https://nixos.org/channels/nixos-24.05 nixpkgs
         echo "Adding dogebox nix channel..."
-        ${pkgs.nix}/bin/nix-channel --add https://github.com/dogeorg/dogebox-nur-packages/archive/1d7816e839e77fb1d3e5d2029e370aaac9b0addd.tar.gz dogebox
+        ${pkgs.nix}/bin/nix-channel --add https://github.com/dogeorg/dogebox-nur-packages/archive/${dbxRelease}.tar.gz dogebox
         echo "Sleeping for 5 seconds..."
         sleep 5
         echo "Updating nix channels..."

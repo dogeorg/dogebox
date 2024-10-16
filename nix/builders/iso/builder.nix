@@ -1,4 +1,4 @@
-{ pkgs, arch, ... }:
+{ pkgs, arch, dbxRelease, ... }:
 
 let
   isoFile = pkgs.writeTextFile {
@@ -29,7 +29,9 @@ in
 {
   imports = [ ./base.nix ];
 
-  isoImage.isoName = "dogebox-" + arch + ".iso";
+  isoImage.isoName = "dogebox-${dbxRelease}-${arch}.iso";
+  isoImage.prependToMenuLabel = "DogeboxOS (";
+  isoImage.appendToMenuLabel = ")";
 
   system.activationScripts.copyFiles = ''
     mkdir /opt

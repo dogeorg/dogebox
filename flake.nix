@@ -5,13 +5,13 @@
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    upstreamDogeboxChannel = {
-      url = "github:dogeorg/dogebox-nur-packages";
-      flake = false;
-    };
   };
-  outputs = { self, nixpkgs, nixos-generators, upstreamDogeboxChannel,... } @ inputs: let
+  outputs = { self, nixpkgs, nixos-generators,... } @ inputs: let
+    # Both of these MUST be updated to successfully build a new
+    # release, otherwise nix will silently cache things.
+    dbxRelease = "v0.2.0-beta";
+    nurPackagesHash = "59366b6903145bd0350c11488bba03670b37fdb2";
+
     developmentMode = builtins.getEnv "dev" == "1";
 
     devConfig = if developmentMode then
@@ -21,7 +21,11 @@
 
     localDogeboxdPath = if (builtins.hasAttr "dogeboxd" devConfig) then devConfig.dogeboxd else null;
     localDpanelPath = if (builtins.hasAttr "dpanel" devConfig) then devConfig.dpanel else null;
-    dogeboxNurPackagesPath = if (builtins.hasAttr "nur" devConfig) then devConfig.nur else upstreamDogeboxChannel;
+    dogeboxNurPackagesPath = if (builtins.hasAttr "nur" devConfig) then devConfig.nur else builtins.fetchGit {
+      url = "https://github.com/dogeorg/dogebox-nur-packages.git";
+      ref = "refs/tags/${dbxRelease}";
+      rev = nurPackagesHash;
+    };
 
     dbx = system: import (dogeboxNurPackagesPath + "/default.nix") {
       pkgs = import nixpkgs {
@@ -36,7 +40,7 @@
       modules = [ builder ];
       format = format;
       specialArgs = {
-        inherit arch;
+        inherit arch dbxRelease;
         dogebox = dbx arch;
       };
     };

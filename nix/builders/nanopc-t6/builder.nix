@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {}, modulesPath, lib, config, ... }:
+{ pkgs ? import <nixpkgs> {}, modulesPath, lib, config, dbxRelease, ... }:
 
 let
   dogebox = import <dogebox> { inherit pkgs; };
@@ -38,7 +38,7 @@ let
     text = builtins.readFile ./firmware.nix;
   };
 
-  imageName = "dogebox-t6";
+  imageName = "dogebox-${dbxRelease}-t6";
 
   # Override make-disk-image to pass in values that aren't properly exposed via nixos-generators
   # https://github.com/nix-community/nixos-generators/blob/master/formats/raw.nix#L23-L27
