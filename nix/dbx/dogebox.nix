@@ -1,4 +1,4 @@
-{ lib, pkgs, dbxRelease, /*rm*/dogebox ? import <dogebox> { inherit pkgs; },/*rm*/... }:
+{ lib, pkgs, /*rm*/dbxRelease, dogebox ? import <dogebox> { inherit pkgs; },/*rm*/... }:
 
 /*inject*/
 {
@@ -35,7 +35,12 @@
       ${pkgs.gnused}/bin/sed -i 's|/\*rm\*/.*/\*rm\*/||g' /etc/nixos/*.nix
 
       # Add <dogebox> channel import
-      ${pkgs.gnused}/bin/sed -i '/\/\*inject\*\//a let dogebox = import <dogebox> { inherit pkgs; }; in' /etc/nixos/*.nix
+      ${pkgs.gnused}/bin/sed -i '/\/\*inject\*\//a\
+let\
+  dogebox = import <dogebox> { inherit pkgs; };\
+  dbxRelease = "${dbxRelease}";\
+in\
+' /etc/nixos/*.nix
 
       # Remove inject line.
       ${pkgs.gnused}/bin/sed -i 's|/\*inject\*/||g' /etc/nixos/*.nix
