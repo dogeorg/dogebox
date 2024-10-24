@@ -67,6 +67,11 @@ in
   system.activationScripts.copyFiles = ''
     mkdir -p /opt
     echo "nanopc-T6" >> /opt/build-type
+
+    # Even though the T6 image can technically run off the microsd card
+    # the EMMC is going to be a much better experience, so force installation.
+    touch /opt/ro-media
+
     cp ${nanopc-T6File} /etc/nixos/configuration.nix
     cp ${kernelConfigFile} /etc/nixos/nanopc-T6_linux_defconfig
     cp ${baseFile} /etc/nixos/base.nix
