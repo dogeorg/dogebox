@@ -1,4 +1,4 @@
-{ pkgs, arch, ... }:
+{ pkgs, arch, dbxRelease, ... }:
 
 let
   vboxFile = pkgs.writeTextFile {
