@@ -59,6 +59,11 @@ for i in "${DATA[@]}"; do
     parted -s ${IMAGE_FILE} mkpart ${NAME} ${START}s $(( ${START} + ${SIZE} - 1 ))s
     parted -s ${IMAGE_FILE} type ${PARTITION_NUMBER} ${partition_uuid[$NAME]}
 
+    if [[ $NAME == 'rootfs' ]]; then
+        parted -s ${IMAGE_FILE} set ${PARTITION_NUMBER} boot on
+        parted -s ${IMAGE_FILE} set ${PARTITION_NUMBER} legacy_boot on 
+    fi
+
     PARTITION_NUMBER=$(( $PARTITION_NUMBER + 1 ))
 done
 
