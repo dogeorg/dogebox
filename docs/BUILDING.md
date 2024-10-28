@@ -2,16 +2,16 @@
 
 ## SD and SD installer images for the NanoPC-T6
 
-Start by building a disk image containing the root filesystem.  Assuming you are in an environment containing nix-shell, from the root of this repository run
+Start by building a disk image containing the root filesystem (covered in the README At the root of this repository).  Assuming you are in an environment containing nix-shell, from the root of this repository run
 
 ```
 nix-shell
 make nanopc-T6
 ```
 
-The last line of output should tell you where the resulting image is located.  Copy it into the build tree (or somewhere that has write access) and take note of it's location.
+The last line of output should tell you where the resulting image is located (/nix/store/..../...).  Copy it into the build tree (or somewhere that has write access) and take note of it's location.
 
-The SD images are built with a fork of FriendlyElec's sd-fuse_rk3588 for now. They need to be run on a debian-based x86_64 machine. The following steps will be automated or replaced soon.
+The SD images are built with a fork of FriendlyElec's sd-fuse_rk3588 for now. They need to be run on a debian-based x86_64 machine (eg Ubuntu should work). The following steps will be automated or replaced soon.
 
 ### SD
 
