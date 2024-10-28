@@ -36,7 +36,7 @@ in
 
   system.activationScripts.copyFiles = ''
     mkdir /opt
-    echo "vmware" >> /opt/build-type
+    echo "vmware" > /opt/build-type
     cp ${vmwareFile} /etc/nixos/configuration.nix
     cp ${baseFile} /etc/nixos/base.nix
     cp ${dogeboxFile} /etc/nixos/dogebox.nix

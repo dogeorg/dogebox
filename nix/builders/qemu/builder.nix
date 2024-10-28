@@ -31,7 +31,7 @@ in
 
   system.activationScripts.copyFiles = ''
     mkdir /opt
-    echo "qemu" >> /opt/build-type
+    echo "qemu" > /opt/build-type
     cp ${qemuFile} /etc/nixos/configuration.nix
     cp ${baseFile} /etc/nixos/base.nix
     cp ${dogeboxFile} /etc/nixos/dogebox.nix

@@ -31,7 +31,7 @@ in
 
   system.activationScripts.copyFiles = ''
     mkdir /opt
-    echo "pve" >> /opt/build-type
+    echo "pve" > /opt/build-type
     cp ${pveFile} /etc/nixos/configuration.nix
     cp ${baseFile} /etc/nixos/base.nix
     cp ${dogeboxFile} /etc/nixos/dogebox.nix

@@ -26,7 +26,7 @@ in
 
   system.activationScripts.copyFiles = ''
     mkdir /opt
-    echo "default" >> /opt/build-type
+    echo "default" > /opt/build-type
     cp ${baseFile} /etc/nixos/configuration.nix
     cp ${dogeboxFile} /etc/nixos/dogebox.nix
     cp ${dogeboxdFile} /etc/nixos/dogeboxd.nix

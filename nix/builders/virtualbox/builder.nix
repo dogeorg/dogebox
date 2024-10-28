@@ -36,7 +36,7 @@ in
 
   system.activationScripts.copyFiles = ''
     mkdir /opt
-    echo "vbox" >> /opt/build-type
+    echo "vbox" > /opt/build-type
     cp ${vboxFile} /etc/nixos/configuration.nix
     cp ${baseFile} /etc/nixos/base.nix
     cp ${dogeboxFile} /etc/nixos/dogebox.nix

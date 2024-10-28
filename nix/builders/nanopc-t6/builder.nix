@@ -66,7 +66,7 @@ in
 
   system.activationScripts.copyFiles = ''
     mkdir -p /opt
-    echo "nanopc-T6" >> /opt/build-type
+    echo "nanopc-T6" > /opt/build-type
 
     # Even though the T6 image can technically run off the microsd card
     # the EMMC is going to be a much better experience, so force installation.
