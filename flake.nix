@@ -31,8 +31,7 @@
       pkgs = import nixpkgs {
         system = system + "-linux";
       };
-      localDogeboxdPath = localDogeboxdPath;
-      localDpanelPath = localDpanelPath;
+      inherit localDogeboxdPath localDpanelPath dbxRelease nurPackagesHash;
     };
 
     base = arch: builder: format: nixos-generators.nixosGenerate {
