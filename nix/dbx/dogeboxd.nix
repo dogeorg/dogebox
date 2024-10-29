@@ -1,13 +1,19 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, /*rm*/dogebox ? import <dogebox>,/*rm*/... }:
 
-let
-  dogebox = import <dogebox> { inherit pkgs; };
-in
+/*inject*/
 {
   environment.systemPackages = [
     pkgs.systemd
     pkgs.nixos-rebuild
     dogebox.dogeboxd
+    pkgs.parted
+    pkgs.util-linux
+    pkgs.e2fsprogs
+    pkgs.dosfstools
+    pkgs.nixos-install-tools
+    pkgs.nix
+    pkgs.git
+    pkgs.libxkbcommon
   ];
 
   users.motd = ''
@@ -32,8 +38,6 @@ in
     "d /opt/dogebox 0700 dogeboxd dogebox -"
   ];
 
-  # TODO: Add /bin to $PATH
-
   systemd.services.dogeboxd = {
     after = [ "network.target" ];
     wantedBy = [ "multi-user.target" ];
@@ -43,7 +47,7 @@ in
       Restart = "always";
       User = "dogeboxd";
       Group = "dogebox";
-      Environment = "PATH=/run/wrappers/bin:${pkgs.systemd}/bin:${pkgs.nixos-rebuild}/bin:${pkgs.coreutils}/bin:${pkgs.bash}/bin:$PATH";
+      Environment = "PATH=/run/wrappers/bin:${pkgs.libxkbcommon}/bin:${pkgs.git}/bin:${pkgs.nix}/bin:${pkgs.nixos-install-tools}/bin:${pkgs.dosfstools}/bin:${pkgs.e2fsprogs}/bin:${pkgs.parted}/bin:${pkgs.util-linux}/bin:${pkgs.systemd}/bin:${pkgs.nixos-rebuild}/bin:${pkgs.coreutils}/bin:${pkgs.bash}/bin:$PATH";
     };
   };
 

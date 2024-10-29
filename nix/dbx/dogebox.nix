@@ -1,8 +1,6 @@
-{ lib, pkgs, ... }:
+{ lib, pkgs, /*rm*/dbxRelease, dogebox ? import <dogebox> { inherit pkgs; },/*rm*/... }:
 
-let
-  dogebox = import <dogebox> { inherit pkgs; };
-in
+/*inject*/
 {
   imports = [
     ./dkm.nix
@@ -24,7 +22,7 @@ in
   security.sudo.wheelNeedsPassword = false;
 
   # These will be overridden by the included dogebox.nix file above, but set defaults.
-  networking.wireless.enable = lib.mkDefault false;
+  networking.wireless.enable = lib.mkForce false;
   networking.networkmanager.enable = lib.mkForce false;
 
   networking.firewall.enable = true;
@@ -32,6 +30,24 @@ in
   environment.etc."first-boot-script.sh" = {
     text = ''
       #${pkgs.bash}/bin/bash
+
+      # Remove <dogebox> flake import
+      ${pkgs.gnused}/bin/sed -i 's|/\*rm\*/.*/\*rm\*/||g' /etc/nixos/*.nix
+
+      # Add <dogebox> channel import
+      ${pkgs.gnused}/bin/sed -i '/\/\*inject\*\//a\
+let\
+  dogebox = import <dogebox> { inherit pkgs; };\
+  dbxRelease = "${dbxRelease}";\
+in\
+' /etc/nixos/*.nix
+
+      # Remove inject line.
+      ${pkgs.gnused}/bin/sed -i 's|/\*inject\*/||g' /etc/nixos/*.nix
+
+      # Replace any ../../dbx/ references with ./ to make everything flat.
+      ${pkgs.gnused}/bin/sed -i 's|\.\.\/\.\.\/dbx\/|\.\/|g' /etc/nixos/*.nix
+
       if [ ! -f /opt/first-boot-done ]; then
         echo "Sleeping for 10 seconds to ensure network is actually up..."
         sleep 10
@@ -40,9 +56,20 @@ in
         echo "Adding nixpkgs channel..."
         ${pkgs.nix}/bin/nix-channel --add https://nixos.org/channels/nixos-24.05 nixpkgs
         echo "Adding dogebox nix channel..."
-        ${pkgs.nix}/bin/nix-channel --add https://github.com/dogeorg/dogebox-nur-packages/archive/v0.1.1-beta.tar.gz dogebox
-        echo "Updating nix channel..."
+        ${pkgs.nix}/bin/nix-channel --add https://github.com/dogeorg/dogebox-nur-packages/archive/${dbxRelease}.tar.gz dogebox
+        echo "Sleeping for 5 seconds..."
+        sleep 5
+        echo "Updating nix channels..."
         ${pkgs.nix}/bin/nix-channel --update
+
+        # If we're booting from a RO media, don't bother rebuilding the system here.
+        if [ -f /opt/ro-media ]; then
+          echo "Detected read-only root filesystem. Skipping system rebuild."
+          echo "Sleeping for 5 seconds..."
+          sleep 5
+          exit 0
+        fi
+
         echo "Rebuilding system..."
         # This MUST use boot and not switch, or you will get errors
         # about nix trying to replace in-process unit files (the one executing this script)

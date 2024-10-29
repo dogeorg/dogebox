@@ -5,7 +5,12 @@
 { lib, pkgs, ... }:
 
 {
-  imports = [ ./dogebox.nix ];
+  imports = [
+    ./dogebox.nix
+  ]
+  ++ lib.optionals (builtins.pathExists "/etc/nixos/hardware-configuration.nix") [
+    /etc/nixos/hardware-configuration.nix
+  ];
 
   nix.settings = {
     #allowed-users = [ "*" ];

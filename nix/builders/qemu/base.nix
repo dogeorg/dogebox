@@ -3,7 +3,7 @@
 {
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
-    ./base.nix
+    ../../dbx/base.nix
   ];
 
   fileSystems."/" = {
