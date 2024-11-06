@@ -9,8 +9,8 @@
   outputs = { self, nixpkgs, nixos-generators,... } @ inputs: let
     # Both of these MUST be updated to successfully build a new
     # release, otherwise nix will silently cache things.
-    dbxRelease = "v0.3.0-beta";
-    nurPackagesHash = "642ed00f92c21e87404dd6dd9b9895fd3d6c824b";
+    dbxRelease = "v0.3.1-beta";
+    nurPackagesHash = "d532765fa6057f2fa146b34f0fcd648737b87bed";
 
     developmentMode = builtins.getEnv "dev" == "1";
 
