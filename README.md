@@ -14,39 +14,6 @@ provide a platform and DRE (Dogecoin Runtime Environment) for building services 
 Services & applications packaged for Dogebox are called 'pups', these are standard linux services that are executed in
 isolated containers, with access to other 'pups' and the Dogecoin blockchain via ACL/Permission controlled internal routing.
 
-## Current Status
-
-**As a pre-alpha preview, these images are provided for people to get an idea of how the system works, while we push to
-complete all the 'glue' that brings the whole system together. We expect rapid acceleration of functionality over the 
-next two weeks (now - 20th Sept 2024).**
-
-Expect that these images will be rapidly replaced as we get closer to a complete working system! 
-
-### Functionality in current nightly:
-
-- **Builtin: dogeboxd / DKM (doge key manager) running**
-- *Setup Dogebox & configure password / master keys*
-- *Install a 'test-pup' and stop/start it*
-
-
-### Functionality end of week:
-
-- **Builtin: Dogenet running** (Dogebox meta-gossip-protocol service for node communication)
-- **Builtin: Internal Pup API Router** (Pups talking to eachother)
-- *SPV node pup available*
-- *Core node pup available*
-- *GigaWallet pup avaialble*
-
-### Functionality remaining (end Sept):
-
-- *Network Map pup available*
-- *Identity pup available*
-- *dPanel: pup realtime logging*
-- *dPanel: resolve API deps when installing pups*
-- **ARM builds available**
-
-</div>
-
 ## Getting It
 
 Builds are available on our [Github Releases](https://github.com/dogeorg/dogebox/releases) page.
