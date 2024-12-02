@@ -44,15 +44,27 @@
       };
     };
   in {
-    t6 = base "aarch64" ./nix/builders/nanopc-t6/builder.nix "raw";
+    iso-aarch64    = base "aarch64" ./nix/builders/iso/builder.nix "iso";
+    iso-x86_64     = base "x86_64" ./nix/builders/iso/builder.nix "iso";
 
-    vbox-x86_64 = base "x86_64" ./nix/builders/virtualbox/builder.nix "virtualbox";
-    vm-x86_64 = base "x86_64" ./nix/builders/default/builder.nix "vm";
+    pve-aarch64    = base "aarch64" ./nix/builders/pve/builder.nix "proxmox-lxc";
+    pve-x86_64     = base "x86_64" ./nix/builders/pve/builder.nix "proxmox-lxc";
 
-    iso-x86_64 = base "x86_64" ./nix/builders/iso/builder.nix "iso";
-    iso-aarch64 = base "aarch64" ./nix/builders/iso/builder.nix "iso";
+    qemu-aarch64   = base "aarch64" ./nix/builders/qemu/builder.nix "qcow";
+    qemu-x86_64    = base "x86_64" ./nix/builders/qemu/builder.nix "qcow";
 
-    qemu-x86_64 = base "x86_64" ./nix/builders/qemu/builder.nix "qcow";
-    qemu-aarch64 = base "aarch64" ./nix/builders/qemu/builder.nix "qcow";
+    raw-aarch64    = base "aarch64" ./nix/builders/default/builder.nix "raw";
+    raw-x86_64     = base "x86_64" ./nix/builders/default/builder.nix "raw";
+
+    t6             = base "aarch64" ./nix/builders/nanopc-t6/builder.nix "raw";
+
+    vbox-aarch64   = base "aarch64" ./nix/builders/virtualbox/builder.nix "virtualbox";
+    vbox-x86_64    = base "x86_64" ./nix/builders/virtualbox/builder.nix "virtualbox";
+
+    vm-aarch64     = base "aarch64" ./nix/builders/default/builder.nix "vm";
+    vm-x86_64      = base "x86_64" ./nix/builders/default/builder.nix "vm";
+
+    vmware-aarch64 = base "aarch64" ./nix/builders/vmware/builder.nix "vmware";
+    vmware-x86_64  = base "x86_64" ./nix/builders/vmware/builder.nix "vmware";
   };
 }
