@@ -1,4 +1,4 @@
-name: 'generate-virtualbox-ova'
+name: "generate-virtualbox-ova"
 
 # Controls when the workflow will run
 on:
@@ -23,18 +23,18 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
-      
+
       - name: Install nix
         uses: cachix/install-nix-action@v24
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
-          nix_path: nixpkgs=channel:nixos-24.05
+          nix_path: nixpkgs=channel:nixos-24.11
 
       - name: Add dogebox channel
         run: |
           nix-channel --add https://github.com/dogeorg/dogebox-nur-packages/archive/main.tar.gz dogebox
           nix-channel --update
-                    
+
       - name: Generate LXC image
         run: |
           NIX_PATH=$NIX_PATH:$(ls -d /nix/store/*dogebox/) nix run github:nix-community/nixos-generators -- -f virtualbox -c nix/vbox.nix | {
