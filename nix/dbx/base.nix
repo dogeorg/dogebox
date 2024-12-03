@@ -40,6 +40,6 @@
     wget
   ];
 
-  # DO NOT CHANGE THIS. EVER. EVEN WHEN UPDATING YOUR SYSTEM PAST 24.05.
-  system.stateVersion = "24.05";
+  # DO NOT CHANGE THIS. EVER. EVEN WHEN UPDATING YOUR SYSTEM PAST 24.11.
+  system.stateVersion = "24.11";
 }
