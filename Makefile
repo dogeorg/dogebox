@@ -6,7 +6,9 @@ nanopc-T6:
 	@nix build .#t6 -L --print-out-paths
 
 nanopc-T6-uboot:
-	NIXPKGS_ALLOW_UNFREE=1 nix-build -E 'with (import <nixpkgs>{}); pkgsCross.aarch64-multiplatform.ubootNanoPCT6'
+	#	NIXPKGS_ALLOW_UNFREE=1 nix-build -E 'with (import <nixpkgs>{}); pkgsCross.aarch64-multiplatform.ubootNanoPCT6'
+	@echo "Building uboot for nanopc-T6..."
+	@NIXPKGS_ALLOW_UNFREE=1 nix build .#t6-uboot -L --print-out-paths --impure
 
 nanopc-T6-sd: nanopc-T6-uboot
 	@echo "Generating nanopc-T6 image..."
