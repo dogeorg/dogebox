@@ -44,7 +44,7 @@
       };
     };
 
-    uboot = nixpkgs.legacyPackages.x86_64-linux.pkgsCross.aarch64-multiplatform.ubootNanoPCT6;
+    uboot = nixpkgs.legacyPackages.aarch64-linux.pkgsCross.aarch64-multiplatform.ubootNanoPCT6;
 
   in {
 

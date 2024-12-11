@@ -54,13 +54,32 @@ in
     ./base.nix
   ];
 
+  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+    "arm-trusted-firmware-rk3588"
+    "rkbin"
+  ];
+
   system.build.raw = lib.mkForce (pkgs.stdenv.mkDerivation {
     name = "dogebox-t6.img";
-    buildInputs = [ baseRawImage ];
+    src = ./.;
+    buildInputs = [
+      baseRawImage
+      pkgs.bash
+      pkgs.parted
+      pkgs.simg2img
+    ];
+    allowUnfree = true;
     buildCommand = ''
+      echo $out
+      echo $src
+      echo ---
       mkdir -p $out
-      cp -R ${baseRawImage}/* $out/
-      mv $out/nixos.img $out/${imageName}.img
+      cp -Rv ${baseRawImage}/* $out/
+      ln -s ${pkgs.pkgsCross.aarch64-multiplatform.ubootNanoPCT6}/idbloader.img ''${out}/idbloader.img
+      ln -s ${pkgs.pkgsCross.aarch64-multiplatform.ubootNanoPCT6}/u-boot.itb    ''${out}/uboot.img
+      ${pkgs.bash}/bin/bash ''${src}/bin/extract-fs-from-disk-image.sh ${baseRawImage}/nixos.img ''${out}/
+      cp ''${src}/templates/parameter.txt ''${out}
+      ${pkgs.bash}/bin/bash ''${src}/bin/make-sd-image.sh ''${out}
     '';
   });
 

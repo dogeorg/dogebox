@@ -3,7 +3,7 @@ T6_WORK_DIR = nixos-arm64
 
 nanopc-T6:
 	@echo "Generating nanopc-T6 image..."
-	@nix build .#t6 -L --print-out-paths
+	@NIXPKGS_ALLOW_UNFREE=1 nix build .#t6 -L --print-out-paths
 
 nanopc-T6-uboot:
 	#	NIXPKGS_ALLOW_UNFREE=1 nix-build -E 'with (import <nixpkgs>{}); pkgsCross.aarch64-multiplatform.ubootNanoPCT6'
