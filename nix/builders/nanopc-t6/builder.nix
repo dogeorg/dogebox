@@ -61,7 +61,7 @@ in
 
   system.build.raw = lib.mkForce (pkgs.stdenv.mkDerivation {
     name = "dogebox-t6.img";
-    src = ./.;
+    src = ../../..;
     buildInputs = [
       baseRawImage
       pkgs.bash
@@ -70,16 +70,12 @@ in
     ];
     allowUnfree = true;
     buildCommand = ''
-      echo $out
-      echo $src
-      echo ---
-      mkdir -p $out
-      cp -Rv ${baseRawImage}/* $out/
-      ln -s ${pkgs.pkgsCross.aarch64-multiplatform.ubootNanoPCT6}/idbloader.img ''${out}/idbloader.img
-      ln -s ${pkgs.pkgsCross.aarch64-multiplatform.ubootNanoPCT6}/u-boot.itb    ''${out}/uboot.img
+      mkdir -p $out 
+      ln -s ${pkgs.ubootNanoPCT6}/idbloader.img ''${out}/idbloader.img
+      ln -s ${pkgs.ubootNanoPCT6}/u-boot.itb    ''${out}/uboot.img
       ${pkgs.bash}/bin/bash ''${src}/bin/extract-fs-from-disk-image.sh ${baseRawImage}/nixos.img ''${out}/
       cp ''${src}/templates/parameter.txt ''${out}
-      ${pkgs.bash}/bin/bash ''${src}/bin/make-sd-image.sh ''${out}
+      ${pkgs.bash}/bin/bash ''${src}/bin/make-sd-image.sh ''${out} ${imageName}.img
     '';
   });
 
