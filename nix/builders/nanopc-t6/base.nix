@@ -25,6 +25,7 @@
   boot.loader.grub.enable = false;
   # Enables the generation of /boot/extlinux/extlinux.conf
   boot.loader.generic-extlinux-compatible.enable = true;
+  boot.loader.timeout = 1;
 
   boot.kernelPackages = let
     linux_rk3588_pkg = {
