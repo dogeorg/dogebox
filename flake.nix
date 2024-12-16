@@ -43,13 +43,9 @@
         dogebox = dbx arch;
       };
     };
-
-    uboot = nixpkgs.legacyPackages.aarch64-linux.pkgsCross.aarch64-multiplatform.ubootNanoPCT6;
-
   in {
 
     t6 = base "aarch64" ./nix/builders/nanopc-t6/builder.nix "raw";
-    t6-uboot = uboot;
 
     vbox-x86_64 = base "x86_64" ./nix/builders/virtualbox/builder.nix "virtualbox";
     vm-x86_64 = base "x86_64" ./nix/builders/default/builder.nix "vm";

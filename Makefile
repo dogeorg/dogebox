@@ -4,10 +4,6 @@ nanopc-T6:
 	@echo "Generating nanopc-T6 image..."
 	@nix build .#t6 -L --print-out-paths
 
-nanopc-T6-uboot:
-	@echo "Building uboot for nanopc-T6..."
-	@NIXPKGS_ALLOW_UNFREE=1 nix build .#t6-uboot -L --print-out-paths --impure
-
 pve-x86_64:
 	@echo "Generating Proxmox LXC..."
 	@nixos-generate -c nix/pve-builder.nix -f proxmox-lxc
@@ -39,5 +35,5 @@ vmware:
 	@echo "Generating VMWare VMDK..."
 	@nixos-generate -c nix/vmware-builder.nix -f vmware
 
-.PHONY: nanopc-T6 nanopc-T6-sd nanopc-T6-uboot pve qemu raw virtualbox virtualbox-launch vmware
+.PHONY: nanopc-T6 nanopc-T6-sd pve qemu raw virtualbox virtualbox-launch vmware
 
