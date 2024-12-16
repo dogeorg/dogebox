@@ -44,7 +44,6 @@
       };
     };
   in {
-
     t6 = base "aarch64" ./nix/builders/nanopc-t6/builder.nix "raw";
 
     vbox-x86_64 = base "x86_64" ./nix/builders/virtualbox/builder.nix "virtualbox";
