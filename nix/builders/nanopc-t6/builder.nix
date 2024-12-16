@@ -54,6 +54,7 @@ in
     ./base.nix
   ];
 
+  # These aren't used directly, but are consumed by ubootNanoPCT6 so need to be explicitly whitelisted.
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
     "arm-trusted-firmware-rk3588"
     "rkbin"
