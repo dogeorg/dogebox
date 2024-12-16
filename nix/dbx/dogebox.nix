@@ -51,6 +51,15 @@ in\
       if [ ! -f /opt/first-boot-done ]; then
         echo "Sleeping for 10 seconds to ensure network is actually up..."
         sleep 10
+
+        echo "Checking internet connectivity..."
+        if ! ${pkgs.iputils}/bin/ping -c 1 dogecoin.org > /dev/null 2>&1; then
+          echo "No internet connectivity detected. Internet is required at boot (ethernet) right now. WiFi support coming soon."
+          sleep 1d
+        else
+          echo "Internet check successful"
+        fi
+
         export NIX_PATH=nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos:nixos-config=/etc/nixos/configuration.nix:/nix/var/nix/profiles/per-user/root/channels
         export PATH=$PATH:${pkgs.git}/bin
         echo "Adding nixpkgs channel..."
