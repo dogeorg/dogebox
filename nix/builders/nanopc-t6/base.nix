@@ -76,45 +76,6 @@
     screen
   ];
 
-  #systemd.services.formatLargestDisk = {
-  #  description = "Formats the largest disk to ext4";
-  #  unitConfig = {
-  #    type = "oneshot";
-  #    after = [ "sysinit.target" ];
-  #  };##
-
-  #  script = ''
-  #    if [ ! -e /etc/largest-disk-formatted ]; then
-  #      largest_disk=$(lsblk -dno NAME,SIZE,MOUNTPOINT | awk '$3 == "" {print $1, $2}' | sort -rh -k2 | head -n1 | awk '{print $1}')
-
-  #      if [ -z "$largest_disk" ]; then
-  #        echo "No suitable data disk found."
-  #        exit 1
-  #      fi
-
-  #      echo "Largest unmounted disk found: $largest_disk"
-  #      echo "Formatting as ext4..."
-  #      mkfs.ext4 /dev/$largest_disk
-
-   #     cat <<EOF > /etc/nixos/opt-overlay.nix
-#{ ... }:
-
-#{
-#  fileSystems."/opt" = {
-#    device = "/dev/''${largest_disk}";
-#    fsType = "ext4";
-#  };
-#}
-#        EOF
-
- #       echo "/dev/$largest_disk" > /etc/largest-disk
- #       touch /etc/largest-disk-formatted
-  #    fi
-  #  '';
-
-   # wantedBy = [ "basic.target" "runOnceOnFirstBoot.service" ];
- # };
-
   systemd.services.resizerootfs = {
     description = "Expands root filesystem of boot deviceon first boot";
     unitConfig = {
