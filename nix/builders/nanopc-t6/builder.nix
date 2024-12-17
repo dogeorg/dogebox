@@ -70,15 +70,18 @@ in
       pkgs.simg2img
     ];
     buildCommand = ''
-      ln -s ${pkgs.ubootNanoPCT6}/idbloader.img ./idbloader.img
-      ln -s ${pkgs.ubootNanoPCT6}/u-boot.itb ./uboot.img
-      ${pkgs.bash}/bin/bash $src/scripts/extract-fs-from-disk-image.sh ${baseRawImage}/nixos.img .
-      cp $src/templates/parameter.txt .
-      ${pkgs.bash}/bin/bash $src/scripts/make-sd-image.sh ./ ${imageName}.img
       mkdir -p $out
 
+      ln -s ${pkgs.ubootNanoPCT6}/idbloader.img $out/idbloader.img
+      ln -s ${pkgs.ubootNanoPCT6}/u-boot.itb $out/uboot.img
+      ${pkgs.bash}/bin/bash $src/scripts/extract-fs-from-disk-image.sh ${baseRawImage}/nixos.img $out/
+      cp $src/templates/parameter.txt $out/
+      ${pkgs.bash}/bin/bash $src/scripts/make-sd-image.sh $out/ ${imageName}.img
+
       # Only copy the resulting image, we don't care about other intermediaries.
-      cp ./dogebox-*.img $out
+      mv $out/dogebox-*.img /tmp
+      rm -Rf $out/*
+      mv /tmp/dogebox-*.img $out/
     '';
   });
 
