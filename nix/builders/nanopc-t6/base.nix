@@ -50,10 +50,6 @@
     })
     .overrideAttrs (old: {
       nativeBuildInputs = old.nativeBuildInputs ++ [ubootTools];
-      prePatch = ''
-        cp arch/arm64/boot/dts/rockchip/rk3588-nanopi6-rev01.dts arch/arm64/boot/dts/rockchip/rk3588-nanopc-t6.dts
-        sed -i "s/rk3588-nanopi6-rev0a.dtb/rk3588-nanopi6-rev0a.dtb\ rk3588-nanopc-t6.dtb/" arch/arm64/boot/dts/rockchip/Makefile
-      '';
     });
       linux_rk3588 = pkgs.callPackage linux_rk3588_pkg{};
     in
