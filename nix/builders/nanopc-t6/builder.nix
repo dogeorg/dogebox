@@ -48,6 +48,11 @@ let
     format = "raw";
     name = imageName;
   };
+  # Override the value of CONFIG_DEFAULT_FDT_FILE, which sets the 'fdtfile' environment variable inside uboot.
+  # This lets us change the kernel device tree name to match the FriendlyElec kernel while leaving uboot's alone.
+  ubootNanoPCT6 = pkgs.ubootNanoPCT6.override {
+    prePatch = "sed -i \"s/rk3588-nanopc-t6.dtb/rk3588-nanopi6-rev01.dtb/\" configs/nanopc-t6-rk3588_defconfig";
+  };
 in
 {
   imports = [
@@ -72,8 +77,8 @@ in
     buildCommand = ''
       mkdir -p $out
 
-      ln -s ${pkgs.ubootNanoPCT6}/idbloader.img $out/idbloader.img
-      ln -s ${pkgs.ubootNanoPCT6}/u-boot.itb $out/uboot.img
+      ln -s ${ubootNanoPCT6}/idbloader.img $out/idbloader.img
+      ln -s ${ubootNanoPCT6}/u-boot.itb $out/uboot.img
       ${pkgs.bash}/bin/bash $src/scripts/extract-fs-from-disk-image.sh ${baseRawImage}/nixos.img $out/
       cp $src/templates/parameter.txt $out/
       ${pkgs.bash}/bin/bash $src/scripts/make-sd-image.sh $out/ ${imageName}.img
