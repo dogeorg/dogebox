@@ -94,7 +94,7 @@ in
 
     # Annoyingly, this script gets run even on a post-installed T6 image, so we need
     # to ensure that we don't re-mark an installed version as RO.
-    if [ ! -f /opt/dbx-install ]; then
+    if [ ! -f /opt/dbx-installed ]; then
       touch /opt/ro-media
     fi
 
