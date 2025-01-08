@@ -30,6 +30,10 @@
     trusted-users = [ "root" "nixos" ];
   };
 
+  # Set the foundation OS essentials binary cache
+  nix.settings.substituters = [ "https://dbx.nix.dogecoin.org" ];
+  nix.settings.trusted-public-keys = [ "dbx.nix.dogecoin.org:ODXaHC+9DNqXQ8ZTijaCT4JpieqmOatZeZBbdN51Obc=" ];
+
   # Set your time zone.
   time.timeZone = "Australia/Brisbane";
 
