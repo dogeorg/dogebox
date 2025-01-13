@@ -13,26 +13,22 @@
   ];
 
   nix.settings = {
-    #allowed-users = [ "*" ];
     auto-optimise-store = false;
-    # builders =
-    #cores = 0;
     experimental-features = [ "nix-command" "flakes" ];
-    #extra-sandbox-paths =
-    ##max-jobs = auto;
     require-sigs = true;
     sandbox = true;
     sandbox-fallback = false;
-    substituters = [ "https://cache.nixos.org/" ];
+    substituters = [
+      "https://cache.nixos.org/"
+      "https://dbx.nix.dogecoin.org"
+    ];
     system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
-    trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
-    #trusted-substituters =
+    trusted-public-keys = [
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      "dbx.nix.dogecoin.org:ODXaHC+9DNqXQ8ZTijaCT4JpieqmOatZeZBbdN51Obc="
+    ];
     trusted-users = [ "root" "nixos" ];
   };
-
-  # Set the foundation OS essentials binary cache
-  nix.settings.substituters = [ "https://dbx.nix.dogecoin.org" ];
-  nix.settings.trusted-public-keys = [ "dbx.nix.dogecoin.org:ODXaHC+9DNqXQ8ZTijaCT4JpieqmOatZeZBbdN51Obc=" ];
 
   # Set your time zone.
   time.timeZone = "Australia/Brisbane";
