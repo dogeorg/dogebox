@@ -1,4 +1,4 @@
-{ lib, pkgs, /*rm*/dbxRelease, dogebox ? import <dogebox> { inherit pkgs; },/*rm*/... }:
+{ lib, pkgs, /*rm*/dbxRelease, nurPackagesHash, dogebox ? import <dogebox> { inherit pkgs; },/*rm*/... }:
 
 /*inject*/
 {
@@ -37,8 +37,9 @@
       # Add <dogebox> channel import
       ${pkgs.gnused}/bin/sed -i '/\/\*inject\*\//a\
 let\
-  dogebox = import <dogebox> { inherit pkgs; };\
   dbxRelease = "${dbxRelease}";\
+  nurPackagesHash = "${nurPackagesHash}";\
+  dogebox = import <dogebox> { inherit pkgs dbxRelease nurPackagesHash; };\
 in\
 ' /etc/nixos/*.nix
 

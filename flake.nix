@@ -39,7 +39,7 @@
       modules = [ builder ];
       format = format;
       specialArgs = {
-        inherit arch dbxRelease;
+        inherit arch dbxRelease nurPackagesHash;
         dogebox = dbx arch;
       };
     };
