@@ -1,4 +1,4 @@
-{ pkgs, dbxRelease, ... }:
+{ pkgs, arch, dbxRelease, ... }:
 
 let
   vmwareFile = pkgs.writeTextFile {
@@ -29,9 +29,9 @@ in
 {
   imports = [ ./base.nix ];
 
-  vmware.memorySize = 4096;
+  #vmware.memorySize = 4096;
   vmware.vmDerivationName = "dogebox";
-  vmware.vmName = "Dogebox";
+  #vmware.vmName = "Dogebox";
   vmware.vmFileName = "dogebox-${dbxRelease}-${arch}.vmdk";
 
   system.activationScripts.copyFiles = ''
