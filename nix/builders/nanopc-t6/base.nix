@@ -70,14 +70,30 @@
     };
 
   environment.systemPackages = with pkgs; [
+    avahi
     cloud-utils
     parted
     wpa_supplicant
     screen
   ];
 
+  services.avahi = {
+      nssmdns4 = true;
+      nssmdns6 = true;
+
+      enable = true;
+      reflector = true;
+      hostName = "dogebox";
+      publish = {
+        enable = true;
+        addresses = true;
+        workstation = true;
+        userServices = true;
+      };
+  };
+
   systemd.services.resizerootfs = {
-    description = "Expands root filesystem of boot deviceon first boot";
+    description = "Expands root filesystem of boot device on first boot";
     unitConfig = {
       type = "oneshot";
       after = [ "sysinit.target" ];

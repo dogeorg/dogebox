@@ -64,7 +64,7 @@ in\
         export NIX_PATH=nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos:nixos-config=/etc/nixos/configuration.nix:/nix/var/nix/profiles/per-user/root/channels
         export PATH=$PATH:${pkgs.git}/bin
         echo "Adding nixpkgs channel..."
-        ${pkgs.nix}/bin/nix-channel --add https://nixos.org/channels/nixos-24.11 nixpkgs
+        ${pkgs.nix}/bin/nix-channel --add https://nixos.org/channels/nixos-24.11-small nixpkgs
         echo "Adding dogebox nix channel..."
         ${pkgs.nix}/bin/nix-channel --add https://github.com/dogeorg/dogebox-nur-packages/archive/${dbxRelease}.tar.gz dogebox
         echo "Sleeping for 5 seconds..."
@@ -121,7 +121,6 @@ in\
     pkgs.nixos-rebuild
     pkgs.bash
     pkgs.nix
-    pkgs.nixos-rebuild
     pkgs.git
   ];
 }
