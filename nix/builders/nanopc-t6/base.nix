@@ -77,13 +77,13 @@
     screen
   ];
 
+  networking.hostName = "dogebox"; # Initial hostName for the box to respond to dogebox.local for first boot and installation steps.
   services.avahi = {
       nssmdns4 = true;
       nssmdns6 = true;
 
       enable = true;
       reflector = true;
-      hostName = "dogebox";
       publish = {
         enable = true;
         addresses = true;
