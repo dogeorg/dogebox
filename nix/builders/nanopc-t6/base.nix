@@ -77,7 +77,9 @@
     screen
   ];
 
-  networking.hostName = "dogebox"; # Initial hostName for the box to respond to dogebox.local for first boot and installation steps.
+  # Initial hostName for the box to respond to dogebox.local for first boot and installation steps.
+  # Will be replaced ny dogeboxd configuration
+  networking.hostName = lib.mkDefault ("dogebox");
   services.avahi = {
       nssmdns4 = true;
       nssmdns6 = true;
