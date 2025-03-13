@@ -118,7 +118,6 @@ in\
 
   # These are all needed for the oneshot boot process above.
   environment.systemPackages = [
-    pkgs.nixos-rebuild
     pkgs.bash
     pkgs.nix
     pkgs.nixos-rebuild

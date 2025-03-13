@@ -70,14 +70,32 @@
     };
 
   environment.systemPackages = with pkgs; [
+    avahi
     cloud-utils
     parted
     wpa_supplicant
     screen
   ];
 
+  # Initial hostName for the box to respond to dogebox.local for first boot and installation steps.
+  # Will be replaced ny dogeboxd configuration
+  networking.hostName = lib.mkDefault ("dogebox");
+  services.avahi = {
+      nssmdns4 = true;
+      nssmdns6 = true;
+
+      enable = true;
+      reflector = true;
+      publish = {
+        enable = true;
+        addresses = true;
+        workstation = true;
+        userServices = true;
+      };
+  };
+
   systemd.services.resizerootfs = {
-    description = "Expands root filesystem of boot deviceon first boot";
+    description = "Expands root filesystem of boot device on first boot";
     unitConfig = {
       type = "oneshot";
       after = [ "sysinit.target" ];
