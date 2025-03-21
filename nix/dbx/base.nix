@@ -38,6 +38,7 @@
     git
     vim
     wget
+    wirelesstools
   ];
 
   # DO NOT CHANGE THIS. EVER. EVEN WHEN UPDATING YOUR SYSTEM PAST 24.11.
