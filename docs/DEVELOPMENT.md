@@ -33,3 +33,4 @@ If you get an error opening dev.json, consider clearing your cache with:
 ```bash
 nix-collect-garbage -d
 ```
+After this, re-run the `git add` and `git update-index` commands above to re-add the dev.json to the git repository before running any further builds.
