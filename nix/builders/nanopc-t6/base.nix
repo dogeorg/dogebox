@@ -73,7 +73,6 @@
     avahi
     cloud-utils
     parted
-    wpa_supplicant
     screen
   ];
 

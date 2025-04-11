@@ -13,7 +13,7 @@
 
   users.users.shibe = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "dogebox" ];
+    extraGroups = [ "wheel" "dogebox" "networkmanager" ];
 
     # Very temporary, until we have SSH key management in dpanel.
     password = "suchpass";
@@ -22,8 +22,9 @@
   security.sudo.wheelNeedsPassword = false;
 
   # These will be overridden by the included dogebox.nix file above, but set defaults.
-  networking.wireless.enable = lib.mkForce false;
-  networking.networkmanager.enable = lib.mkForce false;
+  networking.wireless.iwd.enable = lib.mkDefault true;
+  networking.networkmanager.enable = lib.mkDefault true;
+  networking.networkmanager.wifi.backend = lib.mkDefault "iwd";
 
   networking.firewall.enable = true;
 
@@ -122,5 +123,6 @@ in\
     pkgs.nix
     pkgs.nixos-rebuild
     pkgs.git
+    pkgs.wirelesstools
   ];
 }
