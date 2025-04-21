@@ -14,6 +14,8 @@
     pkgs.nix
     pkgs.git
     pkgs.libxkbcommon
+    pkgs.wirelesstools
+    pkgs.networkmanager
   ];
 
   users.motd = ''

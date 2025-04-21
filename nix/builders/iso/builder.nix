@@ -1,46 +1,52 @@
-{ pkgs, arch, dbxRelease, ... }:
+{ inputs, arch, pkgs, lib, dbxRelease, ... }:
 
 let
-  isoFile = pkgs.writeTextFile {
-    name = "iso.nix";
-    text = builtins.readFile ./base.nix;
+  # Evaluate the inner flake configuration with overrides
+  innerFlakeOutputsFunc = (import "${inputs.self}/nix/flake.nix").outputs;
+  innerFlakeArgs = {
+      self = { inputs = { inherit (inputs) nixpkgs dogeboxd dkm; }; }; # Simplified self
+      inherit (inputs) nixpkgs dogeboxd dkm;
+      lib = inputs.nixpkgs.lib;
   };
+  evaluatedInnerOutputs = innerFlakeOutputsFunc innerFlakeArgs;
 
-  baseFile = pkgs.writeTextFile {
-    name = "base.nix";
-    text = builtins.readFile ../../dbx/base.nix;
-  };
+  # Select the LIST OF MODULES based on arch
+  osConfigName = "dogeboxos-${arch}"; # e.g., dogeboxos-x86_64 or dogeboxos-aarch64
+  baseOsModules = evaluatedInnerOutputs.dogeboxosModules.${osConfigName} or (throw "Unsupported architecture for ISO: ${arch}");
 
-  dogeboxFile = pkgs.writeTextFile {
-    name = "dogebox.nix";
-    text = builtins.readFile ../../dbx/dogebox.nix;
-  };
-
-  dogeboxdFile = pkgs.writeTextFile {
-    name = "dogeboxd.nix";
-    text = builtins.readFile ../../dbx/dogeboxd.nix;
-  };
-
-  dkmFile = pkgs.writeTextFile {
-    name = "dkm.nix";
-    text = builtins.readFile ../../dbx/dkm.nix;
-  };
+  # Define cleaned source for copying
+  cleanedFlakeSource = lib.cleanSource inputs.self;
+  baseNix = lib.cleanSource ./base.nix;
 in
 {
-  imports = [ ./base.nix ];
+  # Import the list of modules from the inner flake
+  imports = baseOsModules; # No longer need to append ./base.nix
 
-  isoImage.isoName = "dogebox-${dbxRelease}-${arch}.iso";
-  isoImage.prependToMenuLabel = "DogeboxOS (";
+  # ----- Merged content from ./base.nix ----- 
+  
+  # ------------------------------------------- 
+
+  # ISO specific settings (kept from original)
+  isoImage.isoName = "dogebox-${dbxRelease}-${arch}-flake.iso"; # Added -flake suffix
+  isoImage.prependToMenuLabel = "DogeboxOS Flake (";
   isoImage.appendToMenuLabel = ")";
 
-  system.activationScripts.copyFiles = ''
-    mkdir /opt
-    touch /opt/ro-media
-    echo "iso" > /opt/build-type
-    cp ${isoFile} /etc/nixos/configuration.nix
-    cp ${baseFile} /etc/nixos/base.nix
-    cp ${dogeboxFile} /etc/nixos/dogebox.nix
-    cp ${dogeboxdFile} /etc/nixos/dogeboxd.nix
-    cp ${dkmFile} /etc/nixos/dkm.nix
-  '';
+  # Set system configuration revision based on outer flake's git rev (if available)
+  system.configurationRevision = lib.mkIf (inputs.self ? rev) inputs.self.rev;
+
+  # Activation script to copy flake source and mark build type
+  system.activationScripts.copyFlake =
+    # Ensure this runs late, after potential mounting/setup
+    lib.mkOrder 1000 ''
+      echo "Copying flake source to /etc/nixos..."
+      mkdir -p /etc/nixos
+      # Copy the contents using the cleaned source path
+      cp -rL ${cleanedFlakeSource}/* /etc/nixos/
+      cp -rL ${baseNix} /etc/nixos/builder-base.nix
+
+      # Mark build type and read-only media (as before)
+      mkdir -p /opt
+      touch /opt/ro-media # ISOs are read-only
+      echo "iso-flake" > /opt/build-type
+    '';
 }

@@ -1,35 +1,35 @@
-{ pkgs, ... }:
+{ inputs, ... }: # arch is implicitly x86_64 for default
 
 let
-  baseFile = pkgs.writeTextFile {
-    name = "base.nix";
-    text = builtins.readFile ../../dbx/base.nix;
+  # Evaluate the inner flake configuration with overrides
+  innerFlakeOutputsFunc = (import "${inputs.self}/nix/flake.nix").outputs;
+  innerFlakeArgs = {
+      self = { # Provide self for inner flake evaluation context
+          inputs = {
+              inherit (inputs) nixpkgs dogeboxd dkm;
+          };
+      };
+      inherit (inputs) nixpkgs dogeboxd dkm;
+      lib = inputs.nixpkgs.lib;
+      flakeSourcePath = inputs.self;
   };
+  evaluatedInnerOutputs = innerFlakeOutputsFunc innerFlakeArgs;
 
-  dogeboxFile = pkgs.writeTextFile {
-    name = "dogebox.nix";
-    text = builtins.readFile ../../dbx/dogebox.nix;
-  };
-
-  dogeboxdFile = pkgs.writeTextFile {
-    name = "dogeboxd.nix";
-    text = builtins.readFile ../../dbx/dogeboxd.nix;
-  };
-
-  dkmFile = pkgs.writeTextFile {
-    name = "dkm.nix";
-    text = builtins.readFile ../../dbx/dkm.nix;
-  };
+  # Select the x86_64 module list
+  baseOsModules = evaluatedInnerOutputs.dogeboxosModules."dogeboxos-x86_64";
 in
 {
-  imports = [ ../../dbx/base.nix ];
+  # Import the list of modules from the inner flake
+  # Default builder might not have its own base.nix, adjust if it does
+  imports = baseOsModules;
 
-  system.activationScripts.copyFiles = ''
-    mkdir /opt
-    echo "default" > /opt/build-type
-    cp ${baseFile} /etc/nixos/configuration.nix
-    cp ${dogeboxFile} /etc/nixos/dogebox.nix
-    cp ${dogeboxdFile} /etc/nixos/dogeboxd.nix
-    cp ${dkmFile} /etc/nixos/dkm.nix
+  # Add any builder-specific overrides here, e.g.:
+  # boot.loader.grub.enable = true;
+  # boot.loader.grub.device = "/dev/sda"; # or "nodev" for VMs
+
+  # Activation script (kept from original)
+  system.activationScripts.buildType = ''
+    mkdir -p /opt
+    echo "default-flake" > /opt/build-type
   '';
 }

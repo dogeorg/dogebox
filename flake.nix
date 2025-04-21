@@ -33,6 +33,7 @@
       format = format;
       specialArgs = {
         inherit arch dbxRelease;
+        inherit inputs;
       };
     };
 

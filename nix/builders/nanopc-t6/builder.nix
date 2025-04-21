@@ -1,70 +1,165 @@
-{ pkgs ? import <nixpkgs> {}, modulesPath, lib, config, dbxRelease, ... }:
+{ inputs, lib, config, pkgs, dbxRelease, modulesPath, ... }:
 
 let
-  dogebox = import <dogebox> { inherit pkgs; };
-
-  nanopc-T6File = pkgs.writeTextFile {
-    name = "nanopc-T6.nix";
-    text = builtins.readFile ./base.nix;
+  # Evaluate the inner flake configuration with overrides
+  innerFlakeOutputsFunc = (import "${inputs.self}/nix/flake.nix").outputs;
+  innerFlakeArgs = {
+      self = { # Provide self for inner flake evaluation context
+          inputs = {
+              inherit (inputs) nixpkgs dogeboxd dkm;
+          };
+      };
+      inherit (inputs) nixpkgs dogeboxd dkm;
+      lib = inputs.nixpkgs.lib;
+      flakeSourcePath = inputs.self;
   };
+  evaluatedInnerOutputs = innerFlakeOutputsFunc innerFlakeArgs;
 
-  kernelConfigFile = pkgs.writeTextFile {
-    name = "nanopc-T6_linux_defconfig";
-    text = builtins.readFile ./nanopc-T6_linux_defconfig;
-  };
+  # Select the aarch64 module list
+  baseOsModules = evaluatedInnerOutputs.dogeboxosModules."dogeboxos-aarch64";
 
-  baseFile = pkgs.writeTextFile {
-    name = "base.nix";
-    text = builtins.readFile ../../dbx/base.nix;
-  };
+  # Get the evaluated config for use in make-disk-image
+  osConfig = evaluatedInnerOutputs.nixosConfigurations."dogeboxos-aarch64".config;
 
-  dogeboxFile = pkgs.writeTextFile {
-    name = "dogebox.nix";
-    text = builtins.readFile ../../dbx/dogebox.nix;
-  };
-
-  dogeboxdFile = pkgs.writeTextFile {
-    name = "dogeboxd.nix";
-    text = builtins.readFile ../../dbx/dogeboxd.nix;
-  };
-
-  dkmFile = pkgs.writeTextFile {
-    name = "dkm.nix";
-    text = builtins.readFile ../../dbx/dkm.nix;
-  };
-
-  firmwareFile = pkgs.writeTextFile {
-    name = "firmware.nix";
-    text = builtins.readFile ./firmware.nix;
-  };
-
+  # Image naming (kept from original)
   imageName = "dogebox-${dbxRelease}-t6";
 
-  # Override make-disk-image to pass in values that aren't properly exposed via nixos-generators
-  # https://github.com/nix-community/nixos-generators/blob/master/formats/raw.nix#L23-L27
+  # Modified make-disk-image logic
   baseRawImage = import "${toString modulesPath}/../lib/make-disk-image.nix" {
-    inherit lib config pkgs;
+    inherit lib pkgs;
+    config = osConfig;
     diskSize = "auto";
     format = "raw";
     name = imageName;
   };
+
 in
 {
-  imports = [
-    ./base.nix
+  # Import the list of modules from the inner flake AND the T6 firmware module.
+  imports = baseOsModules ++ [ ./firmware.nix ]; # No longer need ./base.nix here
+
+  # ----- Merged content from ./base.nix ----- 
+  # (Excluding the imports line from base.nix as dbx/base.nix is already in baseOsModules
+  # and firmware.nix is explicitly imported above)
+
+  nixpkgs.overlays = [
+    (final: super: {
+      makeModulesClosure = x:
+        super.makeModulesClosure (x // { allowMissing = true; });
+    })
   ];
 
-  # These aren't used directly, but are consumed by ubootNanoPCT6 so need to be explicitly whitelisted.
+  # Show everything in the tty console instead of serial.
+  boot.kernelParams = [ "console=ttyFIQ0" ];
+
+  # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
+  boot.loader.grub.enable = lib.mkForce false;
+  # Enables the generation of /boot/extlinux/extlinux.conf
+  boot.loader.generic-extlinux-compatible.enable = lib.mkDefault true;
+  boot.loader.timeout = lib.mkDefault 1;
+
+  boot.kernelPackages = let
+    linux_rk3588_pkg = {
+      fetchFromGitHub,
+      linuxManualConfig,
+      ubootTools,
+      ...
+    } :
+    (linuxManualConfig rec {
+      modDirVersion = "6.1.57";
+      version = modDirVersion;
+
+      src = fetchFromGitHub {
+        owner = "friendlyarm";
+        repo = "kernel-rockchip";
+        rev = "85d0764ec61ebfab6b0d9f6c65f2290068a46fa1";
+        hash = "sha256-oGMx0EYfPQb8XxzObs8CXgXS/Q9pE1O5/fP7/ehRUDA=";
+      };
+
+      configfile = ./nanopc-T6_linux_defconfig;
+      allowImportFromDerivation = true;
+    })
+    .overrideAttrs (old: {
+      nativeBuildInputs = old.nativeBuildInputs ++ [ubootTools];
+      prePatch = ''
+        cp arch/arm64/boot/dts/rockchip/rk3588-nanopi6-rev01.dts arch/arm64/boot/dts/rockchip/rk3588-nanopc-t6.dts
+        sed -i "s/rk3588-nanopi6-rev0a.dtb/rk3588-nanopi6-rev0a.dtb\ rk3588-nanopc-t6.dtb/" arch/arm64/boot/dts/rockchip/Makefile
+      '';
+    });
+      linux_rk3588 = pkgs.callPackage linux_rk3588_pkg{};
+    in
+      pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor linux_rk3588);
+
+  boot.initrd.availableKernelModules = [ "nvme" "usbhid" ];
+  boot.initrd.kernelModules = [ ];
+  boot.kernelModules = [ "rtw88_8822ce" "rtw88_pci" "rtw88_core" ];
+  boot.extraModulePackages = [ ];
+
+  fileSystems."/" =
+    { device = "/dev/disk/by-label/nixos";
+      fsType = "ext4";
+    };
+
+  environment.systemPackages = with pkgs; [
+    avahi
+    cloud-utils
+    parted
+    screen
+  ];
+
+  # Initial hostName for the box to respond to dogebox.local for first boot and installation steps.
+  # Will be replaced ny dogeboxd configuration
+  networking.hostName = lib.mkDefault ("dogebox");
+  services.avahi = {
+      nssmdns4 = true;
+      nssmdns6 = true;
+
+      enable = true;
+      reflector = true;
+      publish = {
+        enable = true;
+        addresses = true;
+        workstation = true;
+        userServices = true;
+      };
+  };
+
+  systemd.services.resizerootfs = {
+    description = "Expands root filesystem of boot device on first boot";
+    unitConfig = {
+      type = "oneshot";
+      after = [ "sysinit.target" ];
+    };
+    script = ''
+      if [ ! -e /etc/fs.resized ];
+        then
+          echo "Expanding root filesystem . . ."
+          PATH=$PATH:/run/current-system/sw/bin/
+          ROOT_PART=$(basename "$(findmnt -c -n -o SOURCE /)")
+          ROOT_PART_NUMBER=$(cat /sys/class/block/$ROOT_PART/partition)
+          ROOT_DISK=$(basename "$(readlink -f "/sys/class/block/$ROOT_PART/..")")
+          growpart /dev/"$ROOT_DISK" "$ROOT_PART_NUMBER" || if [ $? == 2 ]; then echo "Error with growpart"; exit 2; fi
+          partprobe
+          resize2fs /dev/"$ROOT_PART"
+          touch /etc/fs.resized
+        fi
+    '';
+    wantedBy = [ "basic.target" "runOnceOnFirstBoot.service" ];
+  };
+  # ------------------------------------------- 
+
+  # Unfree packages needed for T6 build (kept from original)
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
     "arm-trusted-firmware-rk3588"
     "rkbin"
   ];
 
+  # Custom image building logic (kept from original)
   system.build.raw = lib.mkForce (pkgs.stdenv.mkDerivation {
     name = "dogebox-t6.img";
     src = ./.;
     buildInputs = [
-      baseRawImage
+      baseRawImage # This now contains the flake-based NixOS config
       pkgs.bash
       pkgs.parted
       pkgs.simg2img
@@ -85,25 +180,17 @@ in
     '';
   });
 
+  # Activation script modifications (kept from original)
   system.activationScripts.copyFiles = ''
     mkdir -p /opt
-    echo "nanopc-T6" > /opt/build-type
+    echo "nanopc-T6-flake" > /opt/build-type # Updated build type
 
-    # Even though the T6 image can technically run off the microsd card
-    # the EMMC is going to be a much better experience, so force installation.
-
-    # Annoyingly, this script gets run even on a post-installed T6 image, so we need
-    # to ensure that we don't re-mark an installed version as RO.
+    # ... (original logic for /opt/ro-media and /opt/dbx-installed remains) ...
     if [ ! -f /opt/dbx-installed ]; then
       touch /opt/ro-media
     fi
 
-    cp ${nanopc-T6File} /etc/nixos/configuration.nix
-    cp ${kernelConfigFile} /etc/nixos/nanopc-T6_linux_defconfig
-    cp ${baseFile} /etc/nixos/base.nix
-    cp ${dogeboxFile} /etc/nixos/dogebox.nix
-    cp ${dogeboxdFile} /etc/nixos/dogeboxd.nix
-    cp ${dkmFile} /etc/nixos/dkm.nix
-    cp ${firmwareFile} /etc/nixos/firmware.nix
+    # Removed cp commands for /etc/nixos/*
+    # environment.etc."nixos" in os-flake.nix handles this
   '';
 }
