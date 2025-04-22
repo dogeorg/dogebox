@@ -20,15 +20,11 @@ let
 in
 {
   # Import the list of modules from the inner flake
-  imports = baseOsModules; # No longer need to append ./base.nix
-
-  # ----- Merged content from ./base.nix ----- 
-  
-  # ------------------------------------------- 
+  imports = baseOsModules;
 
   # ISO specific settings (kept from original)
-  isoImage.isoName = "dogebox-${dbxRelease}-${arch}-flake.iso"; # Added -flake suffix
-  isoImage.prependToMenuLabel = "DogeboxOS Flake (";
+  isoImage.isoName = "dogebox-${dbxRelease}-${arch}.iso";
+  isoImage.prependToMenuLabel = "DogeboxOS (";
   isoImage.appendToMenuLabel = ")";
 
   # Set system configuration revision based on outer flake's git rev (if available)
@@ -38,15 +34,14 @@ in
   system.activationScripts.copyFlake =
     # Ensure this runs late, after potential mounting/setup
     lib.mkOrder 1000 ''
-      echo "Copying flake source to /etc/nixos..."
+      echo "Copying source to /etc/nixos..."
       mkdir -p /etc/nixos
       # Copy the contents using the cleaned source path
-      cp -rL ${cleanedFlakeSource}/* /etc/nixos/
-      cp -rL ${baseNix} /etc/nixos/builder-base.nix
+      cp -rL ${cleanedFlakeSource}/nix/* /etc/nixos/
 
       # Mark build type and read-only media (as before)
       mkdir -p /opt
       touch /opt/ro-media # ISOs are read-only
-      echo "iso-flake" > /opt/build-type
+      echo "iso" > /opt/build-type
     '';
 }

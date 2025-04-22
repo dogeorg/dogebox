@@ -32,15 +32,9 @@ let
     format = "raw";
     name = imageName;
   };
-
 in
 {
-  # Import the list of modules from the inner flake AND the T6 firmware module.
   imports = baseOsModules ++ [ ./firmware.nix ]; # No longer need ./base.nix here
-
-  # ----- Merged content from ./base.nix ----- 
-  # (Excluding the imports line from base.nix as dbx/base.nix is already in baseOsModules
-  # and firmware.nix is explicitly imported above)
 
   nixpkgs.overlays = [
     (final: super: {
@@ -183,14 +177,10 @@ in
   # Activation script modifications (kept from original)
   system.activationScripts.copyFiles = ''
     mkdir -p /opt
-    echo "nanopc-T6-flake" > /opt/build-type # Updated build type
+    echo "nanopc-T6" > /opt/build-type # Updated build type
 
-    # ... (original logic for /opt/ro-media and /opt/dbx-installed remains) ...
     if [ ! -f /opt/dbx-installed ]; then
       touch /opt/ro-media
     fi
-
-    # Removed cp commands for /etc/nixos/*
-    # environment.etc."nixos" in os-flake.nix handles this
   '';
 }

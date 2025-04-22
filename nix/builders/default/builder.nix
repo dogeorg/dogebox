@@ -30,6 +30,6 @@ in
   # Activation script (kept from original)
   system.activationScripts.buildType = ''
     mkdir -p /opt
-    echo "default-flake" > /opt/build-type
+    echo "default" > /opt/build-type
   '';
 }
