@@ -114,4 +114,11 @@
     '';
     wantedBy = [ "basic.target" "runOnceOnFirstBoot.service" ];
   };
+
+  system.activationScripts.buildType = {
+    text = ''
+      mkdir -p /opt
+      echo "nanopc-t6" > /opt/build-type
+    '';
+  };
 }

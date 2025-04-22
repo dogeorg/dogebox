@@ -23,4 +23,11 @@
   };
 
   virtualisation.vmware.guest.enable = true;
+
+  system.activationScripts.buildType = {
+    text = ''
+      mkdir -p /opt
+      echo "vmware" > /opt/build-type
+    '';
+  };
 }

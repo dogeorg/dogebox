@@ -12,4 +12,11 @@
   boot.loader.grub.device = lib.mkDefault "/dev/sda"; # Needed for ISO generation
   boot.loader.efi.canTouchEfiVariables = lib.mkDefault true;
   boot.loader.systemd-boot.enable = lib.mkDefault true;
+
+  system.activationScripts.buildType = {
+    text = ''
+      mkdir -p /opt
+      echo "iso" > /opt/build-type
+    '';
+  };
 }
