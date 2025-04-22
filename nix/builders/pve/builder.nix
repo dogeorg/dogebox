@@ -1,41 +1,21 @@
-{ pkgs, ... }:
+{ pkgs, specialArgs, dbxRelease, arch, ... }:
 
 let
-  pveFile = pkgs.writeTextFile {
-    name = "pve.nix";
-    text = builtins.readFile ./base.nix;
-  };
-
-  baseFile = pkgs.writeTextFile {
-    name = "base.nix";
-    text = builtins.readFile ../../dbx/base.nix;
-  };
-
-  dogeboxFile = pkgs.writeTextFile {
-    name = "dogebox.nix";
-    text = builtins.readFile ../../dbx/dogebox.nix;
-  };
-
-  dogeboxdFile = pkgs.writeTextFile {
-    name = "dogeboxd.nix";
-    text = builtins.readFile ../../dbx/dogeboxd.nix;
-  };
-
-  dkmFile = pkgs.writeTextFile {
-    name = "dkm.nix";
-    text = builtins.readFile ../../dbx/dkm.nix;
-  };
+  flakeSource = specialArgs.flakeSource;
 in
 {
-  imports = [ ./base.nix ];
+  system.activationScripts.copyFlakeAndMark = {
+    deps = [ "users" ];
+    text = ''
+      echo "[dbx setup] Copying flake source from ${flakeSource} to image /etc/nixos..."
+      mkdir -p /etc/nixos
+      ${pkgs.rsync}/bin/rsync -a --delete --exclude='.git' "${flakeSource}/" "/etc/nixos/"
 
-  system.activationScripts.copyFiles = ''
-    mkdir /opt
-    echo "pve" > /opt/build-type
-    cp ${pveFile} /etc/nixos/configuration.nix
-    cp ${baseFile} /etc/nixos/base.nix
-    cp ${dogeboxFile} /etc/nixos/dogebox.nix
-    cp ${dogeboxdFile} /etc/nixos/dogeboxd.nix
-    cp ${dkmFile} /etc/nixos/dkm.nix
-  '';
+      echo "[dbx setup] Marking build type as pve..."
+      mkdir -p /opt
+      echo "pve" > /opt/build-type
+
+      echo "[dbx setup] Flake source copy and marking complete."
+    '';
+  };
 }

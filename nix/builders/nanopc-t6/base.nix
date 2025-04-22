@@ -4,7 +4,6 @@
   imports =
     # If we have an overlay for /opt specified, load that first.
     lib.optional (builtins.pathExists /etc/nixos/opt-overlay.nix) /etc/nixos/opt-overlay.nix
-
     ++
     [
       ./firmware.nix
