@@ -2,8 +2,8 @@
 
 {
   imports = [
-    # ./dkm.nix
-    # ./dogeboxd.nix
+    ./dkm.nix
+    ./dogeboxd.nix
   ] ++ lib.optionals (builtins.pathExists "/opt/dogebox/nix/dogebox.nix") [
     /opt/dogebox/nix/dogebox.nix
   ];

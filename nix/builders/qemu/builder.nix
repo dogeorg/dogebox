@@ -1,4 +1,11 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  lib,
+  specialArgs,
+  arch,
+  dbxRelease, # Example of using passed args
+  ...
+}:
 
 let
   qemuFile = pkgs.writeTextFile {
@@ -25,9 +32,35 @@ let
     name = "dkm.nix";
     text = builtins.readFile ../../dbx/dkm.nix;
   };
+
+  flakeSource = specialArgs.flakeSource;
 in
 {
   imports = [ ./base.nix ];
+
+  # QEMU specific settings
+  # Example: Adjust disk size or format if needed for QEMU
+  virtualisation.diskSize = 8192; # Example: 8GB disk
+  format.qcow.imageName = "dogebox-${dbxRelease}-${arch}.qcow2";
+
+  # Activation script to run during image build to copy flake source
+  system.activationScripts.copyFlakeAndMark = {
+    deps = [ "users" ];
+    text = ''
+      echo "[ActivScript] Copying flake source from ${flakeSource} to image /etc/nixos..."
+      mkdir -p /etc/nixos
+      ${pkgs.rsync}/bin/rsync -a --delete --exclude='.git' "${flakeSource}/" "/etc/nixos/"
+
+      echo "[ActivScript] Marking build type as qemu..."
+      mkdir -p /opt
+      echo "qemu" > /opt/build-type
+
+      echo "[ActivScript] Flake source copy and marking complete."
+    '';
+  };
+
+  # Ensure no activation scripts from this module are included
+  system.activationScripts = lib.mkForce {};
 
   system.activationScripts.copyFiles = ''
     mkdir /opt

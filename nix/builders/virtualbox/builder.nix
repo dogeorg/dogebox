@@ -1,4 +1,11 @@
-{ pkgs, arch, dbxRelease, ... }:
+{
+  pkgs,
+  lib,
+  specialArgs,
+  arch,
+  dbxRelease, 
+  ...
+}:
 
 let
   vboxFile = pkgs.writeTextFile {
@@ -25,6 +32,8 @@ let
     name = "dkm.nix";
     text = builtins.readFile ../../dbx/dkm.nix;
   };
+
+  flakeSource = specialArgs.flakeSource;
 in
 {
   imports = [ ./base.nix ];
@@ -33,6 +42,9 @@ in
   virtualbox.vmDerivationName = "dogebox";
   virtualbox.vmName = "Dogebox";
   virtualbox.vmFileName = "dogebox-${dbxRelease}-${arch}.ova";
+
+  virtualisation.virtualbox.guest.enable = true;
+  format.virtualbox.imageName = "dogebox-${dbxRelease}-${arch}.ova";
 
   system.activationScripts.copyFiles = ''
     mkdir /opt
@@ -43,4 +55,22 @@ in
     cp ${dogeboxdFile} /etc/nixos/dogeboxd.nix
     cp ${dkmFile} /etc/nixos/dkm.nix
   '';
+
+  # Activation script to run during image build to copy flake source
+  system.activationScripts.copyFlakeAndMark = {
+    deps = [ "users" ];
+    text = ''
+      echo "[ActivScript] Copying flake source from ${flakeSource} to image /etc/nixos..."
+      mkdir -p /etc/nixos
+      ${pkgs.rsync}/bin/rsync -a --delete --exclude='.git' "${flakeSource}/" "/etc/nixos/"
+
+      echo "[ActivScript] Marking build type as virtualbox..."
+      mkdir -p /opt
+      echo "virtualbox" > /opt/build-type
+
+      echo "[ActivScript] Flake source copy and marking complete."
+    '';
+  };
+
+  system.activationScripts = lib.mkForce {};
 }

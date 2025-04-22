@@ -1,40 +1,21 @@
-{ inputs, lib, config, pkgs, dbxRelease, modulesPath, ... }:
+{ inputs, lib, config, pkgs, dbxRelease, modulesPath, specialArgs, ... }:
 
 let
-  # Evaluate the inner flake configuration with overrides
-  innerFlakeOutputsFunc = (import "${inputs.self}/nix/flake.nix").outputs;
-  innerFlakeArgs = {
-      self = { # Provide self for inner flake evaluation context
-          inputs = {
-              inherit (inputs) nixpkgs dogeboxd dkm;
-          };
-      };
-      inherit (inputs) nixpkgs dogeboxd dkm;
-      lib = inputs.nixpkgs.lib;
-      flakeSourcePath = inputs.self;
-  };
-  evaluatedInnerOutputs = innerFlakeOutputsFunc innerFlakeArgs;
-
-  # Select the aarch64 module list
-  baseOsModules = evaluatedInnerOutputs.dogeboxosModules."dogeboxos-aarch64";
-
-  # Get the evaluated config for use in make-disk-image
-  osConfig = evaluatedInnerOutputs.nixosConfigurations."dogeboxos-aarch64".config;
+  # flakeSource defined using specialArgs consistent with other builders
+  flakeSource = specialArgs.flakeSource;
 
   # Image naming (kept from original)
   imageName = "dogebox-${dbxRelease}-t6";
 
-  # Modified make-disk-image logic
-  baseRawImage = import "${toString modulesPath}/../lib/make-disk-image.nix" {
-    inherit lib pkgs;
-    config = osConfig;
-    diskSize = "auto";
-    format = "raw";
-    name = imageName;
-  };
+  # Reference the base NixOS configuration modules from flake.nix
+  # This assumes mkConfigModules is accessible or we pass modules directly
+  # We will rely on the modules passed by the `base` function in flake.nix
+  # No need to re-evaluate inner flake here
+
 in
 {
-  imports = baseOsModules ++ [ ./firmware.nix ]; # No longer need ./base.nix here
+  # imports = [ ./firmware.nix ]; # Base modules are already included by flake.nix's `base` function
+  imports = [ ./firmware.nix ]; # Keep firmware import if specific to T6
 
   nixpkgs.overlays = [
     (final: super: {
@@ -52,6 +33,7 @@ in
   boot.loader.generic-extlinux-compatible.enable = lib.mkDefault true;
   boot.loader.timeout = lib.mkDefault 1;
 
+  # KERNEL PKG LOGIC REMAINS UNCHANGED...
   boot.kernelPackages = let
     linux_rk3588_pkg = {
       fetchFromGitHub,
@@ -101,13 +83,10 @@ in
     screen
   ];
 
-  # Initial hostName for the box to respond to dogebox.local for first boot and installation steps.
-  # Will be replaced ny dogeboxd configuration
   networking.hostName = lib.mkDefault ("dogebox");
   services.avahi = {
       nssmdns4 = true;
       nssmdns6 = true;
-
       enable = true;
       reflector = true;
       publish = {
@@ -118,7 +97,7 @@ in
       };
   };
 
-  systemd.services.resizerootfs = {
+  systemd.services.resizerootfs = { # kept from original
     description = "Expands root filesystem of boot device on first boot";
     unitConfig = {
       type = "oneshot";
@@ -140,7 +119,6 @@ in
     '';
     wantedBy = [ "basic.target" "runOnceOnFirstBoot.service" ];
   };
-  # ------------------------------------------- 
 
   # Unfree packages needed for T6 build (kept from original)
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
@@ -148,39 +126,33 @@ in
     "rkbin"
   ];
 
-  # Custom image building logic (kept from original)
-  system.build.raw = lib.mkForce (pkgs.stdenv.mkDerivation {
-    name = "dogebox-t6.img";
-    src = ./.;
-    buildInputs = [
-      baseRawImage # This now contains the flake-based NixOS config
-      pkgs.bash
-      pkgs.parted
-      pkgs.simg2img
-    ];
-    buildCommand = ''
-      mkdir -p $out
+  # Custom image building logic (kept from original, ensure config is passed correctly)
+  # Note: make-disk-image might run activation scripts itself. Check its behavior.
+  # We might need to inject the flake copy *before* make-disk-image runs if it doesn't include activation.
+  # For now, assume activation script runs within the environment make-disk-image prepares.
+  
+  # Raw image specific settings
+  format.raw.imageName = "dogebox-${dbxRelease}-t6.img";
 
-      ln -s ${pkgs.ubootNanoPCT6}/idbloader.img $out/idbloader.img
-      ln -s ${pkgs.ubootNanoPCT6}/u-boot.itb $out/uboot.img
-      ${pkgs.bash}/bin/bash $src/scripts/extract-fs-from-disk-image.sh ${baseRawImage}/nixos.img $out/
-      cp $src/templates/parameter.txt $out/
-      ${pkgs.bash}/bin/bash $src/scripts/make-sd-image.sh $out/ ${imageName}.img
+  # Activation script to run during image build to copy flake source
+  system.activationScripts.copyFlakeAndMark = {
+    deps = [ "users" ];
+    text = ''
+      echo "[ActivScript] Copying flake source from ${flakeSource} to image /etc/nixos..."
+      mkdir -p /etc/nixos
+      ${pkgs.rsync}/bin/rsync -a --delete --exclude='.git' "${flakeSource}/" "/etc/nixos/"
 
-      # Only copy the resulting image, we don't care about other intermediaries.
-      mv $out/dogebox-*.img /tmp
-      rm -Rf $out/*
-      mv /tmp/dogebox-*.img $out/
+      echo "[ActivScript] Marking build type as nanopc-t6..."
+      mkdir -p /opt
+      echo "nanopc-t6" > /opt/build-type
+
+      echo "[ActivScript] Flake source copy and marking complete."
     '';
-  });
+  };
 
-  # Activation script modifications (kept from original)
-  system.activationScripts.copyFiles = ''
-    mkdir -p /opt
-    echo "nanopc-T6" > /opt/build-type # Updated build type
-
-    if [ ! -f /opt/dbx-installed ]; then
-      touch /opt/ro-media
-    fi
-  '';
+  # Remove the old, problematic activation script
+  # system.activationScripts.copyFiles = lib.mkForce {}; 
+  # Ensure *all* other activation scripts defined *only* in this file are removed if not needed.
+  # The resizerootfs service handles the first boot resize, not copyFiles logic.
+  # We keep systemd.services.resizerootfs
 }

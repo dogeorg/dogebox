@@ -1,11 +1,6 @@
-{ config, lib, pkgs, /*rm*/dogebox ? import <dogebox>,/*rm*/... }:
+{ config, lib, pkgs, dkm, ... }:
 
-/*inject*/
 {
-  environment.systemPackages = [
-    dogebox.dkm
-  ];
-
   users.users.dkm = {
     isSystemUser = true;
     group =  "dogebox";
@@ -21,7 +16,7 @@
     wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
-      ExecStart = "${dogebox.dkm}/bin/dkm --dir /opt/dkm";
+      ExecStart = "${dkm}/bin/dkm --dir /opt/dkm";
       Restart = "always";
       User = "dkm";
       Group = "dogebox";

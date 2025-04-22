@@ -22,19 +22,49 @@
   outputs = { self, nixpkgs, nixos-generators, flake-utils, ... } @ inputs: let
     dbxRelease = "v0.3.2-beta.3";
 
-    base = arch: builder: format: nixos-generators.nixosGenerate {
-      system = arch + "-linux";
-      modules = [
-        builder
-        {
-          nix.registry.nixpkgs.flake = nixpkgs;
-        }
-      ];
-      format = format;
+    builderBases = {
+      iso = ./nix/builders/iso/base.nix;
+      qemu = ./nix/builders/qemu/base.nix;
+      virtualbox = ./nix/builders/virtualbox/base.nix;
+      nanopc-t6 = ./nix/builders/nanopc-t6/base.nix;
+      default = ./nix/builders/default/base.nix;
+    };
+
+    dbxEntryModule = ./nix/dbx/base.nix;
+    commonModule = ./nix/os/common.nix;
+
+    mkConfigModules = { builderType }: [
+      (builderBases.${builderType} or (throw "Unsupported builderType: ${builderType}"))
+      commonModule
+      dbxEntryModule
+    ];
+
+    mkNixosSystem = { system, builderType }: nixpkgs.lib.nixosSystem {
+      inherit system;
       specialArgs = {
-        inherit arch dbxRelease;
-        inherit inputs;
+        inherit inputs dbxRelease builderType;
+        flakeSource = self;
+        arch = nixpkgs.lib.strings.removeSuffix "-linux" system;
+
+        # These are the built packages, rather than the raw sources.
+        dkm = inputs.dkm.packages.${system}.default;
+        dogeboxd = inputs.dogeboxd.packages.${system}.default;
       };
+      modules = mkConfigModules { inherit builderType; };
+    };
+
+    base = arch: builderType: builderSpecificModule: format:
+      let
+        system = arch + "-linux";
+      in nixos-generators.nixosGenerate {
+        inherit system format;
+        modules = [ builderSpecificModule ] ++ (mkConfigModules { inherit builderType; });
+        specialArgs = {
+          inherit inputs dbxRelease builderType arch;
+          flakeSource = self;
+          dkm = inputs.dkm.packages.${system}.default;
+          dogeboxd = inputs.dogeboxd.packages.${system}.default;
+        };
     };
 
     mkDevShell = system: let
@@ -56,20 +86,24 @@
       ];
     };
   in {
-    t6 = base "aarch64" ./nix/builders/nanopc-t6/builder.nix "raw";
+    t6 = base "aarch64" "nanopc-t6" ./nix/builders/nanopc-t6/builder.nix "raw";
+    vbox-x86_64 = base "x86_64" "virtualbox" ./nix/builders/virtualbox/builder.nix "virtualbox";
+    vm-x86_64 = base "x86_64" "default" ./nix/builders/default/builder.nix "vm"; # Assuming builderType 'default'
+    iso-x86_64 = base "x86_64" "iso" ./nix/builders/iso/builder.nix "iso";
+    iso-aarch64 = base "aarch64" "iso" ./nix/builders/iso/builder.nix "iso";
+    qemu-x86_64 = base "x86_64" "qemu" ./nix/builders/qemu/builder.nix "qcow";
+    qemu-aarch64 = base "aarch64" "qemu" ./nix/builders/qemu/builder.nix "qcow";
 
-    vbox-x86_64 = base "x86_64" ./nix/builders/virtualbox/builder.nix "virtualbox";
-    vm-x86_64 = base "x86_64" ./nix/builders/default/builder.nix "vm";
-
-    iso-x86_64 = base "x86_64" ./nix/builders/iso/builder.nix "iso";
-    iso-aarch64 = base "aarch64" ./nix/builders/iso/builder.nix "iso";
-
-    qemu-x86_64 = base "x86_64" ./nix/builders/qemu/builder.nix "qcow";
-    qemu-aarch64 = base "aarch64" ./nix/builders/qemu/builder.nix "qcow";
-
-    devShell = {
-      "x86_64-linux" = mkDevShell "x86_64-linux";
-      "aarch64-linux" = mkDevShell "aarch64-linux";
+    nixosConfigurations = {
+      dogeboxos-iso-x86_64 = mkNixosSystem { system = "x86_64-linux"; builderType = "iso"; };
+      dogeboxos-iso-aarch64 = mkNixosSystem { system = "aarch64-linux"; builderType = "iso"; };
+      dogeboxos-qemu-x86_64 = mkNixosSystem { system = "x86_64-linux"; builderType = "qemu"; };
+      dogeboxos-qemu-aarch64 = mkNixosSystem { system = "aarch64-linux"; builderType = "qemu"; };
+      dogeboxos-vbox-x86_64 = mkNixosSystem { system = "x86_64-linux"; builderType = "virtualbox"; };
+      dogeboxos-t6-aarch64 = mkNixosSystem { system = "aarch64-linux"; builderType = "nanopc-t6"; };
+      dogeboxos-vm-x86_64 = mkNixosSystem { system = "x86_64-linux"; builderType = "default"; };
     };
+
+    devShells = flake-utils.lib.eachDefaultSystem mkDevShell;
   };
 }

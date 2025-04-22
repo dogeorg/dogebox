@@ -1,0 +1,23 @@
+{ lib, pkgs, config, specialArgs, ... }:
+
+let
+  builderType = specialArgs.builderType or "unknown";
+
+  flakeSource = if builtins.hasAttr "flakeSource" specialArgs then specialArgs.flakeSource
+    else if builtins.hasAttr "source" config.system.build then config.system.build.source
+    else "/etc/nixos";
+in
+{
+  options.dogebox.builderType = lib.mkOption {
+    type = lib.types.str;
+    internal = true;
+    description = "The type of builder used (e.g., iso, qemu).";
+  };
+
+  config = {
+    dogebox.builderType = builderType;
+    nix.registry.nixpkgs.flake = specialArgs.inputs.nixpkgs;
+    environment.systemPackages = [ pkgs.rsync ];
+    system.configurationRevision = lib.mkIf (specialArgs.inputs.self ? rev) specialArgs.inputs.self.rev;
+  };
+}
