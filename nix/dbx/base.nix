@@ -46,10 +46,9 @@
     git
     vim
     wget
+    wirelesstools
   ];
 
-  networking.networkmanager.enable = true;
-  networking.networkmanager.wifi.backend = "iwd";
 
   # DO NOT CHANGE THIS. EVER. EVEN WHEN UPDATING YOUR SYSTEM PAST 24.11.
   system.stateVersion = "24.11";
