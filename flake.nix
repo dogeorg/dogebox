@@ -52,6 +52,34 @@
       touch /opt/${mediaFile}
     '';
 
+    versionScript = let
+      flakeLock = ./flake.lock;
+      flakeLockContent = builtins.readFile flakeLock;
+      flakeLockJson = builtins.fromJSON flakeLockContent;
+
+      # We read these from the lock so that we only need to specify the flake
+      # name, rather than the full flake URL, which has to contain versioning info.
+      dbxdFlake = builtins.getFlake ("github:dogebox-wg/dogeboxd/" + flakeLockJson.nodes.dogeboxd.locked.rev);
+      dkmFlake = builtins.getFlake ("github:dogebox-wg/dkm/" + flakeLockJson.nodes.dkm.locked.rev);
+    in ''
+      mkdir -p /opt/versioning
+
+      # Write out our pretty release version.
+      echo '${dbxRelease}' > /opt/versioning/dbx
+
+      # Dump the entire flake.lock file into the versioning directory.
+      echo '${flakeLockContent}' > /opt/versioning/flake.lock
+
+      # Write out info about our flake inputs for easy access.
+      mkdir -p /opt/versioning/dogeboxd
+      echo '${dbxdFlake.rev}' > /opt/versioning/dogeboxd/rev
+      echo '${dbxdFlake.narHash}' > /opt/versioning/dogeboxd/hash
+
+      mkdir -p /opt/versioning/dkm
+      echo '${dkmFlake.rev}' > /opt/versioning/dkm/rev
+      echo '${dkmFlake.narHash}' > /opt/versioning/dkm/hash
+    '';
+
     dbxEntryModule = ./nix/dbx/base.nix;
     commonModule = ./nix/os/common.nix;
 
@@ -62,6 +90,7 @@
       ({ ... }: {
         system.activationScripts.copyFlake = getCopyFlakeScript system self;
         system.activationScripts.setOpt = getSetOptScript builderType isBaseBuilder;
+        system.activationScripts.versioning = versionScript;
       })
     ];
 
