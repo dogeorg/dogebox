@@ -67,7 +67,7 @@
   ];
 
   # Initial hostName for the box to respond to dogebox.local for first boot and installation steps.
-  # Will be replaced ny dogeboxd configuration
+  # Will be replaced by dogeboxd configuration
   networking.hostName = lib.mkDefault ("dogebox");
   services.avahi = {
       nssmdns4 = true;
@@ -121,11 +121,4 @@
     ln -sf ${nanopc-t6-rk3588-firmware}/lib/firmware/ /lib/firmware
     ln -sf ${nanopc-t6-rk3588-firmware}/system/ /system
   '';
-
-  system.activationScripts.buildType = {
-    text = ''
-      mkdir -p /opt
-      echo "nanopc-t6" > /opt/build-type
-    '';
-  };
 }

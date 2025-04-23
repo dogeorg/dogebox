@@ -1,7 +1,6 @@
 { inputs, lib, config, pkgs, dbxRelease, specialArgs, modulesPath, ... }:
 
 let
-  flakeSource = specialArgs.flakeSource;
   imageName = "dogebox-${dbxRelease}-t6";
 
   baseRawImage = import "${toString modulesPath}/../lib/make-disk-image.nix" {
@@ -36,12 +35,4 @@ in
       mv /tmp/dogebox-*.img $out/
     '';
   });
-
-  system.activationScripts.copyflake = {
-    deps = [ "users" ];
-    text = ''
-      mkdir -p /etc/nixos
-      ${pkgs.rsync}/bin/rsync -a --delete --exclude='.git' "${flakeSource}/" "/etc/nixos/"
-    '';
-  };
 }

@@ -35,44 +35,65 @@
       default = ./nix/builders/default/base.nix;
     };
 
+    getCopyFlakeScript = system: self: let
+      pkgs = nixpkgs.legacyPackages.${system};
+    in
+      ''
+        mkdir -p /etc/nixos
+        ${pkgs.rsync}/bin/rsync -a --delete --exclude='.git' "${self}/" "/etc/nixos/"
+      '';
+
+    getSetOptScript = builderType: isBaseBuilder: let
+      isReadOnly = (builderType == "iso" || builderType == "nanopc-t6");
+      mediaFile = if isReadOnly then "ro-media" else "rw-media";
+    in ''
+      mkdir -p /opt
+      echo '${builderType}' > /opt/build-type
+      touch /opt/${mediaFile}
+    '';
+
     dbxEntryModule = ./nix/dbx/base.nix;
     commonModule = ./nix/os/common.nix;
 
-    mkConfigModules = { builderType }: [
+    mkConfigModules = { system, builderType, isBaseBuilder }: [
       (builderBases.${builderType} or (throw "Unsupported builderType: ${builderType}"))
       commonModule
       dbxEntryModule
+      ({ ... }: {
+        system.activationScripts.copyFlake = getCopyFlakeScript system self;
+        system.activationScripts.setOpt = getSetOptScript builderType isBaseBuilder;
+      })
     ];
 
-    mkNixosSystem = { system, builderType }: nixpkgs.lib.nixosSystem {
-      inherit system;
-      specialArgs = {
-        inherit inputs dbxRelease builderType;
-        flakeSource = self;
-        arch = nixpkgs.lib.strings.removeSuffix "-linux" system;
+    getSpecialArgs = arch: system: builderType: {
+      inherit inputs dbxRelease builderType arch;
 
-        # These are the built packages, rather than the raw sources.
-        dkm = inputs.dkm.packages.${system}.default;
-        dogeboxd = inputs.dogeboxd.packages.${system}.default;
-      };
-      modules = mkConfigModules { inherit builderType; };
+      # These are the built packages, rather than the raw sources.
+      dkm = inputs.dkm.packages.${system}.default;
+      dogeboxd = inputs.dogeboxd.packages.${system}.default;
+
+      # Explicitly only pass the rk3588 firmware for the nanopc-t6 builder.
+      nanopc-t6-rk3588-firmware = inputs.dogebox-nur-packages.legacyPackages.${system}.rk3588-firmware;
+    };
+
+    mkNixosSystem = { system, builderType }:
+      let
+        arch = nixpkgs.lib.strings.removeSuffix "-linux" system;
+        isBaseBuilder = false;
+      in nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = mkConfigModules { inherit system builderType isBaseBuilder; };
+        specialArgs = getSpecialArgs arch system builderType;
     };
 
     base = arch: builderType: builderSpecificModule: format:
       let
         system = arch + "-linux";
+        isBaseBuilder = false;
       in nixos-generators.nixosGenerate {
         inherit system format;
-        modules = [ builderSpecificModule ] ++ (mkConfigModules { inherit builderType; });
-        specialArgs = {
-          inherit inputs dbxRelease builderType arch;
-          flakeSource = self;
-          dkm = inputs.dkm.packages.${system}.default;
-          dogeboxd = inputs.dogeboxd.packages.${system}.default;
-
-          # Explicitly only pass the rk3588 firmware for the nanopc-t6 builder.
-          nanopc-t6-rk3588-firmware = inputs.dogebox-nur-packages.legacyPackages.${system}.rk3588-firmware;
-        };
+        modules = [ builderSpecificModule ] ++ (mkConfigModules { inherit system builderType isBaseBuilder; });
+        specialArgs = getSpecialArgs arch system builderType;
     };
 
     mkDevShell = system: let
@@ -96,7 +117,7 @@
   in {
     t6 = base "aarch64" "nanopc-t6" ./nix/builders/nanopc-t6/builder.nix "raw";
     vbox-x86_64 = base "x86_64" "virtualbox" ./nix/builders/virtualbox/builder.nix "virtualbox";
-    vm-x86_64 = base "x86_64" "default" ./nix/builders/default/builder.nix "vm"; # Assuming builderType 'default'
+    vm-x86_64 = base "x86_64" "default" ./nix/builders/default/builder.nix "vm";
     iso-x86_64 = base "x86_64" "iso" ./nix/builders/iso/builder.nix "iso";
     iso-aarch64 = base "aarch64" "iso" ./nix/builders/iso/builder.nix "iso";
     qemu-x86_64 = base "x86_64" "qemu" ./nix/builders/qemu/builder.nix "qcow";
