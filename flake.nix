@@ -18,6 +18,11 @@
       url = "github:dogebox-wg/dkm/dev-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    dogebox-nur-packages = {
+      url = "github:dogebox-wg/dogebox-nur-packages";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs = { self, nixpkgs, nixos-generators, flake-utils, ... } @ inputs: let
     dbxRelease = "v0.3.2-beta.3";
@@ -64,6 +69,9 @@
           flakeSource = self;
           dkm = inputs.dkm.packages.${system}.default;
           dogeboxd = inputs.dogeboxd.packages.${system}.default;
+
+          # Explicitly only pass the rk3588 firmware for the nanopc-t6 builder.
+          nanopc-t6-rk3588-firmware = inputs.dogebox-nur-packages.legacyPackages.${system}.rk3588-firmware;
         };
     };
 

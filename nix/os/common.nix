@@ -2,10 +2,6 @@
 
 let
   builderType = specialArgs.builderType or "unknown";
-
-  flakeSource = if builtins.hasAttr "flakeSource" specialArgs then specialArgs.flakeSource
-    else if builtins.hasAttr "source" config.system.build then config.system.build.source
-    else "/etc/nixos";
 in
 {
   options.dogebox.builderType = lib.mkOption {

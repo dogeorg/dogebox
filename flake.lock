@@ -22,6 +22,26 @@
         "type": "github"
       }
     },
+    "dogebox-nur-packages": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1743053841,
+        "narHash": "sha256-+Z+Af4hgI63L4u+ty4v2iEzPAqlqVAt6UdKE0YD+rXE=",
+        "owner": "dogebox-wg",
+        "repo": "dogebox-nur-packages",
+        "rev": "3b055551fa069781492283a6eb8b590cfe36e8c5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dogebox-wg",
+        "repo": "dogebox-nur-packages",
+        "type": "github"
+      }
+    },
     "dogeboxd": {
       "inputs": {
         "dpanel-src": "dpanel-src",
@@ -170,6 +190,7 @@
     "root": {
       "inputs": {
         "dkm": "dkm",
+        "dogebox-nur-packages": "dogebox-nur-packages",
         "dogeboxd": "dogeboxd",
         "flake-utils": "flake-utils_3",
         "nixos-generators": "nixos-generators",

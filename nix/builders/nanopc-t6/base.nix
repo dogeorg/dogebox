@@ -1,15 +1,6 @@
-{ pkgs ? import <nixpkgs> {}, lib, ... }:
+{ pkgs, lib, nanopc-t6-rk3588-firmware, ... }:
 
 {
-  imports =
-    # If we have an overlay for /opt specified, load that first.
-    lib.optional (builtins.pathExists /etc/nixos/opt-overlay.nix) /etc/nixos/opt-overlay.nix
-    ++
-    [
-      ./firmware.nix
-      ../../dbx/base.nix
-    ];
-
   nixpkgs.overlays = [
     (final: super: {
       makeModulesClosure = x:
@@ -114,6 +105,22 @@
     '';
     wantedBy = [ "basic.target" "runOnceOnFirstBoot.service" ];
   };
+
+  system.activationScripts.rk3588-firmware = ''
+    mkdir -p /etc/firmware
+    mkdir -p /lib/firmware
+    mkdir -p /system
+
+    for i in /etc/firmware /lib/firmware /system;
+    do
+      [ -L $i ] && echo "Removing old symlink $i" && rm $i
+      [ -e $i ] && echo "Moving $i out of the way" && mv $i $i.`date -I`
+    done
+    echo "Adding new firmware symlinks"
+    ln -sf ${nanopc-t6-rk3588-firmware}/etc/firmware/ /etc/firmware
+    ln -sf ${nanopc-t6-rk3588-firmware}/lib/firmware/ /lib/firmware
+    ln -sf ${nanopc-t6-rk3588-firmware}/system/ /system
+  '';
 
   system.activationScripts.buildType = {
     text = ''
