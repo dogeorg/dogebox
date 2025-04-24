@@ -77,6 +77,7 @@
     cloud-utils
     parted
     screen
+    wpa_supplicant
   ];
 
   # Initial hostName for the box to respond to dogebox.local for first boot and installation steps.
