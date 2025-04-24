@@ -125,6 +125,8 @@
         specialArgs = getSpecialArgs arch system builderType;
     };
 
+    ## Development Scripts & tools below this point.
+
     mkDevShell = system: let
       pkgs = nixpkgs.legacyPackages.${system};
     in pkgs.mkShell {
@@ -143,14 +145,45 @@
         pkgs.exfatprogs
       ];
     };
+
+    qemu-aarch64 = base "aarch64" "qemu" ./nix/builders/qemu/builder.nix "qcow";
+
+    getLaunchAArch64Script = system: let
+      pkgs = nixpkgs.legacyPackages.${system};
+    in pkgs.writeShellApplication {
+      name = "launch";
+      text = ''
+        temp_qcow2=$(mktemp -d)/nixos.qcow2
+
+        cp ${qemu-aarch64}/nixos.qcow2 "''${temp_qcow2}"
+        chmod 777 "''${temp_qcow2}"
+
+        ${pkgs.qemu}/bin/qemu-system-aarch64 \
+          -machine virt,highmem=off \
+          -cpu cortex-a72 \
+          -m 2048 \
+          -bios /opt/homebrew/share/qemu/edk2-aarch64-code.fd \
+          -drive if=none,file="''${temp_qcow2}",format=qcow2,id=hd \
+          -device virtio-blk-device,drive=hd \
+          -netdev user,id=net0,hostfwd=tcp::2222-:22,hostfwd=tcp::3000-:3000,hostfwd=tcp::8080-:8080 \
+          -device virtio-net-device,netdev=net0 \
+          -device virtio-serial-device \
+          -chardev vc,id=virtcon \
+          -device virtconsole,chardev=virtcon
+
+        rm "''${temp_qcow2}"
+      '';
+    };
+
   in {
+    inherit qemu-aarch64;
+
     t6 = base "aarch64" "nanopc-t6" ./nix/builders/nanopc-t6/builder.nix "raw";
     vbox-x86_64 = base "x86_64" "virtualbox" ./nix/builders/virtualbox/builder.nix "virtualbox";
     vm-x86_64 = base "x86_64" "default" ./nix/builders/default/builder.nix "vm";
     iso-x86_64 = base "x86_64" "iso" ./nix/builders/iso/builder.nix "iso";
     iso-aarch64 = base "aarch64" "iso" ./nix/builders/iso/builder.nix "iso";
     qemu-x86_64 = base "x86_64" "qemu" ./nix/builders/qemu/builder.nix "qcow";
-    qemu-aarch64 = base "aarch64" "qemu" ./nix/builders/qemu/builder.nix "qcow";
 
     nixosConfigurations = {
       dogeboxos-iso-x86_64 = mkNixosSystem { system = "x86_64-linux"; builderType = "iso"; };
@@ -163,5 +196,12 @@
     };
 
     devShells = flake-utils.lib.eachDefaultSystem mkDevShell;
+
+    apps = flake-utils.lib.eachDefaultSystemMap (system: {
+      launch-aarch64 = {
+        type    = "app";
+        program = "${getLaunchAArch64Script system}/bin/launch";
+      };
+    });
   };
 }
