@@ -9,14 +9,23 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    dpanel = {
+      url = "github:dogebox-wg/dpanel";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+
     dogeboxd = {
       url = "github:dogebox-wg/dogeboxd/dev-flake";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.dpanel-src.follows = "dpanel";
     };
 
     dkm = {
       url = "github:dogebox-wg/dkm/dev-flake";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
     };
 
     dogebox-nur-packages = {
@@ -60,6 +69,7 @@
       # We read these from the lock so that we only need to specify the flake
       # name, rather than the full flake URL, which has to contain versioning info.
       dbxdFlake = builtins.getFlake ("github:dogebox-wg/dogeboxd/" + flakeLockJson.nodes.dogeboxd.locked.rev);
+      dpanelFlake = builtins.getFlake ("github:dogebox-wg/dpanel/" + flakeLockJson.nodes.dpanel.locked.rev);
       dkmFlake = builtins.getFlake ("github:dogebox-wg/dkm/" + flakeLockJson.nodes.dkm.locked.rev);
     in ''
       mkdir -p /opt/versioning
@@ -78,6 +88,10 @@
       mkdir -p /opt/versioning/dkm
       echo '${dkmFlake.rev}' > /opt/versioning/dkm/rev
       echo '${dkmFlake.narHash}' > /opt/versioning/dkm/hash
+
+      mkdir -p /opt/versioning/dpanel
+      echo '${dpanelFlake.rev}' > /opt/versioning/dpanel/rev
+      echo '${dpanelFlake.narHash}' > /opt/versioning/dpanel/hash
     '';
 
     dbxEntryModule = ./nix/dbx/base.nix;
