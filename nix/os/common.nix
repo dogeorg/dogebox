@@ -1,4 +1,10 @@
-{ lib, pkgs, config, specialArgs, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  specialArgs,
+  ...
+}:
 
 let
   builderType = specialArgs.builderType or "unknown";

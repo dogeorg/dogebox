@@ -1,4 +1,10 @@
-{ config, lib, pkgs, dogeboxd, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  dogeboxd,
+  ...
+}:
 
 {
   environment.systemPackages = [
@@ -17,21 +23,21 @@
   ];
 
   users.motd = ''
-+===================================================+
-|                                                   |
-|      ____   ___   ____ _____ ____   _____  __     |
-|     |  _ \ / _ \ / ___| ____| __ ) / _ \ \/ /     |
-|     | | | | | | | |  _|  _| |  _ \| | | \  /      |
-|     | |_| | |_| | |_| | |___| |_) | |_| /  \      |
-|     |____/ \___/ \____|_____|____/ \___/_/\_\     |
-|                                                   |
-+===================================================+
-'';
+    +===================================================+
+    |                                                   |
+    |      ____   ___   ____ _____ ____   _____  __     |
+    |     |  _ \ / _ \ / ___| ____| __ ) / _ \ \/ /     |
+    |     | | | | | | | |  _|  _| |  _ \| | | \  /      |
+    |     | |_| | |_| | |_| | |___| |_) | |_| /  \      |
+    |     |____/ \___/ \____|_____|____/ \___/_/\_\     |
+    |                                                   |
+    +===================================================+
+  '';
 
   users.users.dogeboxd = {
     isSystemUser = true;
-    group =  "dogebox";
-    extraGroups = [];
+    group = "dogebox";
+    extraGroups = [ ];
   };
 
   systemd.tmpfiles.rules = [
@@ -51,7 +57,10 @@
     };
   };
 
-  networking.firewall.allowedTCPPorts = [ 3000 8080 ];
+  networking.firewall.allowedTCPPorts = [
+    3000
+    8080
+  ];
 
   security.wrappers._dbxroot = {
     source = "${dogeboxd}/dogeboxd/bin/_dbxroot";
@@ -82,10 +91,12 @@
   security.sudo.extraRules = [
     {
       users = [ "dogeboxd" ];
-      commands = [ {
-        command = "ALL";
-        options = [ "NOPASSWD" ];
-      } ];
+      commands = [
+        {
+          command = "ALL";
+          options = [ "NOPASSWD" ];
+        }
+      ];
     }
   ];
 }

@@ -23,6 +23,11 @@
   services.qemuGuest.enable = true;
 
   # Support for usb wifi dongle for wifi bring-up testing
-  boot.kernelModules = [ "rtw88_8822ce" "rtw_8822bu" "rtw88_pci" "rtw88_core" ];
+  boot.kernelModules = [
+    "rtw88_8822ce"
+    "rtw_8822bu"
+    "rtw88_pci"
+    "rtw88_core"
+  ];
   hardware.enableRedistributableFirmware = true;
 }

@@ -1,10 +1,14 @@
-{ pkgs, lib, nanopc-t6-rk3588-firmware, ... }:
+{
+  pkgs,
+  lib,
+  nanopc-t6-rk3588-firmware,
+  ...
+}:
 
 {
   nixpkgs.overlays = [
     (final: super: {
-      makeModulesClosure = x:
-        super.makeModulesClosure (x // { allowMissing = true; });
+      makeModulesClosure = x: super.makeModulesClosure (x // { allowMissing = true; });
     })
   ];
 
@@ -17,47 +21,56 @@
   boot.loader.generic-extlinux-compatible.enable = true;
   boot.loader.timeout = 1;
 
-  boot.kernelPackages = let
-    linux_rk3588_pkg = {
-      fetchFromGitHub,
-      linuxManualConfig,
-      ubootTools,
-      ...
-    } :
-    (linuxManualConfig rec {
-      modDirVersion = "6.1.57";
-      version = modDirVersion;
+  boot.kernelPackages =
+    let
+      linux_rk3588_pkg =
+        {
+          fetchFromGitHub,
+          linuxManualConfig,
+          ubootTools,
+          ...
+        }:
+        (linuxManualConfig rec {
+          modDirVersion = "6.1.57";
+          version = modDirVersion;
 
-      src = fetchFromGitHub {
-        owner = "friendlyarm";
-        repo = "kernel-rockchip";
-        rev = "85d0764ec61ebfab6b0d9f6c65f2290068a46fa1";
-        hash = "sha256-oGMx0EYfPQb8XxzObs8CXgXS/Q9pE1O5/fP7/ehRUDA=";
-      };
+          src = fetchFromGitHub {
+            owner = "friendlyarm";
+            repo = "kernel-rockchip";
+            rev = "85d0764ec61ebfab6b0d9f6c65f2290068a46fa1";
+            hash = "sha256-oGMx0EYfPQb8XxzObs8CXgXS/Q9pE1O5/fP7/ehRUDA=";
+          };
 
-      configfile = ./nanopc-T6_linux_defconfig;
-      allowImportFromDerivation = true;
-    })
-    .overrideAttrs (old: {
-      nativeBuildInputs = old.nativeBuildInputs ++ [ubootTools];
-      prePatch = ''
-        cp arch/arm64/boot/dts/rockchip/rk3588-nanopi6-rev01.dts arch/arm64/boot/dts/rockchip/rk3588-nanopc-t6.dts
-        sed -i "s/rk3588-nanopi6-rev0a.dtb/rk3588-nanopi6-rev0a.dtb\ rk3588-nanopc-t6.dtb/" arch/arm64/boot/dts/rockchip/Makefile
-      '';
-    });
-      linux_rk3588 = pkgs.callPackage linux_rk3588_pkg{};
+          configfile = ./nanopc-T6_linux_defconfig;
+          allowImportFromDerivation = true;
+        }).overrideAttrs
+          (old: {
+            nativeBuildInputs = old.nativeBuildInputs ++ [ ubootTools ];
+            prePatch = ''
+              cp arch/arm64/boot/dts/rockchip/rk3588-nanopi6-rev01.dts arch/arm64/boot/dts/rockchip/rk3588-nanopc-t6.dts
+              sed -i "s/rk3588-nanopi6-rev0a.dtb/rk3588-nanopi6-rev0a.dtb\ rk3588-nanopc-t6.dtb/" arch/arm64/boot/dts/rockchip/Makefile
+            '';
+          });
+      linux_rk3588 = pkgs.callPackage linux_rk3588_pkg { };
     in
-      pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor linux_rk3588);
+    pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor linux_rk3588);
 
-  boot.initrd.availableKernelModules = [ "nvme" "usbhid" ];
+  boot.initrd.availableKernelModules = [
+    "nvme"
+    "usbhid"
+  ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "rtw88_8822ce" "rtw88_pci" "rtw88_core" ];
+  boot.kernelModules = [
+    "rtw88_8822ce"
+    "rtw88_pci"
+    "rtw88_core"
+  ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-label/nixos";
-      fsType = "ext4";
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-label/nixos";
+    fsType = "ext4";
+  };
 
   environment.systemPackages = with pkgs; [
     avahi
@@ -70,17 +83,17 @@
   # Will be replaced by dogeboxd configuration
   networking.hostName = lib.mkDefault ("dogebox");
   services.avahi = {
-      nssmdns4 = true;
-      nssmdns6 = true;
+    nssmdns4 = true;
+    nssmdns6 = true;
 
+    enable = true;
+    reflector = true;
+    publish = {
       enable = true;
-      reflector = true;
-      publish = {
-        enable = true;
-        addresses = true;
-        workstation = true;
-        userServices = true;
-      };
+      addresses = true;
+      workstation = true;
+      userServices = true;
+    };
   };
 
   systemd.services.resizerootfs = {
@@ -103,7 +116,10 @@
           touch /etc/fs.resized
         fi
     '';
-    wantedBy = [ "basic.target" "runOnceOnFirstBoot.service" ];
+    wantedBy = [
+      "basic.target"
+      "runOnceOnFirstBoot.service"
+    ];
   };
 
   system.activationScripts.rk3588-firmware = ''

@@ -1,18 +1,24 @@
 { lib, pkgs, ... }:
 
 {
-  imports = [
-    ./dkm.nix
-    ./dogeboxd.nix
-  ] ++ lib.optionals (builtins.pathExists "/opt/dogebox/nix/dogebox.nix") [
-    /opt/dogebox/nix/dogebox.nix
-  ];
+  imports =
+    [
+      ./dkm.nix
+      ./dogeboxd.nix
+    ]
+    ++ lib.optionals (builtins.pathExists "/opt/dogebox/nix/dogebox.nix") [
+      /opt/dogebox/nix/dogebox.nix
+    ];
 
-  users.groups.dogebox = {};
+  users.groups.dogebox = { };
 
   users.users.shibe = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "dogebox" "networkmanager" ];
+    extraGroups = [
+      "wheel"
+      "dogebox"
+      "networkmanager"
+    ];
 
     # Very temporary, until we have SSH key management in dpanel.
     password = "suchpass";

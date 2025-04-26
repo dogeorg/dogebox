@@ -1,12 +1,18 @@
-{ config, lib, pkgs, dkm, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  dkm,
+  ...
+}:
 
 {
   users.users.dkm = {
     isSystemUser = true;
-    group =  "dogebox";
-    extraGroups = [];
+    group = "dogebox";
+    extraGroups = [ ];
   };
-  
+
   systemd.tmpfiles.rules = [
     "d /opt/dkm 0700 dkm dogebox -"
   ];
