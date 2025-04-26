@@ -39,9 +39,7 @@
     builderBases = {
       iso = ./nix/builders/iso/base.nix;
       qemu = ./nix/builders/qemu/base.nix;
-      virtualbox = ./nix/builders/virtualbox/base.nix;
       nanopc-t6 = ./nix/builders/nanopc-t6/base.nix;
-      default = ./nix/builders/default/base.nix;
     };
 
     getCopyFlakeScript = system: self: let
@@ -193,8 +191,6 @@
     inherit qemu-aarch64;
 
     t6 = base "aarch64" "nanopc-t6" ./nix/builders/nanopc-t6/builder.nix "raw";
-    vbox-x86_64 = base "x86_64" "virtualbox" ./nix/builders/virtualbox/builder.nix "virtualbox";
-    vm-x86_64 = base "x86_64" "default" ./nix/builders/default/builder.nix "vm";
     iso-x86_64 = base "x86_64" "iso" ./nix/builders/iso/builder.nix "iso";
     iso-aarch64 = base "aarch64" "iso" ./nix/builders/iso/builder.nix "iso";
     qemu-x86_64 = base "x86_64" "qemu" ./nix/builders/qemu/builder.nix "qcow";
@@ -204,9 +200,7 @@
       dogeboxos-iso-aarch64 = mkNixosSystem { system = "aarch64-linux"; builderType = "iso"; };
       dogeboxos-qemu-x86_64 = mkNixosSystem { system = "x86_64-linux"; builderType = "qemu"; };
       dogeboxos-qemu-aarch64 = mkNixosSystem { system = "aarch64-linux"; builderType = "qemu"; };
-      dogeboxos-vbox-x86_64 = mkNixosSystem { system = "x86_64-linux"; builderType = "virtualbox"; };
       dogeboxos-t6-aarch64 = mkNixosSystem { system = "aarch64-linux"; builderType = "nanopc-t6"; };
-      dogeboxos-vm-x86_64 = mkNixosSystem { system = "x86_64-linux"; builderType = "default"; };
     };
 
     devShells = flake-utils.lib.eachDefaultSystem mkDevShell;
