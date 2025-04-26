@@ -211,5 +211,8 @@
         program = "${getLaunchAArch64Script system}/bin/launch";
       };
     });
+
+    formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-rfc-style;
+    formatter.aarch64-linux = nixpkgs.legacyPackages.aarch64-linux.nixfmt-rfc-style;
   };
 }
