@@ -9,6 +9,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    pre-commit-hooks = {
+      url = "github:cachix/pre-commit-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     dpanel = {
       url = "github:dogebox-wg/dpanel";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -232,14 +237,24 @@
           '';
         };
 
+      devSupportedSystems = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
+      devForAllSystems = nixpkgs.lib.genAttrs devSupportedSystems;
     in
     {
-      inherit qemu-aarch64;
-
-      t6 = base "aarch64" "nanopc-t6" ./nix/builders/nanopc-t6/builder.nix "raw";
-      iso-x86_64 = base "x86_64" "iso" ./nix/builders/iso/builder.nix "iso";
-      iso-aarch64 = base "aarch64" "iso" ./nix/builders/iso/builder.nix "iso";
-      qemu-x86_64 = base "x86_64" "qemu" ./nix/builders/qemu/builder.nix "qcow";
+      packages = {
+        aarch64-linux = {
+          t6 = base "aarch64" "nanopc-t6" ./nix/builders/nanopc-t6/builder.nix "raw";
+          iso = base "aarch64" "iso" ./nix/builders/iso/builder.nix "iso";
+          qemu = qemu-aarch64;
+        };
+        x86_64-linux = {
+          iso = base "x86_64" "iso" ./nix/builders/iso/builder.nix "iso";
+          qemu = base "x86_64" "qemu" ./nix/builders/qemu/builder.nix "qcow";
+        };
+      };
 
       nixosConfigurations = {
         dogeboxos-iso-x86_64 = mkNixosSystem {
@@ -264,16 +279,26 @@
         };
       };
 
-      devShells = flake-utils.lib.eachDefaultSystem mkDevShell;
+      devShells = devForAllSystems (system: {
+        default = mkDevShell system;
+      });
 
-      apps = flake-utils.lib.eachDefaultSystemMap (system: {
+      apps = devForAllSystems (system: {
         launch-aarch64 = {
           type = "app";
           program = "${getLaunchAArch64Script system}/bin/launch";
         };
       });
 
-      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-rfc-style;
-      formatter.aarch64-linux = nixpkgs.legacyPackages.aarch64-linux.nixfmt-rfc-style;
+      formatter = devForAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-rfc-style);
+
+      checks = devForAllSystems (system: {
+        pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
+          src = ./.;
+          hooks = {
+            nixfmt-rfc-style.enable = true;
+          };
+        };
+      });
     };
 }
