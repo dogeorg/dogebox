@@ -257,6 +257,49 @@
           '';
         };
 
+      getSwitchRemoteHostScript = system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+          target = builtins.getEnv "TARGET";
+        in
+        pkgs.writeShellApplication {
+          name = "switch-remote-host";
+          text = ''
+            # shellcheck disable=SC2050
+            if [ "${target}" == "" ]; then
+              echo "TARGET is not set, or '--impure' was not passed to 'nix run'"
+              exit 1
+            fi
+
+            # Get the stuff we need to be able to build the flake.
+            TYPE=$(ssh shibe@${target} 'cat /opt/build-type')
+            ARCH=$(ssh shibe@${target} 'uname -m')
+            FLAKE="$TYPE-$ARCH"
+
+            echo "Determined flake target: $FLAKE"
+
+            # This is consumed by dogebox.nix to include the remote
+            # dogebox.nix file locally during evaluation.
+            REMOTE_REBUILD_DOGEBOX_DIRECTORY=$(mktemp -d)
+            export REMOTE_REBUILD_DOGEBOX_DIRECTORY
+
+            # Copy the target dogebox/nix directory to our tmpdir, so it can be included in our flake.
+            scp -r shibe@${target}:/opt/dogebox/nix/* "''${REMOTE_REBUILD_DOGEBOX_DIRECTORY}"
+            echo "Copied target dogebox/nix directory to: $REMOTE_REBUILD_DOGEBOX_DIRECTORY"
+
+            nixos-rebuild switch \
+              --flake .#dogeboxos-"$FLAKE" \
+              --target-host shibe@${target} \
+              --build-host shibe@${target} \
+              --use-remote-sudo \
+              --fast \
+              --impure \
+              --override-input dpanel "path:$(realpath ../dpanel)" \
+              --override-input dkm "path:$(realpath ../dkm)" \
+              --override-input dogeboxd "path:$(realpath ../dogeboxd)"
+          '';
+        };
+
       devSupportedSystems = [
         "x86_64-linux"
         "aarch64-linux"
@@ -318,6 +361,11 @@
           "dev-t6" = {
             type = "app";
             program = "${getBuildWithDevOverridesScript "aarch64-linux" "t6"}/bin/build-with-dev-overrides";
+          };
+
+          "switch-remote-host" = {
+            type = "app";
+            program = "${getSwitchRemoteHostScript "aarch64-linux"}/bin/switch-remote-host";
           };
         };
       };

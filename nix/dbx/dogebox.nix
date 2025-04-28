@@ -1,5 +1,8 @@
 { lib, pkgs, ... }:
 
+let
+  remoteRebuildTarget = builtins.getEnv "REMOTE_REBUILD_DOGEBOX_DIRECTORY";
+in
 {
   imports =
     [
@@ -8,6 +11,9 @@
     ]
     ++ lib.optionals (builtins.pathExists "/opt/dogebox/nix/dogebox.nix") [
       /opt/dogebox/nix/dogebox.nix
+    ]
+    ++ lib.optionals (remoteRebuildTarget != "") [
+      "${remoteRebuildTarget}/dogebox.nix"
     ];
 
   users.groups.dogebox = { };
