@@ -237,7 +237,8 @@
           '';
         };
 
-      getBuildWithDevOverridesScript = system: target:
+      getBuildWithDevOverridesScript =
+        system: target:
         let
           pkgs = nixpkgs.legacyPackages.${system};
         in
@@ -316,7 +317,7 @@
 
           "dev-t6" = {
             type = "app";
-            program = "${getBuildWithDevOverridesScript "aarch64-linux" "nanopc-t6"}/bin/build-with-dev-overrides";
+            program = "${getBuildWithDevOverridesScript "aarch64-linux" "t6"}/bin/build-with-dev-overrides";
           };
         };
       };
