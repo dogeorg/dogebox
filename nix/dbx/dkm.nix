@@ -1,17 +1,18 @@
-{ config, lib, pkgs, /*rm*/dogebox ? import <dogebox>,/*rm*/... }:
-
-/*inject*/
 {
-  environment.systemPackages = [
-    dogebox.dkm
-  ];
+  config,
+  lib,
+  pkgs,
+  dkm,
+  ...
+}:
 
+{
   users.users.dkm = {
     isSystemUser = true;
-    group =  "dogebox";
-    extraGroups = [];
+    group = "dogebox";
+    extraGroups = [ ];
   };
-  
+
   systemd.tmpfiles.rules = [
     "d /opt/dkm 0700 dkm dogebox -"
   ];
@@ -21,7 +22,7 @@
     wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
-      ExecStart = "${dogebox.dkm}/bin/dkm --dir /opt/dkm";
+      ExecStart = "${dkm}/bin/dkm --dir /opt/dkm";
       Restart = "always";
       User = "dkm";
       Group = "dogebox";

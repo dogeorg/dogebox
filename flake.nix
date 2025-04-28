@@ -1,58 +1,336 @@
 {
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-24.11";
+    flake-utils = {
+      url = "github:numtide/flake-utils";
+    };
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    pre-commit-hooks = {
+      url = "github:cachix/pre-commit-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    dpanel = {
+      url = "github:dogebox-wg/dpanel";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+
+    dogeboxd = {
+      url = "github:dogebox-wg/dogeboxd";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.dpanel-src.follows = "dpanel";
+    };
+
+    dkm = {
+      url = "github:dogebox-wg/dkm";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+
+    dogebox-nur-packages = {
+      url = "github:dogebox-wg/dogebox-nur-packages";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
-  outputs = { self, nixpkgs, nixos-generators,... } @ inputs: let
-    # Both of these MUST be updated to successfully build a new
-    # release, otherwise nix will silently cache things.
-    dbxRelease = "v0.3.2-beta.3";
-    nurPackagesHash = "4e3a0c35aef994e3ec5516ccbb7c202a0cb8fb27";
+  outputs =
+    {
+      self,
+      nixpkgs,
+      nixos-generators,
+      flake-utils,
+      ...
+    }@inputs:
+    let
+      dbxRelease = "v0.3.2-beta.3";
 
-    developmentMode = builtins.getEnv "dev" == "1";
-
-    devConfig = if developmentMode then
-      builtins.fromJSON (builtins.readFile ./dev.json)
-    else
-      {};
-
-    localDogeboxdPath = if (builtins.hasAttr "dogeboxd" devConfig) then devConfig.dogeboxd else null;
-    localDpanelPath = if (builtins.hasAttr "dpanel" devConfig) then devConfig.dpanel else null;
-    dogeboxNurPackagesPath = if (builtins.hasAttr "nur" devConfig) then devConfig.nur else builtins.fetchGit {
-      url = "https://github.com/dogeorg/dogebox-nur-packages.git";
-      ref = "refs/tags/${dbxRelease}";
-      rev = nurPackagesHash;
-    };
-
-    dbx = system: import (dogeboxNurPackagesPath + "/default.nix") {
-      pkgs = import nixpkgs {
-        system = system + "-linux";
+      builderBases = {
+        iso = ./nix/builders/iso/base.nix;
+        qemu = ./nix/builders/qemu/base.nix;
+        nanopc-t6 = ./nix/builders/nanopc-t6/base.nix;
       };
-      inherit localDogeboxdPath localDpanelPath dbxRelease nurPackagesHash;
-    };
 
-    base = arch: builder: format: nixos-generators.nixosGenerate {
-      system = arch + "-linux";
-      modules = [ builder ];
-      format = format;
-      specialArgs = {
-        inherit arch dbxRelease nurPackagesHash;
-        dogebox = dbx arch;
+      getCopyFlakeScript =
+        system: self:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        ''
+          mkdir -p /etc/nixos
+          ${pkgs.rsync}/bin/rsync -a --delete --exclude='.git' "${self}/" "/etc/nixos/"
+        '';
+
+      getSetOptScript =
+        builderType: isBaseBuilder:
+        let
+          isReadOnly = (builderType == "iso" || builderType == "nanopc-t6");
+          mediaFile = if isReadOnly then "ro-media" else "rw-media";
+        in
+        ''
+          mkdir -p /opt
+          echo '${builderType}' > /opt/build-type
+          touch /opt/${mediaFile}
+        '';
+
+      versionScript =
+        let
+          flakeLock = ./flake.lock;
+          flakeLockContent = builtins.readFile flakeLock;
+          flakeLockJson = builtins.fromJSON flakeLockContent;
+
+          # We read these from the lock so that we only need to specify the flake
+          # name, rather than the full flake URL, which has to contain versioning info.
+          dbxdFlake = builtins.getFlake (
+            "github:dogebox-wg/dogeboxd/" + flakeLockJson.nodes.dogeboxd.locked.rev
+          );
+          dpanelFlake = builtins.getFlake (
+            "github:dogebox-wg/dpanel/" + flakeLockJson.nodes.dpanel.locked.rev
+          );
+          dkmFlake = builtins.getFlake ("github:dogebox-wg/dkm/" + flakeLockJson.nodes.dkm.locked.rev);
+        in
+        ''
+          mkdir -p /opt/versioning
+
+          # Write out our pretty release version.
+          echo '${dbxRelease}' > /opt/versioning/dbx
+
+          # Dump the entire flake.lock file into the versioning directory.
+          echo '${flakeLockContent}' > /opt/versioning/flake.lock
+
+          # Write out info about our flake inputs for easy access.
+          mkdir -p /opt/versioning/dogeboxd
+          echo '${dbxdFlake.rev}' > /opt/versioning/dogeboxd/rev
+          echo '${dbxdFlake.narHash}' > /opt/versioning/dogeboxd/hash
+
+          mkdir -p /opt/versioning/dkm
+          echo '${dkmFlake.rev}' > /opt/versioning/dkm/rev
+          echo '${dkmFlake.narHash}' > /opt/versioning/dkm/hash
+
+          mkdir -p /opt/versioning/dpanel
+          echo '${dpanelFlake.rev}' > /opt/versioning/dpanel/rev
+          echo '${dpanelFlake.narHash}' > /opt/versioning/dpanel/hash
+        '';
+
+      dbxEntryModule = ./nix/dbx/base.nix;
+      commonModule = ./nix/os/common.nix;
+
+      mkConfigModules =
+        {
+          system,
+          builderType,
+          isBaseBuilder,
+        }:
+        [
+          (builderBases.${builderType} or (throw "Unsupported builderType: ${builderType}"))
+          commonModule
+          dbxEntryModule
+          (
+            { ... }:
+            {
+              system.activationScripts.copyFlake = getCopyFlakeScript system self;
+              system.activationScripts.setOpt = getSetOptScript builderType isBaseBuilder;
+              system.activationScripts.versioning = versionScript;
+            }
+          )
+        ];
+
+      getSpecialArgs = arch: system: builderType: {
+        inherit
+          inputs
+          dbxRelease
+          builderType
+          arch
+          ;
+
+        # These are the built packages, rather than the raw sources.
+        dkm = inputs.dkm.packages.${system}.default;
+        dogeboxd = inputs.dogeboxd.packages.${system}.default;
+
+        # Explicitly only pass the rk3588 firmware for the nanopc-t6 builder.
+        nanopc-t6-rk3588-firmware = inputs.dogebox-nur-packages.legacyPackages.${system}.rk3588-firmware;
       };
+
+      mkNixosSystem =
+        { system, builderType }:
+        let
+          arch = nixpkgs.lib.strings.removeSuffix "-linux" system;
+          isBaseBuilder = false;
+        in
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+          modules = mkConfigModules { inherit system builderType isBaseBuilder; };
+          specialArgs = getSpecialArgs arch system builderType;
+        };
+
+      base =
+        arch: builderType: builderSpecificModule: format:
+        let
+          system = arch + "-linux";
+          isBaseBuilder = false;
+        in
+        nixos-generators.nixosGenerate {
+          inherit system format;
+          modules = [
+            builderSpecificModule
+          ] ++ (mkConfigModules { inherit system builderType isBaseBuilder; });
+          specialArgs = getSpecialArgs arch system builderType;
+        };
+
+      ## Development Scripts & tools below this point.
+
+      mkDevShell =
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        pkgs.mkShell {
+          buildInputs = [
+            pkgs.gnumake
+            pkgs.nixos-generators
+            pkgs.swig
+            pkgs.git
+            pkgs.parted
+            pkgs.btrfs-progs
+            pkgs.e2fsprogs
+            pkgs.rsync
+            pkgs.wget
+            pkgs.simg2img
+            pkgs.exfat
+            pkgs.exfatprogs
+          ];
+        };
+
+      qemu-aarch64 = base "aarch64" "qemu" ./nix/builders/qemu/builder.nix "qcow";
+
+      getLaunchAArch64Script =
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        pkgs.writeShellApplication {
+          name = "launch";
+          text = ''
+            temp_qcow2=$(mktemp -d)/nixos.qcow2
+
+            cp ${qemu-aarch64}/nixos.qcow2 "''${temp_qcow2}"
+            chmod 777 "''${temp_qcow2}"
+
+            ${pkgs.qemu}/bin/qemu-system-aarch64 \
+              -machine virt,highmem=off \
+              -cpu cortex-a72 \
+              -m 2048 \
+              -bios /opt/homebrew/share/qemu/edk2-aarch64-code.fd \
+              -drive if=none,file="''${temp_qcow2}",format=qcow2,id=hd \
+              -device virtio-blk-device,drive=hd \
+              -netdev user,id=net0,hostfwd=tcp::2222-:22,hostfwd=tcp::3000-:3000,hostfwd=tcp::8080-:8080 \
+              -device virtio-net-device,netdev=net0 \
+              -device virtio-serial-device \
+              -chardev vc,id=virtcon \
+              -device virtconsole,chardev=virtcon
+
+            rm "''${temp_qcow2}"
+          '';
+        };
+
+      getBuildWithDevOverridesScript =
+        system: target:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        pkgs.writeShellApplication {
+          name = "build-with-dev-overrides";
+          text = ''
+            nix build .#packages.${system}.${target} \
+              -L \
+              --print-out-paths \
+              --override-input dogeboxd "path:$(realpath ../dogeboxd)" \
+              --override-input dpanel "path:$(realpath ../dpanel)" \
+              --override-input dkm "path:$(realpath ../dkm)"
+
+            # This overrides the current OS lockfile, so explicitly git revert that.
+            ${pkgs.git}/bin/git checkout -- flake.lock
+          '';
+        };
+
+      devSupportedSystems = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
+      devForAllSystems = nixpkgs.lib.genAttrs devSupportedSystems;
+    in
+    {
+      packages = {
+        aarch64-linux = {
+          t6 = base "aarch64" "nanopc-t6" ./nix/builders/nanopc-t6/builder.nix "raw";
+          iso = base "aarch64" "iso" ./nix/builders/iso/builder.nix "iso";
+          qemu = qemu-aarch64;
+        };
+        x86_64-linux = {
+          iso = base "x86_64" "iso" ./nix/builders/iso/builder.nix "iso";
+          qemu = base "x86_64" "qemu" ./nix/builders/qemu/builder.nix "qcow";
+        };
+      };
+
+      nixosConfigurations = {
+        dogeboxos-iso-x86_64 = mkNixosSystem {
+          system = "x86_64-linux";
+          builderType = "iso";
+        };
+        dogeboxos-iso-aarch64 = mkNixosSystem {
+          system = "aarch64-linux";
+          builderType = "iso";
+        };
+        dogeboxos-qemu-x86_64 = mkNixosSystem {
+          system = "x86_64-linux";
+          builderType = "qemu";
+        };
+        dogeboxos-qemu-aarch64 = mkNixosSystem {
+          system = "aarch64-linux";
+          builderType = "qemu";
+        };
+        dogeboxos-t6-aarch64 = mkNixosSystem {
+          system = "aarch64-linux";
+          builderType = "nanopc-t6";
+        };
+      };
+
+      devShells = devForAllSystems (system: {
+        default = mkDevShell system;
+      });
+
+      apps = {
+        aarch64-linux = {
+          launch = {
+            type = "app";
+            program = "${getLaunchAArch64Script "aarch64-linux"}/bin/launch";
+          };
+
+          "dev-iso" = {
+            type = "app";
+            program = "${getBuildWithDevOverridesScript "aarch64-linux" "iso"}/bin/build-with-dev-overrides";
+          };
+
+          "dev-t6" = {
+            type = "app";
+            program = "${getBuildWithDevOverridesScript "aarch64-linux" "t6"}/bin/build-with-dev-overrides";
+          };
+        };
+      };
+
+      formatter = devForAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-rfc-style);
+
+      checks = devForAllSystems (system: {
+        pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
+          src = ./.;
+          hooks = {
+            nixfmt-rfc-style.enable = true;
+          };
+        };
+      });
     };
-  in {
-    t6 = base "aarch64" ./nix/builders/nanopc-t6/builder.nix "raw";
-
-    vbox-x86_64 = base "x86_64" ./nix/builders/virtualbox/builder.nix "virtualbox";
-    vm-x86_64 = base "x86_64" ./nix/builders/default/builder.nix "vm";
-
-    iso-x86_64 = base "x86_64" ./nix/builders/iso/builder.nix "iso";
-    iso-aarch64 = base "aarch64" ./nix/builders/iso/builder.nix "iso";
-
-    qemu-x86_64 = base "x86_64" ./nix/builders/qemu/builder.nix "qcow";
-    qemu-aarch64 = base "aarch64" ./nix/builders/qemu/builder.nix "qcow";
-  };
 }
