@@ -19,7 +19,7 @@
     pkgs.git
     pkgs.libxkbcommon
     pkgs.wirelesstools
-    pkgs.networkmanager
+    pkgs.wpa_supplicant
   ];
 
   users.motd = ''
