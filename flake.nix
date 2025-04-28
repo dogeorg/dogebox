@@ -21,14 +21,14 @@
     };
 
     dogeboxd = {
-      url = "github:dogebox-wg/dogeboxd/dev-flake";
+      url = "github:dogebox-wg/dogeboxd";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
       inputs.dpanel-src.follows = "dpanel";
     };
 
     dkm = {
-      url = "github:dogebox-wg/dkm/dev-flake";
+      url = "github:dogebox-wg/dkm";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };

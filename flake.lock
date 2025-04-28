@@ -10,16 +10,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1745237200,
+        "lastModified": 1745585544,
         "narHash": "sha256-oB5pX8dXVN6HvrUAdkDKEW6NNAShc+O0JYFc6zAdlZI=",
         "owner": "dogebox-wg",
         "repo": "dkm",
-        "rev": "52d2673c693cc96a96970cf67a8c243f12af15b0",
+        "rev": "fe17a45f030539737af43f596ed93a3f57fd7d93",
         "type": "github"
       },
       "original": {
         "owner": "dogebox-wg",
-        "ref": "dev-flake",
         "repo": "dkm",
         "type": "github"
       }
@@ -57,16 +56,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1745374761,
-        "narHash": "sha256-7S2AKpqd3ya4gTX5pWebOmm5Vhx3+mFMHX+Pd80foHc=",
+        "lastModified": 1745798979,
+        "narHash": "sha256-arN6LJDxGEI1VyYgKEX/HpDaa192wUPKnO33hDb55io=",
         "owner": "dogebox-wg",
         "repo": "dogeboxd",
-        "rev": "8a8374f8b751187a1829dd21db7e9ecdc40ec22d",
+        "rev": "1e364497a0239ed8a2860004cb907d4beff0446a",
         "type": "github"
       },
       "original": {
         "owner": "dogebox-wg",
-        "ref": "dev-flake",
         "repo": "dogeboxd",
         "type": "github"
       }
@@ -187,11 +185,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1744917357,
-        "narHash": "sha256-1Sj8MToixDwakJYNMYBS/PYbg8Oa4CAxreXraMHB5qg=",
+        "lastModified": 1745487689,
+        "narHash": "sha256-FQoi3R0NjQeBAsEOo49b5tbDPcJSMWc3QhhaIi9eddw=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "1eae3268880484be84199bdb77941c09bb4a97ba",
+        "rev": "5630cf13cceac06cefe9fc607e8dfa8fb342dde3",
         "type": "github"
       },
       "original": {
