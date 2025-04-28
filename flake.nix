@@ -293,7 +293,7 @@
           system = "aarch64-linux";
           builderType = "qemu";
         };
-        dogeboxos-t6-aarch64 = mkNixosSystem {
+        dogeboxos-nanopc-t6-aarch64 = mkNixosSystem {
           system = "aarch64-linux";
           builderType = "nanopc-t6";
         };

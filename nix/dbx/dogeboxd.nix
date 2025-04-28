@@ -19,7 +19,7 @@
     pkgs.git
     pkgs.libxkbcommon
     pkgs.wirelesstools
-    pkgs.networkmanager
+    pkgs.wpa_supplicant
   ];
 
   users.motd = ''
@@ -53,7 +53,7 @@
       Restart = "always";
       User = "dogeboxd";
       Group = "dogebox";
-      Environment = "PATH=/run/wrappers/bin:${pkgs.wirelesstools}/bin:${pkgs.libxkbcommon}/bin:${pkgs.git}/bin:${pkgs.nix}/bin:${pkgs.nixos-install-tools}/bin:${pkgs.dosfstools}/bin:${pkgs.e2fsprogs}/bin:${pkgs.parted}/bin:${pkgs.util-linux}/bin:${pkgs.systemd}/bin:${pkgs.nixos-rebuild}/bin:${pkgs.coreutils}/bin:${pkgs.bash}/bin:$PATH";
+      Environment = "PATH=/run/wrappers/bin:${pkgs.wpa_supplicant}/bin:${pkgs.wirelesstools}/bin:${pkgs.libxkbcommon}/bin:${pkgs.git}/bin:${pkgs.nix}/bin:${pkgs.nixos-install-tools}/bin:${pkgs.dosfstools}/bin:${pkgs.e2fsprogs}/bin:${pkgs.parted}/bin:${pkgs.util-linux}/bin:${pkgs.systemd}/bin:${pkgs.nixos-rebuild}/bin:${pkgs.coreutils}/bin:${pkgs.bash}/bin:$PATH";
     };
   };
 
