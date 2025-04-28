@@ -237,6 +237,25 @@
           '';
         };
 
+      getBuildWithDevOverridesScript = system: target:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        pkgs.writeShellApplication {
+          name = "build-with-dev-overrides";
+          text = ''
+            nix build .#packages.${system}.${target} \
+              -L \
+              --print-out-paths \
+              --override-input dogeboxd "path:$(realpath ../dogeboxd)" \
+              --override-input dpanel "path:$(realpath ../dpanel)" \
+              --override-input dkm "path:$(realpath ../dkm)"
+
+            # This overrides the current OS lockfile, so explicitly git revert that.
+            ${pkgs.git}/bin/git checkout -- flake.lock
+          '';
+        };
+
       devSupportedSystems = [
         "x86_64-linux"
         "aarch64-linux"
@@ -283,12 +302,24 @@
         default = mkDevShell system;
       });
 
-      apps = devForAllSystems (system: {
-        launch-aarch64 = {
-          type = "app";
-          program = "${getLaunchAArch64Script system}/bin/launch";
+      apps = {
+        aarch64-linux = {
+          launch = {
+            type = "app";
+            program = "${getLaunchAArch64Script "aarch64-linux"}/bin/launch";
+          };
+
+          "dev-iso" = {
+            type = "app";
+            program = "${getBuildWithDevOverridesScript "aarch64-linux" "iso"}/bin/build-with-dev-overrides";
+          };
+
+          "dev-t6" = {
+            type = "app";
+            program = "${getBuildWithDevOverridesScript "aarch64-linux" "nanopc-t6"}/bin/build-with-dev-overrides";
+          };
         };
-      });
+      };
 
       formatter = devForAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-rfc-style);
 
