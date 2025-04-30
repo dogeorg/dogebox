@@ -45,7 +45,8 @@
   ];
 
   systemd.services.dogeboxd = {
-    after = [ "network.target" ];
+    after = [ "systemd-networkd-wait-online.service" ];
+    wants = [ "systemd-networkd-wait-online.service" ];
     wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
