@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-24.11";
+    nixpkgs.url = "nixpkgs/nixos-25.05";
     flake-utils = {
       url = "github:numtide/flake-utils";
     };
@@ -15,20 +15,20 @@
     };
 
     dpanel = {
-      url = "github:dogebox-wg/dpanel";
+      url = "github:dogebox-wg/dpanel/chore/nixos-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
 
     dogeboxd = {
-      url = "github:dogebox-wg/dogeboxd";
+      url = "github:dogebox-wg/dogeboxd/chore/nixos-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
       inputs.dpanel-src.follows = "dpanel";
     };
 
     dkm = {
-      url = "github:dogebox-wg/dkm";
+      url = "github:dogebox-wg/dkm/chore/nixos-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
@@ -361,6 +361,11 @@
           "dev-t6" = {
             type = "app";
             program = "${getBuildWithDevOverridesScript "aarch64-linux" "t6"}/bin/build-with-dev-overrides";
+          };
+
+          "dev-qemu" = {
+            type = "app";
+            program = "${getBuildWithDevOverridesScript "aarch64-linux" "qemu"}/bin/build-with-dev-overrides";
           };
 
           "switch-remote-host" = {
