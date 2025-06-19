@@ -94,7 +94,11 @@
       users = [ "dogeboxd" ];
       commands = [
         {
-          command = "ALL";
+          command = "${dogeboxd}/bin/_dbxroot";
+          options = [ "NOPASSWD" ];
+        }
+        {
+          command = "/run/wrappers/bin/_dbxroot";
           options = [ "NOPASSWD" ];
         }
       ];
