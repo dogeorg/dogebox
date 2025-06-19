@@ -69,7 +69,7 @@
         builderType: isBaseBuilder:
         let
           isReadOnly = (builderType == "iso" || builderType == "nanopc-t6");
-          isInstalled = builtins.pathExists /opt/dbx-install;
+          isInstalled = builtins.pathExists "/opt/dbx-installed";
           mediaFile = if (isReadOnly && !isInstalled) then "ro-media" else "rw-media";
         in
         ''
